@@ -1,10 +1,30 @@
+const tanggalPergi = getTanggalPlus3Bulan();
+
+const tanggalPulang = getTanggalPlus4Bulan();
+
+function getTanggalPlus3Bulan() {
+    const today = new Date();
+    today.setMonth(today.getMonth() + 3);
+
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return today.toLocaleDateString('en-US', options);
+}
+
+function getTanggalPlus4Bulan() {
+    const today = new Date();
+    today.setMonth(today.getMonth() + 4);
+
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return today.toLocaleDateString('en-US', options);
+}
+
 export const testData = {
 
     Daytrans: {
         Keberangkatan: "Bandung",
         Tujuan: "Jakarta",
-        TanggalPergi: "February 25, 2026",
-        JumlahPenumpang: 3,
+        TanggalPergi: tanggalPergi,
+        JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -12,10 +32,10 @@ export const testData = {
     Baraya: {
         Keberangkatan: "Pasteur",
         Tujuan: "Jatiwaringin",
-        TanggalPergi: "February 24, 2026",
-        TanggalPulang: "February 25, 2026",
+        TanggalPergi: tanggalPergi,
+        TanggalPulang: tanggalPulang,
         JumlahPenumpang: {
-            Dewasa: 3,
+            Dewasa: 2,
             Bayi: 0
         },
         MetodeBayar: "Pembayaran Instan",
@@ -25,7 +45,8 @@ export const testData = {
     Aragon: {
         Keberangkatan: "Bandung",
         Tujuan: "Jakarta",
-        TanggalPergi: "February 25, 2026",
+        TanggalPergi: tanggalPergi,
+        JumlahPenumpang : 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -33,8 +54,8 @@ export const testData = {
     Jackal: {
         Keberangkatan: "PASTEUR (POOL TRANSIT)",
         Tujuan: "BOGOR TRADE MALL",
-        TanggalPergi: "February 25, 2026",
-        JumlahPenumpang: 3,
+        TanggalPergi: tanggalPergi,
+        JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },

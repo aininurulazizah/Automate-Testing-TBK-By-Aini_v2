@@ -17,6 +17,10 @@ export class Jackal{
 
         this.kursi_tersedia = page.locator('div.seat-blank');
         this.pembayaran_btn = page.locator('button:has-text("Selanjutnya")');
+
+        this.check_ketentuan_btn = page.locator('label[for="ketentuan"]');
+        this.konfirmasi_pembayaran_btn = page.locator('button#submit:has-text("Konfirmasi Reservasi")');
+        this.konfirmasi_pembayaran_btn_modal = page.locator('.modal-footer button:has-text("Ya, Lanjutkan")');
     }
 
     getNamaPenumpang(i) {
@@ -55,7 +59,7 @@ export class Jackal{
         const selected = await this.page.locator('.ss-single-selected span:has-text("Orang")').innerText();
         if (selected !== `${value} Orang`) {
             await this.jumlah_penumpang.click();
-            await this.page.locator(`.ss-option:has-text("${value}")`).click();
+            await this.page.locator(`.ss-option:has-text("${value} Orang")`).click();
             await this.page.locator('body').click({ force: true }); // klik body untuk menutup dropdown setelah pilih opsi
         }
     }
@@ -92,5 +96,14 @@ export class Jackal{
 
     async pilihMetodePembayaran(metode_bayar, platform_bayar){
         await this.getPlatformBayar(platform_bayar).click();
+    }
+
+    async checklistKetentuan() {
+        await this.check_ketentuan_btn.click();
+    }
+
+    async konfirmasiPembayaran() {
+        await this.konfirmasi_pembayaran_btn.click()
+        await this.konfirmasi_pembayaran_btn_modal.click();
     }
 }

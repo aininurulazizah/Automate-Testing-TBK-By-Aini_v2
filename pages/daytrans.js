@@ -21,6 +21,10 @@ export class Daytrans{
 
         this.kursi_tersedia = page.locator('div.seat-blank');
         this.pembayaran_btn = page.locator('button:has-text("pembayaran")');
+
+        this.check_ketentuan_btn = page.locator('label[for="tandaicheck"]');
+        this.konfirmasi_pembayaran_btn = page.locator('button#submit:has-text("Konfirmasi")');
+        this.konfirmasi_pembayaran_btn_modal = page.locator('.modal-body button:has-text("Konfirmasi")');
     }
 
     getNamaPenumpang(i) { // Untuk mendapatkan object data penumpang dari data test
@@ -109,5 +113,14 @@ export class Daytrans{
     async pilihMetodePembayaran(metode_bayar, platform_bayar){
         await this.getMetodeBayar(metode_bayar).click();
         await this.getPlatformBayar(platform_bayar).click();
+    }
+
+    async checklistKetentuan() {
+        await this.check_ketentuan_btn.click();
+    }
+
+    async konfirmasiPembayaran() {
+        await this.konfirmasi_pembayaran_btn.click()
+        await this.konfirmasi_pembayaran_btn_modal.click();
     }
 }

@@ -20,9 +20,11 @@ for (const site of sites) {
 
     test(`${site.tag} - Test Case 1 - Normal Flow`, async({page}) => {
 
+        test.setTimeout(60000);
+
         const web = new site.locator(page);
     
-        await page.goto(site.url); // Buka url
+        await page.goto(site.url);
         
         if(web.close_popup){ // Close popup jika ada
             await web.closePopup(web.close_popup);
@@ -51,16 +53,20 @@ for (const site of sites) {
             await web.pilihKursi(site.data.JumlahPenumpang);
         } 
         
-        else if(path === "/book/pilihkursi") {
+        if(path === "/book/pilihkursi") {
             console.log("Isi kursi dulu");
-            await web.pilihKursi();
-            await web.lanjutIsiData();
-            // await web.isiDataPenumpang(data_Penumpang.Penumpang_1);
+            await web.pilihKursi(site.data.JumlahPenumpang);
+            await web.isiDataPenumpang(site.data.JumlahPenumpang, data_Pemesan, data_Penumpang);
         }
 
         await web.pilihMetodePembayaran(site.data.MetodeBayar, site.data.PlatformBayar);
 
-        await page.waitForTimeout(2000);
+        await web.checklistKetentuan();
+
+        await web.konfirmasiPembayaran();
+
+        await page.pause();
+        // await page.waitForTimeout(200);
         
     })
 
