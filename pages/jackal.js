@@ -5,7 +5,7 @@ export class Jackal{
         this.tujuan = page.locator('#tujuan');
         this.tanggal_pergi = page.locator('input.tgl_berangkat[type="text"]');;
         this.next_month_btn = page.locator('.flatpickr-next-month');
-        this.penumpang = page.locator('#penumpang');
+        this.jumlah_penumpang = page.locator('.ss-main .ss-single-selected span:has-text("Orang")');
         this.cari_btn = page.locator('button:has-text("Cari Tiket")');
         this.pilihjadwal_btn_first = page.locator('a:has-text("Pilih")').first();
 
@@ -13,10 +13,18 @@ export class Jackal{
         this.email_pemesan = page.locator('#email');
         this.nohp_pemesan = page.locator('#nohp');
         this.alamat_pemesan = page.locator('#alamat');
-        this.nama_penumpang = page.locator('#penumpang1');
         this.carikursi_btn = page.locator('button:has-text("Selanjutnya")');
 
-        this.kursi_first = page.locator('table div[id]').first();
+        this.kursi_tersedia = page.locator('div.seat-blank');
+        this.pembayaran_btn = page.locator('button:has-text("Selanjutnya")');
+    }
+
+    getNamaPenumpang(i) {
+        return this.page.locator(`#penumpang${i}`);
+    }
+
+    getPlatformBayar(platform) { // Untuk mendapatkan platform pembayaran setelah pilih metode bayar
+        return this.page.locator(`img[alt=${platform}]`);
     }
 
     async closePopup(value) {
@@ -43,6 +51,15 @@ export class Jackal{
         await tanggal_target.click();
     }
 
+    async isiJumlahPenumpang(value) {
+        const selected = await this.page.locator('.ss-single-selected span:has-text("Orang")').innerText();
+        if (selected !== `${value} Orang`) {
+            await this.jumlah_penumpang.click();
+            await this.page.locator(`.ss-option:has-text("${value}")`).click();
+            await this.page.locator('body').click({ force: true }); // klik body untuk menutup dropdown setelah pilih opsi
+        }
+    }
+
     async cariTiket() {
         await this.cari_btn.click();
     }
@@ -51,19 +68,29 @@ export class Jackal{
         await this.pilihjadwal_btn_first.click();
     }
     
-    async isiDataPenumpang(value) {
-        await this.nama_pemesan.fill(value.NamaPemesan);
-        await this.email_pemesan.fill(value.Email);
-        await this.nohp_pemesan.fill(value.NoHP);
-        await this.alamat_pemesan.fill(value.Alamat);
-        await this.nama_penumpang.fill(value.NamaPenumpang);
+    async isiDataPenumpang(jml_penumpang, pemesan, penumpang) {
+        const penumpang_dewasa = penumpang.PenumpangDewasa;
+        await this.nama_pemesan.fill(pemesan.NamaPemesan);
+        await this.email_pemesan.fill(pemesan.Email);
+        await this.nohp_pemesan.fill(pemesan.NoHP);
+        await this.alamat_pemesan.fill(pemesan.Alamat);
+        for(let i = 0; i < jml_penumpang; i++){
+            await this.getNamaPenumpang(i+1).fill(penumpang_dewasa[`Penumpang_${i+1}`].NamaPenumpang); 
+        }
     }
 
     async cariKursi() {
         await this.carikursi_btn.click();
     }
 
-    async pilihKursi() {
-        await this.kursi_first.click();
+    async pilihKursi(jml_penumpang) {
+        for(let i = 0; i < jml_penumpang; i++){
+            await this.kursi_tersedia.nth(i).click();
+        }
+        await this.pembayaran_btn.click();
+    }
+
+    async pilihMetodePembayaran(metode_bayar, platform_bayar){
+        await this.getPlatformBayar(platform_bayar).click();
     }
 }

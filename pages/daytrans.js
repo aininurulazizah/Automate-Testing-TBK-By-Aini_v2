@@ -16,11 +16,27 @@ export class Daytrans{
         this.nama_pemesan = page.locator('#pemesan');
         this.email_pemesan = page.locator('#email');
         this.nohp_pemesan = page.locator('[name="telepon"]');
-        this.nama_penumpang = page.locator('#penumpang1');
         this.carikursi_btn = page.locator('#submitModal');
         this.carikursi_confirm_btn = page.locator('#confirmSubmit');
 
-        this.kursi_first = page.locator('table div[id]').first();
+        this.kursi_tersedia = page.locator('div.seat-blank');
+        this.pembayaran_btn = page.locator('button:has-text("pembayaran")');
+    }
+
+    getNamaPenumpang(i) { // Untuk mendapatkan object data penumpang dari data test
+        return this.page.locator(`#penumpang${i}`);
+    }
+
+    getPenumpangTerdaftar(i) { // Untuk mendapatkan data penumpang setelah isi data untuk memilih kursi
+        return this.page.locator(`[data-passenger-index="${i}"]`);
+    }
+
+    getMetodeBayar(metode) { // Untuk mendapatkan metode pembayaran sesuai data test
+        return this.page.locator(`#container-payment p:has-text("${metode}")`);
+    }
+
+    getPlatformBayar(platform) { // Untuk mendapatkan platform pembayaran setelah pilih metode bayar
+        return this.page.locator(`img[alt=${platform}]`);
     }
 
     async closePopup(value) {
@@ -54,7 +70,7 @@ export class Daytrans{
         if (selected !== `${value} Orang`) {
             await this.jumlah_penumpang.click();
             await this.page.locator(`.ss-option:has-text("${value}")`).click();
-            await this.page.mouse.click(5, 5); // klik random untuk menutup dropdown setelah pilih opsi
+            await this.page.locator('body').click({ force: true }); // klik body untuk menutup dropdown setelah pilih opsi
         }
     }
 
@@ -67,11 +83,14 @@ export class Daytrans{
         await this.pilihjadwal_btn_first.click();
     }
 
-    async isiDataPenumpang(value) {
-        await this.nama_pemesan.fill(value.NamaPemesan);
-        await this.email_pemesan.fill(value.Email);
-        await this.nohp_pemesan.fill(value.NoHP);
-        await this.nama_penumpang.fill(value.NamaPenumpang);
+    async isiDataPenumpang(jml_penumpang, pemesan, penumpang) {
+        const penumpang_dewasa = penumpang.PenumpangDewasa;
+        await this.nama_pemesan.fill(pemesan.NamaPemesan);
+        await this.email_pemesan.fill(pemesan.Email);
+        await this.nohp_pemesan.fill(pemesan.NoHP);
+        for(let i = 0; i < jml_penumpang; i++){
+            await this.getNamaPenumpang(i+1).fill(penumpang_dewasa[`Penumpang_${i+1}`].NamaPenumpang); 
+        }
     }
 
     async cariKursi() {
@@ -79,7 +98,16 @@ export class Daytrans{
         await this.carikursi_confirm_btn.click();
     }
 
-    async pilihKursi() {
-        await this.kursi_first.click();
+    async pilihKursi(jml_penumpang) {
+        for(let i = 0; i < jml_penumpang; i++){
+            await this.getPenumpangTerdaftar(i+1).click();
+            await this.kursi_tersedia.nth(i).click();
+        }
+        await this.pembayaran_btn.click();
+    }
+
+    async pilihMetodePembayaran(metode_bayar, platform_bayar){
+        await this.getMetodeBayar(metode_bayar).click();
+        await this.getPlatformBayar(platform_bayar).click();
     }
 }

@@ -12,14 +12,15 @@ export class Aragon {
         this.cari_btn = page.locator('#btn-send');
         this.pilihjadwal_btn_first = page.locator('a:has-text("Pesan")').first();
 
-        this.kursi_first = page.locator('table div[id]').first();
+        // this.kursi_first = page.locator('td div[id]').first();
+        this.kursi_first = page.locator('.seat-blank').first();
         this.isidata_btn = page.locator('button:has-text("Selanjutnya")');
 
         this.nama_pemesan = page.locator('#pemesan');
         this.email_pemesan = page.locator('#email');
         this.nohp_pemesan = page.locator('[name="telepon"]');
         this.nama_penumpang = page.locator('#penumpang1');
-        this.pembayaran_btn = page.locator('button:has-text("Selanjutnya")');
+        // this.pembayaran_btn = page.locator('button:has-text("Selanjutnya")');
     }
 
     async closePopup(value) {
@@ -63,6 +64,7 @@ export class Aragon {
 
     async lanjutIsiData() {
         await this.isidata_btn.click();
+        console.log("Button selanjutnya abis milih kursi terpilih");
     }
 
     async isiDataPenumpang(value) {

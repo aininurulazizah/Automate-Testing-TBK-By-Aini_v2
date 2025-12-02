@@ -12,6 +12,8 @@ const sites = [
     {tag: '@jackal', url: 'https://www.jackalholidays.com/', locator: Jackal, data: testData.Jackal}
 ]
 
+const data_Pemesan = testData.Pemesan;
+
 const data_Penumpang = testData.Penumpang;
 
 for (const site of sites) {
@@ -32,7 +34,9 @@ for (const site of sites) {
 
         await web.isiTanggalPergi(site.data.TanggalPergi); // Isi field tanggal pergi
 
-        // await web.isiJumlahPenumpang(site.data.JumlahPenumpang); // Isi jumlah penumpang
+        if(web.jumlah_penumpang){
+            await web.isiJumlahPenumpang(site.data.JumlahPenumpang); // Isi jumlah penumpang
+        }
 
         await web.cariTiket(); // Cari tiket
 
@@ -42,19 +46,21 @@ for (const site of sites) {
 
         if(path === "/book/pemesan") {
             console.log("Isi data dulu");
-            await web.isiDataPenumpang(data_Penumpang.Penumpang_1);
+            await web.isiDataPenumpang(site.data.JumlahPenumpang, data_Pemesan, data_Penumpang);
             await web.cariKursi();
-            await web.pilihKursi();
+            await web.pilihKursi(site.data.JumlahPenumpang);
         } 
         
         else if(path === "/book/pilihkursi") {
-            // console.log("Isi kursi dulu");
-            // await web.pilihKursi();
-            // await web.lanjutIsiData();
+            console.log("Isi kursi dulu");
+            await web.pilihKursi();
+            await web.lanjutIsiData();
             // await web.isiDataPenumpang(data_Penumpang.Penumpang_1);
         }
 
-        await page.waitForTimeout(5000);
+        await web.pilihMetodePembayaran(site.data.MetodeBayar, site.data.PlatformBayar);
+
+        await page.waitForTimeout(2000);
         
     })
 

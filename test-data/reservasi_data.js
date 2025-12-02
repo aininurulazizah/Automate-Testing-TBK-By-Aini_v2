@@ -4,7 +4,9 @@ export const testData = {
         Keberangkatan: "Bandung",
         Tujuan: "Jakarta",
         TanggalPergi: "February 25, 2026",
-        JumlahPenumpang: 1,
+        JumlahPenumpang: 3,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS"
     },
 
     Baraya: {
@@ -12,36 +14,66 @@ export const testData = {
         Tujuan: "Jatiwaringin",
         TanggalPergi: "February 24, 2026",
         TanggalPulang: "February 25, 2026",
-        JumlahPenumpang: 1
+        JumlahPenumpang: {
+            Dewasa: 3,
+            Bayi: 0
+        },
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS"
     },
 
     Aragon: {
         Keberangkatan: "Bandung",
         Tujuan: "Jakarta",
-        TanggalPergi: "February 25, 2026"
+        TanggalPergi: "February 25, 2026",
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS"
     },
 
     Jackal: {
         Keberangkatan: "PASTEUR (POOL TRANSIT)",
         Tujuan: "BOGOR TRADE MALL",
         TanggalPergi: "February 25, 2026",
-        JumlahPenumpang: 1
+        JumlahPenumpang: 3,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS"
+    },
+
+    Pemesan: {
+        NamaPemesan: "Pemesan",
+        Email: "pemesan@harakirimail.com",
+        NoHP: "081234567890",
+        Alamat: "Bandung"
     },
 
     Penumpang: {
-        Penumpang_1: {
-            NamaPemesan: "Penumpang Satu",
-            Email: "penumpang1@harakirimail.com",
-            NoHP: "081234567890",
-            Alamat: "Bandung",
-            NamaPenumpang: "Penumpang Satu"
+        PenumpangDewasa: {
+            Penumpang_1: {
+                NamaPenumpang: "Penumpang Satu"
+            },
+            Penumpang_2: {
+                NamaPenumpang: "Penumpang Dua"
+            },
+            Penumpang_3: {
+                NamaPenumpang: "Penumpang Tiga"
+            },
+            Penumpang_4: {
+                NamaPenumpang: "Penumpang Empat"
+            },
+            Penumpang_5: {
+                NamaPenumpang: "Penumpang Lima"
+            }
         },
-        Penumpang_2: {
-            NamaPemesan: "Penumpang Dua",
-            Email: "penumpang2@harakirimail.com",
-            NoHP: "081234567890",
-            Alamat: "Bandung",
-            NamaPenumpang: "Penumpang Dua"
+        PenumpangBayi: {
+            PenumpangBayi_1: {
+                NamaPenumpang: "Penumpang Bayi Satu"
+            },
+            PenumpangBayi_2: {
+                NamaPenumpang: "Penumpang Bayi Dua"
+            },
+            PenumpangBayi_3: {
+                NamaPenumpang: "Penumpang Bayi Tiga"
+            }
         }
     }
 
