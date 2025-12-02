@@ -22,6 +22,6 @@ Proyek ini automasi testing untuk proses pemesanan tiket bus pada beberapa penye
     `--project-chromium` jika ingin menggunakan satu webdriver yaitu chrome.
     `--headed` menampilkan proses automate testing berjalan. Hapus jika ingin membiarkan proses berjalan di latar belakang.
 
-   ### Notes
-   - Saat ini setiap test case dijalankan diberikan `await page.pause();` agar jendela tidak langsung di-close untuk melihat hasil akhir. Akan muncul jendela debug, close untuk melanjutkan test di website lain
-   - Aragon masih dalam pengerjaan sehingga hasil testing failed
+### Notes
+- Saat ini setiap test case dijalankan diberikan `await page.pause();` agar jendela tidak langsung di-close untuk melihat hasil akhir. Akan muncul jendela debug, close untuk melanjutkan test di website lain
+- Aragon masih dalam pengerjaan sehingga hasil testing failed
