@@ -19,9 +19,12 @@ export class Aragon {
 
         this.nama_pemesan = page.locator('input#pemesan');
         this.email_pemesan = page.locator('#email');
-        this.nohp_pemesan = page.locator('[name="telepon"]');
+        this.nohp_pemesan = page.locator('[name="nohp"]');
         this.nama_penumpang = page.locator('#penumpang1');
-        // this.pembayaran_btn = page.locator('button:has-text("Selanjutnya")');
+        this.pembayaran_btn = page.locator('button:has-text("Selanjutnya")');
+
+        this.check_ketentuan_btn = page.locator('label[for="tandaicheck"]');
+        this.konfirmasi_pembayaran_btn = page.locator('button#submit:has-text("Konfirmasi")');
     }
 
     getNamaPenumpang(i) { // Untuk mendapatkan object data penumpang dari data test
@@ -63,23 +66,24 @@ export class Aragon {
     }
 
     async pilihJadwal(){
-        await this.pilihjadwal_btn_first.click();
-        console.log("button pesan diklik")
+        let path = new URL(this.page.url()).pathname;
+        console.log(path);
+        while (path === "/book/tiket") {
+            await this.pilihjadwal_btn_first.click();
+            path = new URL(this.page.url()).pathname;
+        }
     }
 
     async pilihKursi(jml_penumpang) {
         for(let i = 0; i < jml_penumpang; i++) {
-            // await this.kursi_tersedia.nth(i).waitFor({ state: 'visible' });
-            // await this.kursi_tersedia.nth(i).click();
-            // await expect(this.kursi_tersedia.nth(i)).toHaveClass(/seat-select/);
-            const kursi = this.kursi_tersedia.nth(i);
-            await kursi.waitFor({ state: 'visible' });
-            await kursi.click();
-            await expect(kursi).toHaveClass(/seat seat-blank flex-center/);
-            console.log("Kursi terpilih");
+            let seatClass = await this.kursi_tersedia.nth(i).getAttribute('class');
+            const selectedSeatClass = "seat-select";
+            while (!seatClass.includes(selectedSeatClass)) {
+                await this.kursi_tersedia.nth(i).click();
+                seatClass = await this.kursi_tersedia.nth(i).getAttribute('class');
+            }
         }
         await this.isidata_btn.click();
-        console.log("Pilih kursi berhasil, sekarang isi data");
     }
 
     async isiDataPenumpang(jml_penumpang, pemesan, penumpang) {
@@ -90,13 +94,18 @@ export class Aragon {
         for(let i = 0; i < jml_penumpang; i++){
             await this.getNamaPenumpang(i+1).fill(penumpang_dewasa[`Penumpang_${i+1}`].NamaPenumpang); 
         }
-    }
-
-    async pilihPembayaran() {
         await this.pembayaran_btn.click();
     }
 
     async pilihMetodePembayaran(metode_bayar, platform_bayar){
         await this.getPlatformBayar(platform_bayar).click();
+    }
+
+    async checklistKetentuan() {
+        await this.check_ketentuan_btn.click();
+    }
+
+    async konfirmasiPembayaran() {
+        await this.konfirmasi_pembayaran_btn.click()
     }
 }

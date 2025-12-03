@@ -46,9 +46,9 @@ export const testData = {
         Keberangkatan: "Bandung",
         Tujuan: "Jakarta",
         TanggalPergi: tanggalPergi,
-        JumlahPenumpang : 2,
+        JumlahPenumpang : 1,
         MetodeBayar: "Pembayaran Instan",
-        PlatformBayar: "QRIS"
+        PlatformBayar: "qrissp"
     },
 
     Jackal: {

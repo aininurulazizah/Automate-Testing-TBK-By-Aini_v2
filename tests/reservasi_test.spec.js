@@ -66,7 +66,6 @@ for (const site of sites) {
         await web.konfirmasiPembayaran();
 
         await page.pause();
-        // await page.waitForTimeout(200);
         
     })
 
