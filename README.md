@@ -4,7 +4,7 @@ Proyek ini automasi testing untuk proses pemesanan tiket bus pada beberapa penye
 
 ### Tools
 - Playwright
-
+- Visual Studio Code
 ### Cara Menjalankan
 1. Install dependensi yang dibutuhkan
 2. Menjalankan test semua website :
@@ -24,4 +24,3 @@ Proyek ini automasi testing untuk proses pemesanan tiket bus pada beberapa penye
 
 ### Notes
 - Saat ini setiap test case dijalankan diberikan `await page.pause();` agar jendela tidak langsung di-close untuk melihat hasil akhir. Akan muncul jendela debug, close untuk melanjutkan test di website lain
-- Aragon masih dalam pengerjaan sehingga hasil testing failed
