@@ -1,0 +1,41 @@
+name: Run Playwright Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_file:
+        description: "Spec file yang mau dijalankan"
+        required: false
+        default: ""
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - run: npm install
+
+      - run: npx playwright install --with-deps
+
+      - name: Run tests
+        run: |
+          if [ -z "${{ github.event.inputs.test_file }}" ]; then
+            npx playwright test
+          else
+            npx playwright test ./tests/${{ github.event.inputs.test_file }}
+          fi
+        continue-on-error: true
+
+      - name: Send Result to n8n
+        env:
+          N8N_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d "{\"status\":\"done\",\"result\":\"See logs in GitHub Action.\"}" \
+          $N8N_WEBHOOK_URL
