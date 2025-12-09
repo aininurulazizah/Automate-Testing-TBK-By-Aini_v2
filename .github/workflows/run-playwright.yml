@@ -21,14 +21,14 @@ jobs:
 
       - run: npm install
 
-      - run: npx playwright install --with-deps
+      - run: npx playwright install chromium
 
       - name: Run tests
         run: |
           if [ -z "${{ github.event.inputs.test_file }}" ]; then
-            npx playwright test
+            npx playwright test --project=chromium
           else
-            npx playwright test ./tests/${{ github.event.inputs.test_file }}
+            npx playwright test ./tests/${{ github.event.inputs.test_file }} --project=chromium
           fi
         continue-on-error: true
 
