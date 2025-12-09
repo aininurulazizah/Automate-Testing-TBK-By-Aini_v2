@@ -46,7 +46,7 @@ export const testData = {
         Keberangkatan: "Bandung",
         Tujuan: "Jakarta",
         TanggalPergi: tanggalPergi,
-        JumlahPenumpang : 1,
+        JumlahPenumpang : 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "qrissp"
     },

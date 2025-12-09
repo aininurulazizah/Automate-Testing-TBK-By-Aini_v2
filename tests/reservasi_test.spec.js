@@ -47,14 +47,12 @@ for (const site of sites) {
         const path = new URL(page.url()).pathname;
 
         if(path === "/book/pemesan") {
-            console.log("Isi data dulu");
             await web.isiDataPenumpang(site.data.JumlahPenumpang, data_Pemesan, data_Penumpang);
             await web.cariKursi();
             await web.pilihKursi(site.data.JumlahPenumpang);
         } 
         
         if(path === "/book/pilihkursi") {
-            console.log("Isi kursi dulu");
             await web.pilihKursi(site.data.JumlahPenumpang);
             await web.isiDataPenumpang(site.data.JumlahPenumpang, data_Pemesan, data_Penumpang);
         }
@@ -65,7 +63,9 @@ for (const site of sites) {
 
         await web.konfirmasiPembayaran();
 
-        await page.pause();
+        await expect(page.locator('body')).toBeVisible();
+
+        // await page.pause();
         
     })
 

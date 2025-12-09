@@ -67,7 +67,7 @@ export class Aragon {
 
     async pilihJadwal(){
         let path = new URL(this.page.url()).pathname;
-        console.log(path);
+        // console.log(path);
         while (path === "/book/tiket") {
             await this.pilihjadwal_btn_first.click();
             path = new URL(this.page.url()).pathname;
