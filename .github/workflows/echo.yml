@@ -22,4 +22,4 @@ jobs:
 
       - name: Send output
         id: output-step
-        run: echo "result=Done:${{ github.event.inputs.message }}" >> $GITHUB_OUTPUT
+        run: echo result="Done:${{ github.event.inputs.message }}" >> $GITHUB_OUTPUT
