@@ -12,6 +12,9 @@ jobs:
   echo_job:
     runs-on: ubuntu-latest
 
+    outputs:
+      final_message: ${{ steps.output-step.outputs.result }}
+
     steps:
       - name: Print message
         run: |
@@ -20,6 +23,3 @@ jobs:
       - name: Send output
         id: output-step
         run: echo "result=Done:${{ github.event.inputs.message }}" >> $GITHUB_OUTPUT
-
-    outputs:
-      final_message: ${{ steps.output-step.outputs.result }}
