@@ -19,36 +19,61 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: 18
 
       - name: Install dependecies
         run: npm install
 
-      - run: npx playwright install chromium
+      - name: Install Playwright Browser
+        run: npx playwright install chromium
 
       - name: Run tests
         id: teststep
         run: |
           if [ -z "${{ github.event.inputs.test_file }}" ]; then
-            npx playwright test --project=chromium
+            npx playwright test --project=chromium --reporter=json > result.json
           else
-            npx playwright test ./tests/${{ github.event.inputs.test_file }} --project=chromium
+            npx playwright test ./tests/${{ github.event.inputs.test_file }} --project=chromium --reporter=json > result.json
           fi
         continue-on-error: true
 
-      - name: Set result
-        id: collect
-        run: |
-          if [ -f test-results.json ]; then
-            echo "result=$(cat test-results.json | jq -r '.status')" >> $GITHUB_OUTPUT
-          else
-            echo "result=Completed" >> $GITHUB_OUTPUT
-          fi
+      # - name: Set result
+      #   id: collect
+      #   run: |
+      #     if [ -f test-results.json ]; then
+      #       echo "result=$(cat test-results.json | jq -r '.status')" >> $GITHUB_OUTPUT
+      #     else
+      #       echo "result=Completed" >> $GITHUB_OUTPUT
+      #     fi
 
-      - name: Callback to n8n
+      - name: Extract test summary for n8n
+        id: summary
+        run: |
+          jq '[
+            .suites[].specs[].tests[] |
+            {
+              name: .title,
+              status: .status
+            }
+          ]' result.json > summary.json 
+                
+      - name: Upload full result.json
+        uses: actions/upload-artifact@v4
+        with:
+          name: full-playwright-report
+          path: result.json
+
+      # - name: Callback to n8n
+      #   run: |
+      #     curl -X POST "${{ github.event.inputs.callback_url }}" \
+      #       -H "Content-Type: application/json" \
+      #       -d "{\"status\": \"done\", \"test_result\": \"${{ steps.collect.outputs.result }}\"}"
+
+      - name: Callback to n8n with test summary
         run: |
           curl -X POST "${{ github.event.inputs.callback_url }}" \
             -H "Content-Type: application/json" \
-            -d "{\"status\": \"done\", \"test_result\": \"${{ steps.collect.outputs.result }}\"}"
+            --data "@summary.json"
