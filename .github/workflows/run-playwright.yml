@@ -40,15 +40,6 @@ jobs:
           fi
         continue-on-error: true
 
-      # - name: Set result
-      #   id: collect
-      #   run: |
-      #     if [ -f test-results.json ]; then
-      #       echo "result=$(cat test-results.json | jq -r '.status')" >> $GITHUB_OUTPUT
-      #     else
-      #       echo "result=Completed" >> $GITHUB_OUTPUT
-      #     fi
-
       - name: Extract test summary for n8n
         id: summary
         run: |
@@ -59,21 +50,30 @@ jobs:
               status: .status
             }
           ]' result.json > summary.json 
-                
-      - name: Upload full result.json
-        uses: actions/upload-artifact@v4
-        with:
-          name: full-playwright-report
-          path: result.json
-
-      # - name: Callback to n8n
-      #   run: |
-      #     curl -X POST "${{ github.event.inputs.callback_url }}" \
-      #       -H "Content-Type: application/json" \
-      #       -d "{\"status\": \"done\", \"test_result\": \"${{ steps.collect.outputs.result }}\"}"
 
       - name: Callback to n8n with test summary
         run: |
           curl -X POST "${{ github.event.inputs.callback_url }}" \
             -H "Content-Type: application/json" \
             --data "@summary.json"
+
+      # - name: Set result
+      #   id: collect
+      #   run: |
+      #     if [ -f test-results.json ]; then
+      #       echo "result=$(cat test-results.json | jq -r '.status')" >> $GITHUB_OUTPUT
+      #     else
+      #       echo "result=Completed" >> $GITHUB_OUTPUT
+      #     fi    
+                
+      # - name: Upload full result.json
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: full-playwright-report
+      #     path: result.json
+
+      # - name: Callback to n8n
+      #   run: |
+      #     curl -X POST "${{ github.event.inputs.callback_url }}" \
+      #       -H "Content-Type: application/json" \
+      #       -d "{\"status\": \"done\", \"test_result\": \"${{ steps.collect.outputs.result }}\"}"
