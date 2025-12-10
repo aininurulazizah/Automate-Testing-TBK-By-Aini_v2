@@ -3,27 +3,33 @@ name: Run Playwright Tests
 on:
   workflow_dispatch:
     inputs:
+      callback_url:
+        description: "URL to send back result to n8n"
+        required: true
       test_file:
         description: "Spec file yang mau dijalankan"
         required: false
         default: ""
 
 jobs:
-  test:
+  run-test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
       - uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      - run: npm install
+      - name: Install dependecies
+        run: npm install
 
       - run: npx playwright install chromium
 
       - name: Run tests
+        id: teststep
         run: |
           if [ -z "${{ github.event.inputs.test_file }}" ]; then
             npx playwright test --project=chromium
@@ -32,10 +38,17 @@ jobs:
           fi
         continue-on-error: true
 
-      - name: Send Result to n8n
-        env:
-          N8N_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL }}
+      - name: Set result
+        id: collect
         run: |
-          curl -X POST -H "Content-Type: application/json" \
-          -d "{\"status\":\"done\",\"result\":\"See logs in GitHub Action.\"}" \
-          $N8N_WEBHOOK_URL
+          if [ -f test-results.json ]; then
+            echo "result=$(cat test-results.json | jq -r '.status')" >> $GITHUB_OUTPUT
+          else
+            echo "result=Completed" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Callback to n8n
+        run: |
+          curl -X POST "${{ github.event.inputs.callback_url }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"status\": \"done\", \"test_result\": \"${{ steps.collect.outputs.result }}\"}"
