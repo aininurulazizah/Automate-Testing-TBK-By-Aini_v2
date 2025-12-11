@@ -42,22 +42,22 @@ jobs:
           fi
         continue-on-error: true
 
-      - name: Extract test summary for n8n
-        id: summary
-        run: |
-          jq '[
-            .suites[].specs[].tests[] |
-            {
-              name: .title,
-              status: .status
-            }
-          ]' result.json > summary.json 
+      # - name: Extract test summary for n8n
+      #   id: summary
+      #   run: |
+      #     jq '[
+      #       .suites[].specs[].tests[] |
+      #       {
+      #         name: .title,
+      #         status: .status
+      #       }
+      #     ]' result.json > summary.json 
 
       - name: Callback to n8n with test summary
         run: |
           curl -X POST "${{ github.event.inputs.callback_url }}" \
             -H "Content-Type: application/json" \
-            --data "@summary.json"
+            --data "@result.json"
 
 #===========================================================
 
