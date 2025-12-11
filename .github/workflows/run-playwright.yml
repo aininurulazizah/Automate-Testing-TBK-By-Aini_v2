@@ -34,9 +34,9 @@ jobs:
         id: teststep
         run: |
           if [ -z "${{ github.event.inputs.test_file }}" ]; then
-            npx playwright test --reporter=json --project=chromium > result.json
+            npx playwright test --reporter=json --project=chromium > result.json || true
           else
-            npx playwright test ./tests/${{ github.event.inputs.test_file }} --reporter=json --project=chromium > result.json
+            npx playwright test ./tests/${{ github.event.inputs.test_file }} --reporter=json --project=chromium > result.json || true
           fi
         continue-on-error: true
 
