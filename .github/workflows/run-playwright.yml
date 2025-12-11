@@ -35,8 +35,10 @@ jobs:
         run: |
           if [ -z "${{ github.event.inputs.test_file }}" ]; then
             npx playwright test --reporter=json --project=chromium > result.json || true
+            echo "Done running all tests"
           else
             npx playwright test ./tests/${{ github.event.inputs.test_file }} --reporter=json --project=chromium > result.json || true
+            echo "Done running specific test: ${{ github.event.inputs.test_file }}"
           fi
         continue-on-error: true
 
