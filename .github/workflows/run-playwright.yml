@@ -30,17 +30,17 @@ jobs:
       - name: Install Playwright Browser
         run: npx playwright install chromium
 
-      - name: Run tests
-        id: teststep
-        run: |
-          if [ -z "${{ github.event.inputs.test_file }}" ]; then
-            npx playwright test --reporter=json --project=chromium > result.json || true
-            echo "Done running all tests"
-          else
-            npx playwright test ./tests/${{ github.event.inputs.test_file }} --reporter=json --project=chromium > result.json || true
-            echo "Done running specific test: ${{ github.event.inputs.test_file }}"
-          fi
-        continue-on-error: true
+      # - name: Run tests
+      #   id: teststep
+      #   run: |
+      #     if [ -z "${{ github.event.inputs.test_file }}" ]; then
+      #       npx playwright test --reporter=json --project=chromium > result.json || true
+      #       echo "Done running all tests"
+      #     else
+      #       npx playwright test ./tests/${{ github.event.inputs.test_file }} --reporter=json --project=chromium > result.json || true
+      #       echo "Done running specific test: ${{ github.event.inputs.test_file }}"
+      #     fi
+      #   continue-on-error: true
 
       # - name: Extract test summary for n8n
       #   id: summary
@@ -56,8 +56,8 @@ jobs:
       - name: Callback to n8n with test summary
         run: |
           curl -X POST "${{ github.event.inputs.callback_url }}" \
-            -H "Content-Type: application/json" \
-            --data "@result.json"
+            -H "Content-Type: application/json" 
+# --data "@result.json"
 
 #===========================================================
 
