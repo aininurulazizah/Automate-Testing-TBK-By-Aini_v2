@@ -3,13 +3,15 @@ import { Daytrans } from "../pages/daytrans";
 import { Baraya } from "../pages/baraya";
 import { Aragon } from "../pages/aragon";
 import { Jackal } from "../pages/jackal";
+import { Btm } from "../pages/btm";
 import { testData } from "../test-data/reservasi_data";
 
 const sites = [
     {tag: '@daytrans', url: 'https://www.daytrans.co.id/', locator: Daytrans, data: testData.Daytrans},
     {tag: '@baraya', url: 'https://www.baraya-travel.com/', locator: Baraya, data: testData.Baraya},
     {tag: '@aragon', url: 'https://www.aragontrans.com/', locator: Aragon, data: testData.Aragon},
-    {tag: '@jackal', url: 'https://www.jackalholidays.com/', locator: Jackal, data: testData.Jackal}
+    {tag: '@jackal', url: 'https://www.jackalholidays.com/', locator: Jackal, data: testData.Jackal},
+    {tag: '@btm', url: 'https://www.btmshuttle.id/', locator: Btm, data: testData.Btm}
 ]
 
 const data_Pemesan = testData.Pemesan;

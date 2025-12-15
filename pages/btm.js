@@ -1,9 +1,9 @@
-export class Jackal{
-    constructor(page){
+export class Btm{
+    constructor(page) {
         this.page = page;
-        this.keberangkatan = page.locator('#keberangkatan');
-        this.tujuan = page.locator('#tujuan');
-        this.tanggal_pergi = page.locator('input[type="text"][readonly]');;
+        this.keberangkatan = page.locator('.ss-single-selected').first();
+        this.tujuan = page.locator('.ss-single-selected').nth(1);
+        this.tanggal_pergi = page.locator('input.datepicker[readonly]');
         this.next_month_btn = page.locator('.flatpickr-next-month');
         this.jumlah_penumpang = page.locator('.ss-main .ss-single-selected span:has-text("Orang")');
         this.cari_btn = page.locator('button:has-text("Cari Tiket")');
@@ -11,44 +11,56 @@ export class Jackal{
 
         this.nama_pemesan = page.locator('#pemesan');
         this.email_pemesan = page.locator('#email');
-        this.nohp_pemesan = page.locator('#nohp');
-        this.alamat_pemesan = page.locator('#alamat');
-        this.carikursi_btn = page.locator('button:has-text("Selanjutnya")');
+        this.nohp_pemesan = page.locator('input[name="telepon"]');
+        this.carikursi_btn = page.locator('button:has-text("Pilih Kursi")');
 
         this.kursi_tersedia = page.locator('div.seat-blank');
-        this.pembayaran_btn = page.locator('button:has-text("Selanjutnya")');
+        this.pembayaran_btn = page.locator('button:has-text("Pembayaran")');
 
-        this.check_ketentuan_btn = page.locator('label[for="ketentuan"]');
-        this.konfirmasi_pembayaran_btn = page.locator('button#submit:has-text("Konfirmasi Reservasi")');
-        this.konfirmasi_pembayaran_btn_modal = page.locator('.modal-footer button:has-text("Ya, Lanjutkan")');
+        this.check_ketentuan_btn = page.locator('label[for="tandaicheck"]');
+        this.konfirmasi_pembayaran_btn = page.locator('button:has-text("Konfirmasi ")').first();
+        this.konfirmasi_pembayaran_btn_modal = page.locator('button:has-text("Konfirmasi ")').nth(1);
     }
 
     getNamaPenumpang(i) {
         return this.page.locator(`#penumpang${i}`);
     }
 
-    getPlatformBayar(platform) { // Untuk mendapatkan platform pembayaran setelah pilih metode bayar
+    getPenumpangTerdaftar(i) { // Untuk mendapatkan data penumpang setelah isi data untuk memilih kursi
+        return this.page.locator(`[data-passenger-index="${i}"]`);
+    }
+
+    getPlatformBayar(platform) {
         return this.page.locator(`img[alt=${platform}]`);
     }
 
     async closePopup(value) {
         while (await value.isVisible()) {
-            await value.click(); 
-            await this.page.waitForTimeout(1000);
+            await value.click();
+            await this.page.waitForTimeout (1000);
         }
     }
 
     async isiKeberangkatan(value) {
-        await this.page.selectOption('#keberangkatan', { label: value }, { force: true });
+        await this.keberangkatan.click();
+        await this.page.locator('.ss-option', { hasText: value }).click();
     }
 
     async isiTujuan(value) {
-        await this.page.selectOption('#tujuan', { label: value }, { force: true });
+        await this.tujuan.click();
+        await this.page.locator('.ss-option', { hasText: value }).nth(1).click();
     }
 
     async isiTanggalPergi(value) {
-        const tanggal_target = this.page.locator(`[aria-label="${value}"]`);
+        const date = new Date(value);
+        const bulan = new Intl.DateTimeFormat('id-ID', { month: 'long' }).format(date);
+        const hari = date.getDate();
+        const tahun = date.getFullYear();
+        const tanggal_target_id = `${bulan} ${hari}, ${tahun}`; // Convert tanggal ke Bahasa Indonesia
+
+        const tanggal_target = this.page.locator(`[aria-label="${tanggal_target_id}"]`);
         await this.tanggal_pergi.click();
+
         while(!(await tanggal_target.isVisible())){
             await this.next_month_btn.click();
         }
@@ -71,30 +83,37 @@ export class Jackal{
     async pilihJadwal() {
         await this.pilihjadwal_btn_first.click();
     }
-    
+
     async isiDataPenumpang(jml_penumpang, pemesan, penumpang) {
         const penumpang_dewasa = penumpang.PenumpangDewasa;
         await this.nama_pemesan.fill(pemesan.NamaPemesan);
         await this.email_pemesan.fill(pemesan.Email);
         await this.nohp_pemesan.fill(pemesan.NoHP);
-        await this.alamat_pemesan.fill(pemesan.Alamat);
         for(let i = 0; i < jml_penumpang; i++){
             await this.getNamaPenumpang(i+1).fill(penumpang_dewasa[`Penumpang_${i+1}`].NamaPenumpang); 
         }
     }
 
     async cariKursi() {
-        await this.carikursi_btn.click();
-    }
+        let path = new URL(this.page.url()).pathname;
+        while (path !== "/book/pilihkursi") {
+          await this.carikursi_btn.click();
+          console.log("Cari kursi diklik");
+          await this.page.waitForLoadState('networkidle'); //nunggu navigasi selesai load
+          path = new URL(this.page.url()).pathname;
+        }
+      }
+      
 
     async pilihKursi(jml_penumpang) {
         for(let i = 0; i < jml_penumpang; i++){
+            await this.getPenumpangTerdaftar(i+1).click();
             await this.kursi_tersedia.nth(i).click();
         }
         await this.pembayaran_btn.click();
     }
 
-    async pilihMetodePembayaran(metode_bayar, platform_bayar){
+    async pilihMetodePembayaran(metode_bayar, platform_bayar) {
         await this.getPlatformBayar(platform_bayar).click();
     }
 
@@ -103,7 +122,7 @@ export class Jackal{
     }
 
     async konfirmasiPembayaran() {
-        await this.konfirmasi_pembayaran_btn.click()
+        await this.konfirmasi_pembayaran_btn.click();
         await this.konfirmasi_pembayaran_btn_modal.click();
     }
 }

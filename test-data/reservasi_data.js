@@ -60,6 +60,15 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
+    Btm: {
+        Keberangkatan: "PASTEUR (KUNAFE PUSAT OLEH-OLEH )",
+        Tujuan: "BTM PANDEGLANG",
+        TanggalPergi: tanggalPergi,
+        JumlahPenumpang: 2,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS"
+    },
+
     Pemesan: {
         NamaPemesan: "Pemesan",
         Email: "pemesan@harakirimail.com",
