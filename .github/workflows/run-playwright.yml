@@ -1,0 +1,83 @@
+name: Run Playwright Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      callback_url:
+        description: "URL to send back result to n8n"
+        required: true
+      test_file:
+        description: "Spec file yang mau dijalankan"
+        required: false
+        default: ""
+
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependecies
+        run: npm install
+
+      - name: Install Playwright Browser
+        run: npx playwright install chromium
+
+      - name: Run tests
+        id: teststep
+        run: |
+          if [ -z "${{ github.event.inputs.test_file }}" ]; then
+            npx playwright test --reporter=json --project=chromium > result.json || true
+            echo "Done running all tests"
+          else
+            npx playwright test ./tests/${{ github.event.inputs.test_file }} --reporter=json --project=chromium > result.json || true
+            echo "Done running specific test: ${{ github.event.inputs.test_file }}"
+          fi
+        continue-on-error: true
+
+      # - name: Extract test summary for n8n
+      #   id: summary
+      #   run: |
+      #     jq '[
+      #       .suites[].specs[].tests[] |
+      #       {
+      #         name: .title,
+      #         status: .status
+      #       }
+      #     ]' result.json > summary.json 
+
+      - name: Callback to n8n with test summary
+        run: |
+          curl -X POST "${{ github.event.inputs.callback_url }}" \
+            -H "Content-Type: application/json" \
+            --data "@result.json"
+
+#===========================================================
+
+      # - name: Set result
+      #   id: collect
+      #   run: |
+      #     if [ -f test-results.json ]; then
+      #       echo "result=$(cat test-results.json | jq -r '.status')" >> $GITHUB_OUTPUT
+      #     else
+      #       echo "result=Completed" >> $GITHUB_OUTPUT
+      #     fi    
+                
+      # - name: Upload full result.json
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: full-playwright-report
+      #     path: result.json
+
+      # - name: Callback to n8n
+      #   run: |
+      #     curl -X POST "${{ github.event.inputs.callback_url }}" \
+      #       -H "Content-Type: application/json" \
+      #       -d "{\"status\": \"done\", \"test_result\": \"${{ steps.collect.outputs.result }}\"}"

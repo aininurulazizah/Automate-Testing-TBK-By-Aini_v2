@@ -1,0 +1,32 @@
+name: Test Echo from n8n
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: "Message from n8n"
+        required: true
+        default: "Hello from n8n"
+      callback_url:
+        description: "URL to send back result to n8n"
+        required: true
+
+jobs:
+  echo_job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print message
+        run: |
+          echo "Received: ${{ github.event.inputs.message }}"
+
+      - name: Prepare result output
+        id: output-step
+        run: echo "result=Done:${{ github.event.inputs.message }}" >> $GITHUB_OUTPUT
+
+      - name: Send callback result to n8n
+        run: |
+          curl -X POST \
+          -H "Content-Type: application/json" \
+          -d "{\"result\": \"Done:${{ github.event.inputs.message }}\"}" \
+          "${{ github.event.inputs.callback_url }}"
