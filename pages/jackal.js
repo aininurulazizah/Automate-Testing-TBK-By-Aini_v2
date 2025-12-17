@@ -3,11 +3,15 @@ export class Jackal{
         this.page = page;
         this.keberangkatan = page.locator('#keberangkatan');
         this.tujuan = page.locator('#tujuan');
-        this.tanggal_pergi = page.locator('input[type="text"][readonly]');;
+        this.tanggal_pergi = page.locator('input[type="text"][readonly]');
+        this.pp_checkbox =  page.locator('div.transition-all').first();
+        this.tanggal_pulang = page.locator('input.tgl_pulang[readonly]');
         this.next_month_btn = page.locator('.flatpickr-next-month');
+        this.next_month_btn2 = page.locator('.flatpickr-next-month').nth(1);
         this.jumlah_penumpang = page.locator('.ss-main .ss-single-selected span:has-text("Orang")');
         this.cari_btn = page.locator('button:has-text("Cari Tiket")');
         this.pilihjadwal_btn_first = page.locator('button:has-text("Pilih")').first();
+        this.pilihjadwal_btn_plg_first = page.locator('button[onclick^="sendJadwalpp"]').first();
 
         this.nama_pemesan = page.locator('#pemesan');
         this.email_pemesan = page.locator('#email');
@@ -16,6 +20,7 @@ export class Jackal{
         this.carikursi_btn = page.locator('button:has-text("Selanjutnya")');
 
         this.kursi_tersedia = page.locator('div.seat-blank');
+        this.kursi_plg_tersedia = page.locator('div.seat-blank[onclick*="books_pp"]');
         this.pembayaran_btn = page.locator('button:has-text("Selanjutnya")');
 
         this.check_ketentuan_btn = page.locator('label[for="ketentuan"]');
@@ -55,6 +60,19 @@ export class Jackal{
         await tanggal_target.click();
     }
 
+    async checklistPP() {
+        await this.pp_checkbox.click();
+    }
+
+    async isiTanggalPulang(value) {
+        const tanggal_target = this.page.locator(`[aria-label="${value}"]`);
+        await this.tanggal_pulang.click();
+        while(!(await tanggal_target.isVisible())){
+            await this.next_month_btn2.click();
+        }
+        await tanggal_target.click();
+    }
+
     async isiJumlahPenumpang(value) {
         const selected = await this.page.locator('.ss-single-selected span:has-text("Orang")').innerText();
         if (selected !== `${value} Orang`) {
@@ -70,6 +88,10 @@ export class Jackal{
 
     async pilihJadwal() {
         await this.pilihjadwal_btn_first.click();
+    }
+
+    async pilihJadwalPulang() {
+        await this.pilihjadwal_btn_plg_first.click();
     }
     
     async isiDataPenumpang(jml_penumpang, pemesan, penumpang) {
@@ -90,6 +112,13 @@ export class Jackal{
     async pilihKursi(jml_penumpang) {
         for(let i = 0; i < jml_penumpang; i++){
             await this.kursi_tersedia.nth(i).click();
+        }
+        await this.pembayaran_btn.click();
+    }
+
+    async pilihKursiPulang(jml_penumpang) {
+        for(let i = 0; i < jml_penumpang; i++){
+            await this.kursi_plg_tersedia.nth(i).click();
         }
         await this.pembayaran_btn.click();
     }

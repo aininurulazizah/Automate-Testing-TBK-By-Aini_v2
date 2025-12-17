@@ -1,18 +1,18 @@
-const tanggalPergi = getTanggalPlus3Bulan();
+const tanggalPergi = tanggalPlus2Bulan();
 
-const tanggalPulang = getTanggalPlus4Bulan();
+const tanggalPulang = tanggalPlus3Bulan();
 
-function getTanggalPlus3Bulan() {
+function tanggalPlus2Bulan() {
     const today = new Date();
-    today.setMonth(today.getMonth() + 3);
+    today.setMonth(today.getMonth() + 2);
 
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return today.toLocaleDateString('en-US', options);
 }
 
-function getTanggalPlus4Bulan() {
+function tanggalPlus3Bulan() {
     const today = new Date();
-    today.setMonth(today.getMonth() + 4);
+    today.setMonth(today.getMonth() + 3);
 
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return today.toLocaleDateString('en-US', options);
@@ -30,8 +30,8 @@ export const testData = {
     },
 
     Baraya: {
-        Keberangkatan: "Pasteur",
-        Tujuan: "Jatiwaringin",
+        Keberangkatan: "Buah Batu",
+        Tujuan: "Cibubur",
         TanggalPergi: tanggalPergi,
         TanggalPulang: tanggalPulang,
         JumlahPenumpang: {
@@ -52,9 +52,10 @@ export const testData = {
     },
 
     Jackal: {
-        Keberangkatan: "PASTEUR (POOL TRANSIT)",
-        Tujuan: "BOGOR TRADE MALL",
+        Keberangkatan: "BUAH BATU (POOL TRANSIT)",
+        Tujuan: "CIBUBUR",
         TanggalPergi: tanggalPergi,
+        TanggalPulang: tanggalPulang,
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"

@@ -7,15 +7,17 @@ export class Baraya {
         this.dropdown_tujuan = page.locator('#dropdown-outlet2');
         this.search_lokasi = page.locator('#dropdown-outlet2 #searchQuery');
         this.tanggal_pergi = page.locator('#tanggal');
-        this.next_month_btn = page.locator('.flatpickr-next-month');
-        this.checklist_tanggal_pulang = page.locator('#is_pp');
+        this.pp_checkbox =  page.locator('input#is_pp');
         this.tanggal_pulang = page.locator('#tanggal_pulang');
+        this.next_month_btn = page.locator('.flatpickr-next-month');
+        this.next_month_btn2 = page.locator('.flatpickr-next-month').nth(1);
         this.jumlah_penumpang = page.locator('#penumpangInput');
         this.add_dewasa_btn = page.locator('#btnPlusDewasa');
         this.add_bayi_btn = page.locator('#btnPlusBayi');
         this.simpan_penumpang_btn = page.locator('button:has-text("Simpan")');
         this.cari_btn = page.locator('#submit'); 
         this.pilihjadwal_btn_first = page.locator('button:has-text("Pilih")').first();
+        this.pilihjadwal_btn_plg_first = page.locator('button[onclick^="sendJadwalpp"]').first();
 
         this.nama_pemesan = page.locator('#pemesan');
         this.email_pemesan = page.locator('#email');
@@ -24,6 +26,7 @@ export class Baraya {
         this.carikursi_btn = page.locator('button:has-text("Pilih Kursi")');
 
         this.kursi_tersedia = page.locator('div.seat-blank');
+        this.kursi_plg_tersedia = page.locator('div.seat-blank[onclick*="books_pp"]');
         this.pembayaran_btn = page.locator('button:has-text("Pembayaran")');
 
         this.check_ketentuan_btn = page.locator('label[for="tandaicheck"]');
@@ -70,6 +73,19 @@ export class Baraya {
         await tanggal_target.click();
     }
 
+    async checklistPP() {
+        await this.pp_checkbox.click();
+    }
+
+    async isiTanggalPulang(value) {
+        const tanggal_target = this.page.locator(`[aria-label="${value}"]`);
+        await this.tanggal_pulang.click();
+        while(!(await tanggal_target.isVisible())){
+            await this.next_month_btn2.click();
+        }
+        await tanggal_target.click();
+    }
+
     async isiJumlahPenumpang(value) {
         let value_dewasa = Number(await this.page.locator('#inputDewasa').getAttribute('value'));
         let value_bayi = Number(await this.page.locator('#inputBayi').getAttribute('value'));
@@ -89,8 +105,12 @@ export class Baraya {
         await this.cari_btn.click();
     }
 
-    async pilihJadwal(){
+    async pilihJadwal() {
         await this.pilihjadwal_btn_first.click();
+    }
+
+    async pilihJadwalPulang() {
+        await this.pilihjadwal_btn_plg_first.click();
     }
 
     async isiDataPenumpang(jml_penumpang, pemesan, penumpang) {
@@ -117,6 +137,15 @@ export class Baraya {
         const jml_dewasa = jml_penumpang.Dewasa;
         for(let i = 0; i < jml_dewasa; i++) {
             await this.kursi_tersedia.nth(i).click();
+        }
+        await this.pembayaran_btn.click();
+        await this.page.waitForTimeout(5000);
+    }
+
+    async pilihKursiPulang(jml_penumpang) {
+        const jml_dewasa = jml_penumpang.Dewasa;
+        for(let i = 0; i < jml_dewasa; i++) {
+            await this.kursi_plg_tersedia.nth(i).click();
         }
         await this.pembayaran_btn.click();
         await this.page.waitForTimeout(5000);

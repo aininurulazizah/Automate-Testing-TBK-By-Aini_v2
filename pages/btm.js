@@ -98,7 +98,6 @@ export class Btm{
         let path = new URL(this.page.url()).pathname;
         while (path !== "/book/pilihkursi") {
           await this.carikursi_btn.click();
-          console.log("Cari kursi diklik");
           await this.page.waitForLoadState('networkidle'); //nunggu navigasi selesai load
           path = new URL(this.page.url()).pathname;
         }
