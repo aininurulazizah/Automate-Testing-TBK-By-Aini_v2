@@ -26,6 +26,7 @@ export class Baraya {
         this.carikursi_btn = page.locator('button:has-text("Pilih Kursi")');
 
         this.kursi_tersedia = page.locator('div.seat-blank');
+        this.tab_plg = page.locator('a:has-text("Pulang")');
         this.kursi_plg_tersedia = page.locator('div.seat-blank[onclick*="books_pp"]');
         this.pembayaran_btn = page.locator('button:has-text("Pembayaran")');
 
@@ -138,15 +139,17 @@ export class Baraya {
         for(let i = 0; i < jml_dewasa; i++) {
             await this.kursi_tersedia.nth(i).click();
         }
-        await this.pembayaran_btn.click();
-        await this.page.waitForTimeout(5000);
     }
 
     async pilihKursiPulang(jml_penumpang) {
         const jml_dewasa = jml_penumpang.Dewasa;
+        await this.tab_plg.click();
         for(let i = 0; i < jml_dewasa; i++) {
             await this.kursi_plg_tersedia.nth(i).click();
         }
+    }
+
+    async klikBayar() {
         await this.pembayaran_btn.click();
         await this.page.waitForTimeout(5000);
     }

@@ -20,6 +20,8 @@ export class Daytrans{
         this.carikursi_confirm_btn = page.locator('#confirmSubmit');
 
         this.kursi_tersedia = page.locator('div.seat-blank');
+        this.total_kursi_perarmada = 0;
+        this.pilih_next_kursi_btn = page.locator('button:has-text("Pilih Kursi Selanjutnya")');
         this.pembayaran_btn = page.locator('button:has-text("pembayaran")');
 
         this.check_ketentuan_btn = page.locator('label[for="tandaicheck"]');
@@ -31,8 +33,16 @@ export class Daytrans{
         return this.page.locator(`#penumpang${i}`);
     }
 
-    getPenumpangTerdaftar(i) { // Untuk mendapatkan data penumpang setelah isi data untuk memilih kursi
-        return this.page.locator(`[data-passenger-index="${i}"]`);
+    getPenumpangTerdaftar(i, n) { // Untuk mendapatkan data penumpang setelah isi data untuk memilih kursi
+        return this.page.locator(`[data-passenger-index="${i}"]`).nth(n);
+    }
+
+    getJumlahPindahArmada() {
+        return this.page.locator(`[data-passenger-index="1"]`).count();
+    }
+
+    getJumlahKursi() {
+        return this.kursi_tersedia.count();
     }
 
     getMetodeBayar(metode) { // Untuk mendapatkan metode pembayaran sesuai data test
@@ -102,12 +112,29 @@ export class Daytrans{
         await this.carikursi_confirm_btn.click();
     }
 
-    async pilihKursi(jml_penumpang) {
+    async pilihKursi(jml_penumpang) { // n = 0 (tidak ada perpindahan armada)
         for(let i = 0; i < jml_penumpang; i++){
-            await this.getPenumpangTerdaftar(i+1).click();
+            await this.getPenumpangTerdaftar(i+1, 0).click();
             await this.kursi_tersedia.nth(i).click();
         }
+    }
+
+    async pilihKursiConnRes(jml_penumpang, n) {
+        for (let i = 0; i < jml_penumpang; i++) {
+          await this.getPenumpangTerdaftar(i+1, n).click(); // Dapatkan/klik penumpang terdaftar untuk pilih kursi
+          await this.kursi_tersedia.nth(this.total_kursi_perarmada+i).click(); // Pilih kursi 
+        }
+        const kursiSaatIni = await this.kursi_tersedia.count(); // Hitung banyak kursi saat ini untuk membantu pemilihan kursi di armada selanjutnya
+        this.total_kursi_perarmada = kursiSaatIni;
+    }
+
+    async klikBayar() {
         await this.pembayaran_btn.click();
+    }
+      
+
+    async pilihKursiNextArmada() {
+        await this.pilih_next_kursi_btn.click();
     }
 
     async pilihMetodePembayaran(metode_bayar, platform_bayar){

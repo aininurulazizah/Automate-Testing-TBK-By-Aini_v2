@@ -15,6 +15,8 @@ export class Btm{
         this.carikursi_btn = page.locator('button:has-text("Pilih Kursi")');
 
         this.kursi_tersedia = page.locator('div.seat-blank');
+        this.total_kursi_perarmada = 0;
+        this.pilih_next_kursi_btn = page.locator('button:has-text("Pilih Kursi Selanjutnya")');
         this.pembayaran_btn = page.locator('button:has-text("Pembayaran")');
 
         this.check_ketentuan_btn = page.locator('label[for="tandaicheck"]');
@@ -30,6 +32,14 @@ export class Btm{
         return this.page.locator(`[data-passenger-index="${i}"]`);
     }
 
+    getJumlahPindahArmada() {
+        return this.page.locator(`[data-passenger-index="1"]`).count();
+    }
+
+    getJumlahKursi() {
+        return this.kursi_tersedia.count();
+    }
+
     getPlatformBayar(platform) {
         return this.page.locator(`img[alt=${platform}]`);
     }
@@ -43,7 +53,7 @@ export class Btm{
 
     async isiKeberangkatan(value) {
         await this.keberangkatan.click();
-        await this.page.locator('.ss-option', { hasText: value }).click();
+        await this.page.locator('.ss-option', { hasText: value }).first().click();
     }
 
     async isiTujuan(value) {
@@ -109,6 +119,18 @@ export class Btm{
             await this.getPenumpangTerdaftar(i+1).click();
             await this.kursi_tersedia.nth(i).click();
         }
+    }
+
+    async pilihKursiConnRes(jml_penumpang, n) {
+        await this.pilihKursi(jml_penumpang)
+    }
+
+    async pilihKursiNextArmada() {
+        await this.pilih_next_kursi_btn.click();
+        await this.page.waitForTimeout(3000);
+    }
+
+    async klikBayar() {
         await this.pembayaran_btn.click();
     }
 

@@ -26,7 +26,11 @@ export const testData = {
         TanggalPergi: tanggalPergi,
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
-        PlatformBayar: "QRIS"
+        PlatformBayar: "QRIS",
+        ConnectingReservation: {
+            Keberangkatan: "Atrium plaza",
+            Tujuan: "Karang ayu"
+        }
     },
 
     Baraya: {
@@ -67,7 +71,11 @@ export const testData = {
         TanggalPergi: tanggalPergi,
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
-        PlatformBayar: "QRIS"
+        PlatformBayar: "QRIS",
+        ConnectingReservation: {
+            Keberangkatan: "BAYAH",
+            Tujuan: "SUCI (HOTEL NINDYA BIODISTRICT )"
+        }
     },
 
     Pemesan: {

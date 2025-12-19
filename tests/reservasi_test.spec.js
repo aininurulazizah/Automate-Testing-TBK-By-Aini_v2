@@ -7,11 +7,11 @@ import { Btm } from "../pages/btm";
 import { testData } from "../test-data/reservasi_data";
 
 const sites = [
-    {tag: '@daytrans', url: 'https://www.daytrans.co.id/', locator: Daytrans, data: testData.Daytrans, roundTrip: false},
-    {tag: '@baraya', url: 'https://www.baraya-travel.com/', locator: Baraya, data: testData.Baraya, roundTrip: true},
-    {tag: '@aragon', url: 'https://www.aragontrans.com/', locator: Aragon, data: testData.Aragon, roundTrip: false},
-    {tag: '@jackal', url: 'https://www.jackalholidays.com/', locator: Jackal, data: testData.Jackal, roundTrip: true},
-    {tag: '@btm', url: 'https://www.btmshuttle.id/', locator: Btm, data: testData.Btm, roundTrip: false}
+    {tag: '@daytrans', url: 'https://www.daytrans.co.id/', locator: Daytrans, data: testData.Daytrans, roundTrip: false, connectingRes: true},
+    {tag: '@baraya', url: 'https://www.baraya-travel.com/', locator: Baraya, data: testData.Baraya, roundTrip: true, connectingRes: false},
+    {tag: '@aragon', url: 'https://www.aragontrans.com/', locator: Aragon, data: testData.Aragon, roundTrip: false, connectingRes: false},
+    {tag: '@jackal', url: 'https://www.jackalholidays.com/', locator: Jackal, data: testData.Jackal, roundTrip: true, connectingRes: false},
+    {tag: '@btm', url: 'https://www.btmshuttle.id/', locator: Btm, data: testData.Btm, roundTrip: false, connectingRes: true}
 ]
 
 const data_Pemesan = testData.Pemesan;
@@ -58,6 +58,8 @@ for (const site of sites) {
             await web.pilihKursi(site.data.JumlahPenumpang);
             await web.isiDataPenumpang(site.data.JumlahPenumpang, data_Pemesan, data_Penumpang);
         }
+
+        await web.klikBayar();
 
         await web.pilihMetodePembayaran(site.data.MetodeBayar, site.data.PlatformBayar);
 
@@ -112,6 +114,8 @@ for (const site of sites) {
             await web.pilihKursi(site.data.JumlahPenumpang);
                 
             await web.pilihKursiPulang(site.data.JumlahPenumpang);
+            
+            await web.klikBayar();
     
             await web.pilihMetodePembayaran(site.data.MetodeBayar, site.data.PlatformBayar);
     
@@ -120,9 +124,75 @@ for (const site of sites) {
             await web.konfirmasiPembayaran();
     
             await expect(page.locator('body')).toBeVisible();
+
+            // await page.pause();
     
         })
 
+    }
+
+
+    if(site.connectingRes) {
+
+        test(`${site.tag} - Test Case 3 - Connecting Reservation`, async({page}) => {
+        
+            test.setTimeout(60000);
+    
+            const web = new site.locator(page);
+    
+            await page.goto(site.url);
+    
+            if(web.close_popup) {
+                await web.closePopup(web.close_popup);
+            }
+    
+            await web.isiKeberangkatan(site.data.ConnectingReservation.Keberangkatan);
+    
+            await web.isiTujuan(site.data.ConnectingReservation.Tujuan);
+    
+            await web.isiTanggalPergi(site.data.TanggalPergi);
+    
+            if(web.jumlah_penumpang){
+                await web.isiJumlahPenumpang(site.data.JumlahPenumpang); // Isi jumlah penumpang
+            }
+    
+            await web.cariTiket(); // Cari tiket
+    
+            await web.pilihJadwal(); // Pilih Jadwal Keberangkatan
+
+            await web.isiDataPenumpang(site.data.JumlahPenumpang, data_Pemesan, data_Penumpang);
+                
+            await web.cariKursi();
+
+            let n = 0; // armada ke berapa
+            while(true) {
+
+                await web.pilihKursiConnRes(site.data.JumlahPenumpang, n); // Pilih kursi
+
+                if(await web.pilih_next_kursi_btn.isVisible()) {
+
+                    await web.pilihKursiNextArmada(); // Klik button 'Pilih Kursi Selanjutnya' jika ada
+
+                } else {
+                    break; // Jika tidak ada button pilih kursi selanjutnya maka perulangan selesai
+                }
+                n++ ;
+            }
+
+            await web.klikBayar();
+    
+            await web.pilihMetodePembayaran(site.data.MetodeBayar, site.data.PlatformBayar);
+    
+            await web.checklistKetentuan();
+    
+            await web.konfirmasiPembayaran();
+    
+            await expect(page.locator('body')).toBeVisible();
+
+            // await page.pause();
+    
+        })
+    
     }
 
 }

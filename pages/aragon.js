@@ -67,7 +67,6 @@ export class Aragon {
 
     async pilihJadwal(){
         let path = new URL(this.page.url()).pathname;
-        // console.log(path);
         while (path === "/book/tiket") {
             await this.pilihjadwal_btn_first.click();
             path = new URL(this.page.url()).pathname;
@@ -94,6 +93,9 @@ export class Aragon {
         for(let i = 0; i < jml_penumpang; i++){
             await this.getNamaPenumpang(i+1).fill(penumpang_dewasa[`Penumpang_${i+1}`].NamaPenumpang); 
         }
+    }
+
+    async klikBayar() {
         await this.pembayaran_btn.click();
     }
 

@@ -20,6 +20,7 @@ export class Jackal{
         this.carikursi_btn = page.locator('button:has-text("Selanjutnya")');
 
         this.kursi_tersedia = page.locator('div.seat-blank');
+        this.tab_plg = page.locator('a:has-text("Pulang")');
         this.kursi_plg_tersedia = page.locator('div.seat-blank[onclick*="books_pp"]');
         this.pembayaran_btn = page.locator('button:has-text("Selanjutnya")');
 
@@ -113,13 +114,16 @@ export class Jackal{
         for(let i = 0; i < jml_penumpang; i++){
             await this.kursi_tersedia.nth(i).click();
         }
-        await this.pembayaran_btn.click();
     }
 
     async pilihKursiPulang(jml_penumpang) {
+        await this.tab_plg.click();
         for(let i = 0; i < jml_penumpang; i++){
             await this.kursi_plg_tersedia.nth(i).click();
         }
+    }
+
+    async klikBayar() {
         await this.pembayaran_btn.click();
     }
 
