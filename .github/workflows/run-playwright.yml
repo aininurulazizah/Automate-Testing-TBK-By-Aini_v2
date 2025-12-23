@@ -8,7 +8,7 @@ on:
         required: false
         default: ""
   schedule:
-    - cron: "50 4 * * *"
+    - cron: "0 23 * * *"
 
 jobs:
   run-test:
@@ -28,6 +28,9 @@ jobs:
 
       - name: Install Playwright Browser
         run: npx playwright install chromium
+
+      - name: Set Timezone to WIB
+        run: sudo timedatectl set-timezone Asia/Jakarta
 
       - name: Run tests
         id: run_tests
@@ -52,11 +55,11 @@ jobs:
           const suites = data.suites || [];
           const stats = data.stats || {};
 
-          const executionTime = new Date(stats.startTime || Date.now());
+          const executionTime = stats.startTime ? new Date(stats.startTime) : new Date();
           const duration = stats.duration || 0;
 
           const date = executionTime.toLocaleDateString('id-ID');
-          const time = executionTime.toLocaleTimeString('id-ID');
+          const time = executionTime.toLocaleTimeString('id-ID', { hour12: false });
 
           let total = 0;
           let passed = 0;
@@ -92,7 +95,7 @@ jobs:
              Summary
              🧪 Total: ${total}
              ✅ Passed: ${passed}
-            ❌ Failed: ${failed}
+             ❌ Failed: ${failed}
 
              Detail
              ${detail}`;
@@ -103,6 +106,13 @@ jobs:
           );
           EOF
 
+      - name: Send Telegram Notification
+        if: always()
+        run: |
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            --data-urlencode "text=$TELEGRAM_REPORT"
+
       # - name: Generate HTML report
       #   run: npx playwright show-report --output=report
 
@@ -111,10 +121,3 @@ jobs:
       #   with:
       #     github_token: ${{ secrets.GITHUB_TOKEN }}
       #     publish_dir: ./report
-
-      - name: Send Telegram Notification
-        if: always()
-        run: |
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
-            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-            --data-urlencode "text=$TELEGRAM_REPORT"
