@@ -43,15 +43,65 @@ jobs:
           fi
         continue-on-error: true
 
-      - name: Generate test summary
+      - name: Build Telegram Report
         run: |
-          PASSED=$(jq '[.suites[].specs[].tests[].results[] | select(.status=="passed")] | length' result.json)
-          FAILED=$(jq '[.suites[].specs[].tests[].results[] | select(.status=="failed")] | length' result.json)
-          TOTAL=$((PASSED + FAILED))
+          node <<'EOF'
+          const fs = require('fs');
 
-          echo "PASSED=$PASSED" >> $GITHUB_ENV
-          echo "FAILED=$FAILED" >> $GITHUB_ENV
-          echo "TOTAL=$TOTAL" >> $GITHUB_ENV
+          const data = JSON.parse(fs.readFileSync('result.json', 'utf8'));
+          const suites = data.suites || [];
+          const stats = data.stats || {};
+
+          const executionTime = new Date(stats.startTime || Date.now());
+          const duration = stats.duration || 0;
+
+          const date = executionTime.toLocaleDateString('id-ID');
+          const time = executionTime.toLocaleTimeString('id-ID');
+
+          let total = 0;
+          let passed = 0;
+          let failed = 0;
+          let detail = '';
+
+          suites.forEach(suite => {
+            if (!suite.file) return;
+
+            detail += `📁 File: ${suite.file}\n`;
+
+            (suite.specs || []).forEach(spec => {
+              const test = spec.tests?.[0];
+              const status = test?.expectedStatus || 'unknown';
+
+              total++;
+              if (status === 'passed') passed++;
+              else failed++;
+
+              detail += `  • ${spec.title} — [ ${status} ]\n`;
+            });
+
+            detail += '\n';
+          });
+
+          const report =
+            `AUTOMATE TEST REPORT
+
+             📅 Date: ${date} 
+             🕒 Time: ${time}
+              ⏱ Duration: ${duration} ms
+
+             Summary
+             🧪 Total: ${total}
+             ✅ Passed: ${passed}
+            ❌ Failed: ${failed}
+
+             Detail
+             ${detail}`;
+
+          fs.appendFileSync(
+            process.env.GITHUB_ENV,
+            `TELEGRAM_REPORT<<EOF\n${report}\nEOF\n`
+          );
+          EOF
 
       - name: Generate HTML report
         run: npx playwright show-report --output=report
@@ -67,14 +117,4 @@ jobs:
         run: |
           curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
             -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-            -d text="🧪 *Playwright Test Result*
-
-            Status: ${{ job.status }}
-            Total: $TOTAL
-            Passed: $PASSED
-            Failed: $FAILED
-
-            Triggered by: ${{ github.actor }}
-            Workflow: ${{ github.workflow }}
-            Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            Report: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+            --data-urlencode "text=$TELEGRAM_REPORT"
