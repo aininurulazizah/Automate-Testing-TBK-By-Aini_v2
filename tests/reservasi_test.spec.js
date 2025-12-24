@@ -20,9 +20,9 @@ const data_Penumpang = testData.Penumpang;
 
 for (const site of sites) {
 
-    test(`${site.tag} - Test Case 1 - One Way Trip`, async({page}) => {
+    test.setTimeout(60000);
 
-        test.setTimeout(60000);
+    test(`${site.tag} - Test Case 1 - One Way Trip`, async({page}) => {
 
         const web = new site.locator(page);
     
@@ -67,7 +67,7 @@ for (const site of sites) {
 
         await web.konfirmasiPembayaran();
 
-        await expect(page.locator('body')).toBeVisible();
+        await page.waitForURL(/selesai/);
 
         // await page.pause();
         
@@ -76,8 +76,6 @@ for (const site of sites) {
     if(site.roundTrip) {
 
         test(`${site.tag} - Test Case 2 - Round Trip`, async({page}) => {
-        
-            test.setTimeout(60000);
     
             const web = new site.locator(page);
     
@@ -122,8 +120,8 @@ for (const site of sites) {
             await web.checklistKetentuan();
     
             await web.konfirmasiPembayaran();
-    
-            await expect(page.locator('body')).toBeVisible();
+
+            await page.waitForURL(/selesai/);
 
             // await page.pause();
     
@@ -135,8 +133,6 @@ for (const site of sites) {
     if(site.connectingRes) {
 
         test(`${site.tag} - Test Case 3 - Connecting Reservation`, async({page}) => {
-        
-            test.setTimeout(60000);
     
             const web = new site.locator(page);
     
@@ -186,8 +182,8 @@ for (const site of sites) {
             await web.checklistKetentuan();
     
             await web.konfirmasiPembayaran();
-    
-            await expect(page.locator('body')).toBeVisible();
+
+            await page.waitForURL(/selesai/);
 
             // await page.pause();
     

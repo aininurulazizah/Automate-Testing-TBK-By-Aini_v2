@@ -1,21 +1,15 @@
-const tanggalPergi = tanggalPlus2Bulan();
+const tanggalPergi = getTanggal(2);
 
-const tanggalPulang = tanggalPlus3Bulan();
+const tanggalPulang = getTanggal(3);
 
-function tanggalPlus2Bulan() {
+function getTanggal(bulan) {
     const today = new Date();
-    today.setMonth(today.getMonth() + 2);
-
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return today.toLocaleDateString('en-US', options);
-}
-
-function tanggalPlus3Bulan() {
-    const today = new Date();
-    today.setMonth(today.getMonth() + 3);
-
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return today.toLocaleDateString('en-US', options);
+    const day = today.getDate(); //Ambil tanggal di hari ini
+    today.setDate(1); //Set tanggal jadi 1 agar tidak overflow
+    today.setMonth(today.getMonth() + bulan); //Set bulan ke bulan setelah berapa 'bulan'
+    const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate(); //Set tanggal terakhir di bulan tujuan
+    today.setDate(Math.min(day,lastDay)); //Membandingkan tanggal hari ini (yang akan dipilih) dengan tanggal terakhir di bulan tujuan (misal tgl sekarang 31, tanggal terakhir di bulan target 28, maka yang dipilih 28)
+    return today.toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'}); //Mengembalikan nilai tanggal tujuan
 }
 
 export const testData = {
