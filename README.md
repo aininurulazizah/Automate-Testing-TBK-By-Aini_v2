@@ -2,9 +2,14 @@
 ### Deskripsi
 Proyek ini automasi testing untuk proses pemesanan tiket bus pada beberapa penyedia layanan di TBK : Daytrans, Baraya, Aragon, dan Jackal.
 
-### Tools
-- Playwright
-- Visual Studio Code
+### Tools & Prerequisites
+- **Node.js v18+** (v22.11.0 digunakan) — Runtime JavaScript untuk menjalankan Playwright
+- **Git** — Version control
+- **Playwright** — Framework automated UI testing
+- **GitHub Actions** — CI untuk menjalankan automated test secara otomatis
+- **Telegram Bot API** — Notifikasi hasil pengujian ke telegram
+- **Visual Studio Code** (atau editor lain) — Code editor
+  
 ### Cara Menjalankan
 1. Install dependensi yang dibutuhkan
 2. Menjalankan test semua website :
@@ -57,4 +62,4 @@ Proyek ini automasi testing untuk proses pemesanan tiket bus pada beberapa penye
    | Btm      | Connecting Reservation | @btm - Test Case 3 - Connecting Reservation      |
 
 ### Notes
-- [Belum ada catatan untuk saat ini]
+- Untuk saat ini automated test ini akan dijalankan secara otomatis setiap pukul 06.00 pagi dan notifikasi hasil testing akan dikirimkan ke [Telegram](https://t.me/+ZXzmUv7vd-YxOTA9)
