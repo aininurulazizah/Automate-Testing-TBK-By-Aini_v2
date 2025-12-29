@@ -51,12 +51,26 @@ jobs:
           node <<'EOF'
           const fs = require('fs');
 
+          function formatDuration(ms) {
+            const totalSeconds = Math.floor(ms / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds & 60;
+
+            return [
+              String(hours).padStart(2, '0'),
+              String(minutes).padStart(2, '0'),
+              String(seconds).padStart(2, '0'),
+            ].join(':');
+          }
+
           const data = JSON.parse(fs.readFileSync('result.json', 'utf8'));
           const suites = data.suites || [];
           const stats = data.stats || {};
 
           const executionTime = stats.startTime ? new Date(stats.startTime) : new Date();
           const duration = stats.duration || 0;
+          const durationFormatted = formatDuration(duration);
 
           const date = executionTime.toLocaleDateString('id-ID');
           const time = executionTime.toLocaleTimeString('id-ID', { hour12: false });
@@ -90,7 +104,7 @@ jobs:
 
              📅 Date: ${date} 
              🕒 Time: ${time}
-              ⏱ Duration: ${duration} ms
+              ⏱ Duration: ${durationFormatted} ms
 
              Summary
              🧪 Total: ${total}
