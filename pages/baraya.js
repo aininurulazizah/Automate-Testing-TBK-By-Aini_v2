@@ -1,7 +1,11 @@
 export class Baraya {
     constructor(page){
+
+        // General
         this.page = page;
         this.close_popup = page.locator('.close-pop-info');
+        
+        // Reservation Form
         this.keberangkatan = page.locator('#dropdownOutlet');
         this.tujuan = page.locator('.col-12 .mx-0 .px-0 .btn-group #dropdownOutlet2');
         this.dropdown_tujuan = page.locator('#dropdown-outlet2');
@@ -19,20 +23,39 @@ export class Baraya {
         this.pilihjadwal_btn_first = page.locator('button:has-text("Pilih")').first();
         this.pilihjadwal_btn_plg_first = page.locator('button[onclick^="sendJadwalpp"]').first();
 
+        // User Data
         this.nama_pemesan = page.locator('#pemesan');
         this.email_pemesan = page.locator('#email');
         this.nohp_pemesan = page.locator('[name="telepon"]');
         this.nama_penumpang = page.locator('#penumpang1');
         this.carikursi_btn = page.locator('button:has-text("Pilih Kursi")');
 
+        // Seat Page
         this.kursi_tersedia = page.locator('div.seat-blank');
         this.tab_plg = page.locator('a:has-text("Pulang")');
         this.kursi_plg_tersedia = page.locator('div.seat-blank[onclick*="books_pp"]');
         this.pembayaran_btn = page.locator('button:has-text("Pembayaran")');
 
+        // Payment Confirmation Page
         this.check_ketentuan_btn = page.locator('label[for="tandaicheck"]');
         this.konfirmasi_pembayaran_btn = page.locator('button#submit:has-text("Konfirmasi")');
         this.konfirmasi_pembayaran_btn_modal = page.locator('.modal-body button:has-text("Konfirmasi")');
+
+        // Login
+        this.login_btn = page.locator('a:has-text("Masuk")');
+        this.login_phone_btn = page.locator('button:has-text("Nomor Telepon")');
+        this.login_whatsapp_btn = page.locator('button:has-text("Nomor Whatsapp")');
+        this.login_email_btn = page.locator('button:has-text("Email")');
+        this.login_google_btn = page.locator('button:has-text("Google")');
+        this.phone_field = page.locator('input#telp');
+        this.email_field = page.locator('input#email');
+        this.submit_btn = page.locator('button:has-text("Masuk")');
+        this.submit_otp_btn = page.locator('button[onclick*="submit"]');
+        this.regis_instruction = page.getByRole('heading', { name: /Lengkapi\s+Data Kamu/i })
+        this.regis_nama_field = page.locator('input#nama');
+        this.regis_phone_field = page.locator('input#telp');
+        this.regis_email_field = page.locator('input#email');
+        this.regis_simpan_btn = page.locator('button:has-text("Simpan")');
     }
 
     getNamaPenumpang(i) {
@@ -166,4 +189,64 @@ export class Baraya {
         await this.konfirmasi_pembayaran_btn.click()
         await this.konfirmasi_pembayaran_btn_modal.click();
     }
+
+    // Login
+
+    async klikButtonLogin() {
+        await this.login_btn.click();
+    }
+
+    async pilihViaTelepon() {
+        await this.login_phone_btn.click();
+    }
+
+    async pilihViaEmail() {
+        await this.login_email_btn.click();
+    }
+
+    async pilihViaGoogle() {
+        await this.login_google_btn.click();
+    }
+
+    async isiNoTelp(no_telp) {
+        await this.phone_field.fill(no_telp);
+    }
+
+    async isiEmail(email) {
+        await this.email_field.fill(email);
+    }
+
+    async pilihAkun() {
+        await this.page.pause();
+    }
+
+    async submitNoTelp() {
+        await this.submit_btn.click();
+    }
+
+    async submitEmail() {
+        await this.submit_btn.click();
+    }
+
+    async isiOTP() {
+        await this.page.pause();
+    }
+
+    async submitOTP() {
+        await this.submit_otp_btn.click();
+        await this.page.waitForTimeout(2000);
+    }
+
+    async isiDataRegistrasi(value, byTelpOrEmail) {
+        await this.regis_nama_field.fill(value.Nama);
+        if(byTelpOrEmail === 'byTelp') {
+            await this.regis_email_field.fill(value.Email);
+        }
+        if(byTelpOrEmail === 'byEmail') {
+            await this.regis_phone_field.fill(value.NoTelepon);
+        }
+        await this.page.pause();
+        await this.regis_simpan_btn.click();
+    }
+
 }

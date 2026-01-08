@@ -1,7 +1,11 @@
 export class Daytrans{
     constructor(page) {
+
+        // General
         this.page = page;
         this.close_popup = page.locator('.close-pop-info');
+
+        // Reservation Form
         this.keberangkatan = page.locator('#berangkat');
         this.tujuan = page.locator('#tujuan');
         this.dropdown_keberangkatan = page.locator('#dropdown-outlet');
@@ -13,20 +17,35 @@ export class Daytrans{
         this.carijadwal_btn_first = page.locator('.btn-list-jadwal').first();
         this.pilihjadwal_btn_first = page.locator('button:has-text("Beli")').first();
 
+        // User Data
         this.nama_pemesan = page.locator('#pemesan');
         this.email_pemesan = page.locator('#email');
         this.nohp_pemesan = page.locator('[name="telepon"]');
         this.carikursi_btn = page.locator('#submitModal');
         this.carikursi_confirm_btn = page.locator('#confirmSubmit');
 
+        // Seat Page
         this.kursi_tersedia = page.locator('div.seat-blank');
         this.total_kursi_perarmada = 0;
         this.pilih_next_kursi_btn = page.locator('button:has-text("Pilih Kursi Selanjutnya")');
         this.pembayaran_btn = page.locator('button:has-text("pembayaran")');
 
+        // Payment Confirmation Page
         this.check_ketentuan_btn = page.locator('label[for="tandaicheck"]');
         this.konfirmasi_pembayaran_btn = page.locator('button#submit:has-text("Konfirmasi")');
         this.konfirmasi_pembayaran_btn_modal = page.locator('.modal-body button:has-text("Konfirmasi")');
+
+        // Login
+        this.login_btn = page.locator('a:has-text("Masuk")');
+        this.login_phone_btn = page.locator('button:has-text("Nomor Telepon")');
+        this.login_whatsapp_btn = page.locator('button:has-text("Whatsapp")');
+        this.login_email_btn = page.locator('button:has-text("Email")');
+        this.login_google_btn = page.locator('button:has-text("Google")');
+        this.phone_field = page.locator('input#no_telepon');
+        this.email_field = page.locator('input#email');
+        this.submit_tlp_btn = page.locator('button[onclick*="submittlp"]');
+        this.submit_email_btn = page.locator('button[onclick*=submitemail]');
+        this.submit_otp_btn = page.locator('button[onclick*="submit"]');
     }
 
     getNamaPenumpang(i) { // Untuk mendapatkan object data penumpang dari data test
@@ -150,4 +169,51 @@ export class Daytrans{
         await this.konfirmasi_pembayaran_btn.click()
         await this.konfirmasi_pembayaran_btn_modal.click();
     }
-}
+
+    // Login
+
+    async klikButtonLogin() {
+        await this.login_btn.click();
+    }
+
+    async pilihViaTelepon() {
+        await this.login_phone_btn.click();
+    }
+
+    async pilihViaEmail() {
+        await this.login_email_btn.click();
+    }
+
+    async pilihViaGoogle() {
+        await this.login_google_btn.click();
+    }
+
+    async isiNoTelp(no_telp) {
+        await this.phone_field.fill(no_telp);
+    }
+
+    async isiEmail(email) {
+        await this.email_field.fill(email);
+    }
+    
+    async pilihAkun() {
+        await this.page.pause();
+    }
+
+    async submitNoTelp() {
+        await this.submit_tlp_btn.click();
+    }
+
+    async submitEmail() {
+        await this.submit_email_btn.click();
+    }
+
+    async isiOTP() {
+        await this.page.pause();
+    }
+
+    async submitOTP() {
+        await this.submit_otp_btn.click();
+        await this.page.waitForTimeout(2000);
+    }
+ }

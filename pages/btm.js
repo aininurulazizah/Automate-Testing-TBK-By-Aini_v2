@@ -1,6 +1,11 @@
 export class Btm{
     constructor(page) {
+
+        // General
         this.page = page;
+        this.close_popup = page.locator('.close-pop-info')
+
+        // Reservation Form
         this.keberangkatan = page.locator('.ss-single-selected').first();
         this.tujuan = page.locator('.ss-single-selected').nth(1);
         this.tanggal_pergi = page.locator('input.datepicker[readonly]');
@@ -9,19 +14,43 @@ export class Btm{
         this.cari_btn = page.locator('button:has-text("Cari Tiket")');
         this.pilihjadwal_btn_first = page.locator('button:has-text("Pilih")').first();
 
+        // User Data
         this.nama_pemesan = page.locator('#pemesan');
         this.email_pemesan = page.locator('#email');
         this.nohp_pemesan = page.locator('input[name="telepon"]');
         this.carikursi_btn = page.locator('button:has-text("Pilih Kursi")');
 
+        // Seat Page
         this.kursi_tersedia = page.locator('div.seat-blank');
         this.total_kursi_perarmada = 0;
         this.pilih_next_kursi_btn = page.locator('button:has-text("Pilih Kursi Selanjutnya")');
         this.pembayaran_btn = page.locator('button:has-text("Pembayaran")');
 
+        // Payment Confirmation Page
         this.check_ketentuan_btn = page.locator('label[for="tandaicheck"]');
         this.konfirmasi_pembayaran_btn = page.locator('button:has-text("Konfirmasi ")').first();
         this.konfirmasi_pembayaran_btn_modal = page.locator('button:has-text("Konfirmasi ")').nth(1);
+
+        // Login
+        this.login_btn = page.locator('a:has-text("Daftar/Masuk")');
+        this.login_phone_btn = page.locator('button:has-text("Login dengan Nomor Telepon")');
+        this.login_whatsapp_btn = page.locator('button:has-text("Login dengan Whatsapp")');
+        this.login_email_btn = page.locator('button:has-text("Login dengan Email")');
+        this.login_google_btn = page.locator('button:has-text("Login dengan Google")');
+        this.phone_field = page.locator('input#no_telepon');
+        this.email_field = page.locator('input#email');
+        this.submit_tlp_btn = page.locator('button[onclick*="submittlp"]');
+        this.submit_email_btn = page.locator('button[onclick*="submitemail"]');
+        this.submit_otp_btn = page.locator('button[onclick*="submit"]');
+        this.regis_instruction = page.locator('p:has-text("Daftar Akun")');
+        this.regis_nama_field = page.locator('input#nama');
+        this.regis_phone_field = page.locator('input[name="telp"]');
+        this.regis_email_field = page.locator('input[name="email"]');
+        this.regis_tanggal_lahir = page.locator('input[placeholder="Tanggal ulang tahun"][type="text"]');
+        this.prev_month_btn = page.locator('.flatpickr-prev-month');
+        this.regis_alamat_field = page.locator('textarea[name="alamat"]');
+        this.regis_simpan_btn = page.locator('button:has-text("Daftar")');
+
     }
 
     getNamaPenumpang(i) {
@@ -44,6 +73,16 @@ export class Btm{
         return this.page.locator(`img[alt=${platform}]`);
     }
 
+    getGenderRegistration(gender) {
+        if(gender === "Perempuan") {
+            return this.page.locator(`div.d-flex.gender.wanita >> div:has-text('Perempuan')`);
+        }
+        if(gender === "Laki-laki") {
+            return this.page.locator(`div.d-flex.genderpria >> div:has-text('Laki-laki')`);
+        }
+        
+    }
+
     async closePopup(value) {
         while (await value.isVisible()) {
             await value.click();
@@ -62,19 +101,7 @@ export class Btm{
     }
 
     async isiTanggalPergi(value) {
-        const date = new Date(value);
-        const bulan = new Intl.DateTimeFormat('id-ID', { month: 'long' }).format(date);
-        const hari = date.getDate();
-        const tahun = date.getFullYear();
-        const tanggal_target_id = `${bulan} ${hari}, ${tahun}`; // Convert tanggal ke Bahasa Indonesia
-
-        const tanggal_target = this.page.locator(`[aria-label="${tanggal_target_id}"]`);
-        await this.tanggal_pergi.click();
-
-        while(!(await tanggal_target.isVisible())){
-            await this.next_month_btn.click();
-        }
-        await tanggal_target.click();
+        await this.isiTanggal(value, "next", this.tanggal_pergi);
     }
 
     async isiJumlahPenumpang(value) {
@@ -146,4 +173,94 @@ export class Btm{
         await this.konfirmasi_pembayaran_btn.click();
         await this.konfirmasi_pembayaran_btn_modal.click();
     }
+
+    // Login
+
+    async klikButtonLogin() {
+        await this.login_btn.click();
+    }
+
+    async pilihViaTelepon() {
+        await this.login_phone_btn.click();
+    }
+
+    async pilihViaEmail() {
+        await this.login_email_btn.click();
+    }
+
+    async pilihViaGoogle() {
+        await this.login_google_btn.click();
+    }
+
+    async isiNoTelp(no_telp) {
+        await this.phone_field.fill(no_telp);
+    }
+
+    async isiEmail(email) {
+        await this.email_field.fill(email);
+    }
+
+    async pilihAkun() {
+        await this.page.pause();
+    }
+
+    async submitNoTelp() {
+        await this.submit_tlp_btn.click();
+    }
+
+    async submitEmail() {
+        await this.submit_email_btn.click();
+    }
+
+    async isiOTP() {
+        await this.page.pause();
+    }
+
+    async submitOTP() {
+        await this.submit_otp_btn.click();
+        await this.page.waitForTimeout(2000);
+    }
+
+    async isiTanggal(value, nextOrPrev, tgl_elm) {
+        const date = new Date(value);
+        const bulan = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(date);
+        const hari = date.getDate();
+        const tahun = date.getFullYear();
+        const tanggal_target_id = `${bulan} ${hari}, ${tahun}`; // Convert tanggal ke Bahasa Indonesia
+        // console.log(`hari, tanggal, bulan : ${bulan} ${hari}, ${tahun}`);
+
+        const tanggal_target = this.page.locator(`span[aria-label="${tanggal_target_id}"]`);
+        await tgl_elm.click();
+
+        if(nextOrPrev === "next") {
+            while(!(await tanggal_target.isVisible())){
+                await this.next_month_btn.click();
+            }
+            await tanggal_target.click();
+        }
+
+        if(nextOrPrev === "prev") {
+            while(!(await tanggal_target.isVisible())){
+                await this.prev_month_btn.click();
+            }
+            await tanggal_target.click();            
+        }
+
+    }
+
+    async isiDataRegistrasi(value, byTelpOrEmail) {
+        await this.regis_nama_field.fill(value.Nama);
+        if(byTelpOrEmail === 'byTelp') {
+            await this.regis_email_field.fill(value.Email);
+        }
+        if(byTelpOrEmail === 'byEmail') {
+            await this.regis_phone_field.fill(value.NoTelepon);
+        }
+        await this.isiTanggal(value.TanggalLahir, "prev", this.regis_tanggal_lahir);
+        await this.getGenderRegistration(value.JenisKelamin).click();
+        await this.regis_alamat_field.fill(value.Alamat)
+        await this.page.pause();
+        await this.regis_simpan_btn.click();
+    }
+
 }

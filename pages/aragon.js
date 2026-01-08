@@ -2,8 +2,12 @@ import { expect } from '@playwright/test';
 
 export class Aragon {
     constructor(page){
+
+        // General
         this.page = page;
         this.close_popup = page.locator('.close-pop-info')
+        
+        // Reservation Form
         this.layanan_shuttle = page.locator('text=Shuttle');
         this.layanan_travel = page.locator('text=Travel');
         this.keberangkatan = page.locator('#berangkat');
@@ -14,17 +18,34 @@ export class Aragon {
         this.cari_btn = page.locator('#btn-send');
         this.pilihjadwal_btn_first = page.locator('a:has-text("Pesan")').first();
 
+        // User Data
         this.kursi_tersedia = page.locator('div.seat-blank[onclick]');
         this.isidata_btn = page.locator('button:has-text("Selanjutnya")');
 
+        // Seat Page
         this.nama_pemesan = page.locator('input#pemesan');
         this.email_pemesan = page.locator('#email');
         this.nohp_pemesan = page.locator('[name="nohp"]');
         this.nama_penumpang = page.locator('#penumpang1');
         this.pembayaran_btn = page.locator('button:has-text("Selanjutnya")');
 
+        // Payment Confirmation Page
         this.check_ketentuan_btn = page.locator('label[for="tandaicheck"]');
         this.konfirmasi_pembayaran_btn = page.locator('button#submit:has-text("Konfirmasi")');
+
+        // Login
+        this.login_btn = page.locator('a:has-text("Login & Sign Up")');
+        this.login_phone_btn = page.locator('button:has-text("Dengan Nomor Telepon")').first();
+        this.login_whatsapp_btn = page.locator('button:has-text("Dengan Nomor Whatsapp")');
+        this.login_google_btn = page.locator('button:has-text("Dengan Google")').first();
+        this.phone_field = page.locator('input[name="telepon"]').first();
+        this.submit_btn = page.locator('button:has-text("Kirim")').first();
+        this.submit_otp_btn = page.locator('button[onclick*="submit"]');
+        this.regis_nama_field = page.locator('input[name="nama"]');
+        this.regis_phone_field = page.locator('input[name="telepon"]');
+        this.regis_email_field = page.locator('input[name="email"][type="email"]');
+        this.regis_alamat_field = page.locator('textarea[name="alamat"]');
+        this.regis_simpan_btn = page.locator('button#post-btn-daftar');
     }
 
     getNamaPenumpang(i) { // Untuk mendapatkan object data penumpang dari data test
@@ -110,4 +131,53 @@ export class Aragon {
     async konfirmasiPembayaran() {
         await this.konfirmasi_pembayaran_btn.click()
     }
+
+    // Login
+
+    async klikButtonLogin() {
+        await this.login_btn.click();
+    }
+
+    async pilihViaTelepon() {
+        await this.login_phone_btn.click();
+    }
+
+    async pilihViaGoogle() {
+        await this.login_google_btn.click();
+    }
+
+    async isiNoTelp(no_telp) {
+        await this.phone_field.fill(no_telp);
+    }
+
+    async pilihAkun() {
+        await this.page.pause();
+    }
+
+    async submitNoTelp() {
+        await this.submit_btn.click();
+    }
+
+    async isiOTP() {
+        await this.page.pause();
+    }
+
+    async submitOTP() {
+        await this.submit_otp_btn.click();
+        await this.page.waitForTimeout(2000);
+    }
+
+    async isiDataRegistrasi(value, byTelpOrEmail) {
+        await this.regis_nama_field.fill(value.Nama);
+        if(byTelpOrEmail === 'byTelp') {
+            await this.regis_email_field.fill(value.Email);
+        }
+        if(byTelpOrEmail === 'byEmail') {
+            await this.regis_phone_field.fill(value.NoTelepon);
+        }
+        await this.regis_alamat_field.fill(value.Alamat);
+        await this.page.pause();
+        // await this.regis_simpan_btn.click();
+    }
+
 }
