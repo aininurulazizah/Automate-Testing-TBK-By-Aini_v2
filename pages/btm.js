@@ -101,7 +101,7 @@ export class Btm{
     }
 
     async isiTanggalPergi(value) {
-        await this.isiTanggal(value, "next", this.tanggal_pergi);
+        await this.isiTanggal(value, "next", this.tanggal_pergi, "id-ID");
     }
 
     async isiJumlahPenumpang(value) {
@@ -221,13 +221,13 @@ export class Btm{
         await this.page.waitForTimeout(2000);
     }
 
-    async isiTanggal(value, nextOrPrev, tgl_elm) {
+    async isiTanggal(value, nextOrPrev, tgl_elm, locale) {
         const date = new Date(value);
-        const bulan = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(date);
+        const bulan = new Intl.DateTimeFormat(locale, { month: 'long' }).format(date);
         const hari = date.getDate();
         const tahun = date.getFullYear();
-        const tanggal_target_id = `${bulan} ${hari}, ${tahun}`; // Convert tanggal ke Bahasa Indonesia
-        // console.log(`hari, tanggal, bulan : ${bulan} ${hari}, ${tahun}`);
+        const tanggal_target_id = `${bulan} ${hari}, ${tahun}`;
+        console.log(`hari, tanggal, bulan : ${bulan} ${hari}, ${tahun}`);
 
         const tanggal_target = this.page.locator(`span[aria-label="${tanggal_target_id}"]`);
         await tgl_elm.click();
@@ -256,7 +256,7 @@ export class Btm{
         if(byTelpOrEmail === 'byEmail') {
             await this.regis_phone_field.fill(value.NoTelepon);
         }
-        await this.isiTanggal(value.TanggalLahir, "prev", this.regis_tanggal_lahir);
+        await this.isiTanggal(value.TanggalLahir, "prev", this.regis_tanggal_lahir, "en-US");
         await this.getGenderRegistration(value.JenisKelamin).click();
         await this.regis_alamat_field.fill(value.Alamat)
         await this.page.pause();

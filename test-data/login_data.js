@@ -10,13 +10,12 @@ export const testData = {
     },
     Aragon: {
         NoTelepon: "085156173645",
-        Email: "aini.tbk1@gmail.com",
         Nama: "QC Aini",
         Alamat: "Jalan Indah Nusapermai Cimahi"
     },
     Jackal: {
         NoTelepon: "085156173645",
-        Email: "aininurul9702@gmail.com",
+        Email: "aini.tbk1@gmail.com",
         Nama: "QC Aini"
     },
     Btm: {

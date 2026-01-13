@@ -22,8 +22,8 @@ export const testData = {
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS",
         ConnectingReservation: {
-            Keberangkatan: "Atrium plaza",
-            Tujuan: "Karang ayu"
+            Keberangkatan: "Alfamart Prambanan",
+            Tujuan: "Dipatiukur"
         }
     },
 
@@ -50,8 +50,8 @@ export const testData = {
     },
 
     Jackal: {
-        Keberangkatan: "BUAH BATU (POOL TRANSIT)",
-        Tujuan: "CIBUBUR",
+        Keberangkatan: "DIPATIUKUR 89 SEBRANG UNIKOM",
+        Tujuan: "LIPPO CIKARANG",
         TanggalPergi: tanggalPergi,
         TanggalPulang: tanggalPulang,
         JumlahPenumpang: 2,
