@@ -95,10 +95,17 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Pemesan: {
+    Pemesan1: {
         NamaPemesan: "Pemesan",
         Email: "pemesan@harakirimail.com",
-        NoHP: "081234567890",
+        NoHP: "0812345678901",
+        Alamat: "Bandung"
+    },
+
+    Pemesan2: {
+        NamaPemesan: "Pemesan",
+        Email: "pemesan2@harakirimail.com",
+        NoHP: "0812345678902",
         Alamat: "Bandung"
     },
 

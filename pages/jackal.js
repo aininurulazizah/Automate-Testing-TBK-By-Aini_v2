@@ -16,7 +16,7 @@ export class Jackal{
         this.next_month_btn2 = page.locator('.flatpickr-next-month').nth(1);
         this.jumlah_penumpang = page.locator('.ss-main .ss-single-selected span:has-text("Orang")');
         this.cari_btn = page.locator('button:has-text("Cari Tiket")');
-        this.jadwal_card = page.locator('div#pergi ul.list.list-jadwal > li.list-jadwal-li');
+        this.jadwal_card = page.locator('ul.list.list-jadwal > li.list-jadwal-li');
         this.jadwal_card_plg = page.locator('div#pulang ul.list.list-jadwal > li.list-jadwal-li');
 
         // User Data
@@ -109,7 +109,7 @@ export class Jackal{
     }
 
     async isiTanggalPulang(value) {
-        const tanggal_target = this.page.locator(`[aria-label="${value}"]`).nth(1);
+        const tanggal_target = this.page.locator(`[aria-label="${value}"]`);
         await this.tanggal_pulang.click();
         while(!(await tanggal_target.isVisible())){
             await this.next_month_btn2.click();
@@ -172,7 +172,7 @@ export class Jackal{
         }
     }
 
-    async validasiHargaTiketKursi(harga_tiket, jml_penumpang) { //Validasi harga tiket yang terpampang di kursi
+    async validasiHargaTiketKursi(harga_tiket, jml_penumpang, kursi_tersedia) { //Validasi harga tiket yang terpampang di kursi
         const harga_type = harga_tiket.includes(" - ") ? "range" : "fixed";
         let harga_min;
         let harga_max;
@@ -183,7 +183,7 @@ export class Jackal{
             harga_max = this.normalizeRupiah(harga_max);
 
             for (let i = 0; i < jml_penumpang; i++) {
-                const harga_kursi = this.normalizeRupiah(await this.kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
                 expect(harga_kursi).toBeGreaterThanOrEqual(harga_min);
                 expect(harga_kursi).toBeLessThanOrEqual(harga_max);
             }
@@ -192,7 +192,7 @@ export class Jackal{
         
         if (harga_type === "fixed") {
             for (let i = 0; i < jml_penumpang; i++) {
-                const harga_kursi = this.normalizeRupiah(await this.kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
                 expect(harga_kursi).toBe(this.normalizeRupiah(harga_tiket));
             }
         }
@@ -201,14 +201,16 @@ export class Jackal{
 
     }
 
-    async validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, current_page, biaya_lainnya) {
+    async validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, current_page, biaya_lainnya, case_flag) {
 
         switch(current_page) {
             case("seat-page") :
 
-                if (await this.validasiHargaTiketKursi(harga_tiket, jml_penumpang)) {
+            const list_kursi_tersedia = case_flag === "round-trip" ? this.kursi_plg_tersedia : this.kursi_tersedia;
+
+                if (await this.validasiHargaTiketKursi(harga_tiket, jml_penumpang, list_kursi_tersedia)) {
                     for (let i = 0; i < jml_penumpang; i++) {
-                        const current_harga_tiket = this.normalizeRupiah(await this.kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                        const current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(1).innerText());
                         expected_total_tiket += current_harga_tiket;
                     }
                 }   
