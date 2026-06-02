@@ -96,7 +96,7 @@ export class Aragon {
     }
 
     async isiTanggalPergi(value) {
-        const tanggal_target = this.page.locator(`[aria-label="${value}"]`);
+        const tanggal_target = this.page.locator(`.flatpickr-day:not(.nextMonthDay)[aria-label="${value}"]`);
         await this.tanggal_pergi.click();
         while(!(await tanggal_target.isVisible())){
             await this.next_month_btn.click();
