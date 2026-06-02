@@ -22,7 +22,7 @@ Proyek ini automasi testing untuk proses pemesanan tiket bus pada beberapa penye
     ```
     Contoh melakukan testing pada Daytrans :
     ```
-    npx playwright test ./reservasi_test.spec.js --project=chromium --headed --workers=1 --grep '@Daytrans'
+    npx playwright test ./reservasi_test.spec.js --project=chromium --headed --workers=1 --grep '@daytrans'
     ```
 5. Menjalankan test untuk kondisi case tertentu, misalnya jalankan test case reservasi dengan kondisi pulang pergi (Rountrip) :
     ```
@@ -39,7 +39,15 @@ Proyek ini automasi testing untuk proses pemesanan tiket bus pada beberapa penye
     ```
     Contoh melakukan testing connecting reservation pada BTM :
     ```
-    npx playwright test ./reservasi_test.spec.js --project=chromium --headed --workers=1 --grep '@Btm - Test Case 3 - Connecting Reservation'
+    npx playwright test ./reservasi_test.spec.js --project=chromium --headed --workers=1 --grep '@btm - Test Case 3 - Connecting Reservation'
+    ```
+8. Menjalankan test dengan lebih dari satu kata kunci (bisa mitra/test case) :
+    ```
+    npx playwright test ./reservasi_test.spec.js --project=chromium --headed --workers=1 --grep '[kata kunci 1]|[kata kunci 2]|[kata kunci n]'
+    ```
+    Contoh melakukan testing pada mitra Daytrans, Baraya, dan BTM :
+    ```
+    npx playwright test ./reservasi_test.spec.js --project=chromium --headed --workers=1 --grep '@daytrans|@baraya|@btm'
     ```
     Daftar nama test case dapat dilihat di [Daftar Test Case](#daftar-test-case)
 
@@ -59,7 +67,6 @@ Proyek ini automasi testing untuk proses pemesanan tiket bus pada beberapa penye
    | Jackal   | One Way Trip           | @jackal - Test Case 1 - One Way Trip             |
    | Jackal   | Round Way Trip         | @jackal - Test Case 2 - Round Trip               |
    | Btm      | One Way Trip           | @btm - Test Case 1 - One Way Trip                |
-   | Btm      | Connecting Reservation | @btm - Test Case 3 - Connecting Reservation      |
 
 ### Notes
 - Untuk saat ini automated test ini akan dijalankan secara otomatis setiap pukul 06.00 pagi dan notifikasi hasil testing akan dikirimkan ke [Telegram](https://t.me/+ZXzmUv7vd-YxOTA9)
