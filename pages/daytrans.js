@@ -18,6 +18,7 @@ export class Daytrans{
         this.cari_tiket_btn = page.locator('.btn-search');
         this.jadwal_btn = page.locator('.btn-list-jadwal');
         this.jam_card = page.locator('div#jadwal-list-0 > li');
+        // this.jadwal_cards = page.locator('ul#jadwal-list-only > li');
 
         // User Data
         this.nama_pemesan = page.locator('#pemesan');
@@ -103,6 +104,29 @@ export class Daytrans{
             .trim()
     }
 
+    async waitForLoader(selector, loader_class, to_have) {
+        const loaders = this.page.locator(selector);
+        const count = await loaders.count();
+    
+        for (let i = 0; i < count; i++) {
+            
+            const loader = loaders.nth(i);
+    
+            if (to_have) {
+                await expect(loader).toHaveClass(new RegExp(loader_class), { timeout: 120000 });
+            } else {
+                await expect(loader).not.toHaveClass(new RegExp(loader_class), { timeout: 120000 });
+            }
+        }
+    }
+
+    async waitForScheduleSectionLoader() {
+        const loaders = await this.page.locator('div[id^="loading-jadwal-"]');
+        for (let i = 0; i < loaders.count(); i++) {
+            await expect(loaders).nth(i).toBeHidden({timeout: 120000});
+        }
+    }
+
     async closePopup(value) {
         while (await value.isVisible()) {
             await value.click(); 
@@ -140,9 +164,12 @@ export class Daytrans{
 
     async cariTiket() {
         await this.cari_tiket_btn.click();
+        await this.waitForLoader('#modal-load', 'show', false);
     }
 
     async pilihJadwal(){
+        await this.waitForScheduleSectionLoader();
+
         await this.jadwal_btn.first().click(); //Pilih jadwal
         const jam_card = this.jam_card.first(); //Ambil card pertama dari list jam berangkat
         const harga_tiket = this.jam_card.first().locator('h4.harga').nth(1).innerText(); //Ambil harga tiketnya
@@ -166,6 +193,8 @@ export class Daytrans{
     }
 
     async pilihKursi(jml_penumpang) { // n = 0 (tidak ada perpindahan armada)
+        await this.waitForLoader('div[id^="load-layout-kursi"]', 'd-none', true);
+
         for(let i = 0; i < jml_penumpang; i++){
             await this.getPenumpangTerdaftar(i+1, 0).click();
             await this.getKursi(i).click();
@@ -173,6 +202,8 @@ export class Daytrans{
     }
 
     async pilihKursiConnRes(jml_penumpang, n) {
+        await this.waitForLoader('div[id^="load-layout-kursi"]', 'd-none', true);
+
         for (let i = 0; i < jml_penumpang; i++) {
           await this.getPenumpangTerdaftar(i+1, n).click(); // Dapatkan/klik penumpang terdaftar untuk pilih kursi
           await this.getKursi(this.total_kursi_perarmada+i).click(); // Pilih kursi 
@@ -220,7 +251,18 @@ export class Daytrans{
         
         if (harga_type === "fixed") {
             for (let i = 0; i < jml_penumpang; i++) {
-                const harga_kursi = this.normalizeRupiah(await this.getKursi(i).locator('span').innerText());
+                if (!connectingRes) {
+                    kursi = await this.getKursi(i).locator('span');
+                } else {
+                    kursi = await this.getKursi(this.elemenKursiKe+i).locator('span');
+                }
+                
+                if (await kursi.first().innerText() === "Promo") {
+                    harga_kursi = this.normalizeRupiah(await kursi.nth(1).innerText());
+                } else {
+                    harga_kursi = this.normalizeRupiah(await kursi.first().innerText());
+                }
+
                 expect(harga_kursi).toBe(this.normalizeRupiah(harga_tiket));
             }
         }
@@ -319,6 +361,8 @@ export class Daytrans{
     }
 
     async pilihMetodePembayaran(metode_bayar, platform_bayar){
+        await this.waitForLoader('div[id^="load-container-payment"]', 'd-none', true);
+
         await this.getMetodeBayar(metode_bayar).click();
         await this.getPlatformBayar(platform_bayar).click();
     }
@@ -330,6 +374,8 @@ export class Daytrans{
     async konfirmasiPembayaran() {
         await this.konfirmasi_pembayaran_btn.click()
         await this.konfirmasi_pembayaran_btn_modal.click();
+
+        await this.waitForLoader('#modal-load', 'show', false);
     }
 
     // Login

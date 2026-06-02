@@ -15,8 +15,8 @@ function getTanggal(bulan) {
 export const testData = {
 
     Daytrans: {
-        Keberangkatan: "Bandung",
-        Tujuan: "Jakarta",
+        Keberangkatan: "Dipatiukur",
+        Tujuan: "Bekasi",
         TanggalPergi: tanggalPergi,
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
