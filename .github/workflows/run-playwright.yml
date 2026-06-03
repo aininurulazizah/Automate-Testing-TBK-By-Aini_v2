@@ -103,7 +103,7 @@ jobs:
               const results = test?.results || [];
               let status = results.at(-1)?.status || 'unknown';
 
-              if (result.length < 1 && results.some(r => r.status === 'failed') && results.some(r => r.status === 'passed')) {
+              if (results.length < 1 && results.some(r => r.status === 'failed') && results.some(r => r.status === 'passed')) {
                 status = 'flaky';
               }
 
