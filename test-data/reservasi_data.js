@@ -87,8 +87,8 @@ export const testData = {
     },
 
     Semeru: {
-        Keberangkatan: "BEKASI",
-        Tujuan: "AGEN CIKOPO",
+        Keberangkatan: "KALIDERES PERTAMINA",
+        Tujuan: "BEKASI",
         TanggalPergi: tanggalPergi,
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
