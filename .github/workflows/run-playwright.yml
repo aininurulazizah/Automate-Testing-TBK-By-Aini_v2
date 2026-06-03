@@ -90,6 +90,7 @@ jobs:
           let total = 0;
           let passed = 0;
           let failed = 0;
+          let flaky = 0;
           let detail = '';
 
           suites.forEach(suite => {
@@ -99,11 +100,22 @@ jobs:
 
             (suite.specs || []).forEach(spec => {
               const test = spec.tests?.[0];
-              const status = test?.results?.[0]?.status || 'unknown';
+              const results = test?.results || [];
+              let status = results.at(-1)?.status || 'unknown';
+
+              if (result.length < 1 && results.some(r => r.status === 'failed') && results.some(r => r.status === 'passed')) {
+                status = 'flaky';
+              }
 
               total++;
-              if (status === 'passed') passed++;
-              else failed++;
+              
+              if (status === 'passed') {
+                passed++;
+              } else if (status === 'flaky') {
+                flaky++;
+              } else {
+                failed++;
+              }
 
               detail += `  • ${spec.title} — [ ${status} ]\n`;
             });
@@ -121,6 +133,7 @@ jobs:
              Summary
              🧪 Total: ${total}
              ✅ Passed: ${passed}
+             ⚠️ Flaky: ${flaky}
              ❌ Failed: ${failed}
 
              Detail
