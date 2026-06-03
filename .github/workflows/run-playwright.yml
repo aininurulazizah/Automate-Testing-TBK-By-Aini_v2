@@ -119,14 +119,24 @@ jobs:
 
                 const lastResult = results.at(-1);
 
-                const errorMessage =
+                const rawError =
                   lastResult?.error?.message ||
+                  lastResult?.error ||
                   lastResult?.errors?.[0]?.message ||
                   'No error message available';
+
+                const errorMessage = String(rawError)
+                  .replace(/\x1B\[[0-9;]*m/g, '')
+                  .trim();
+
+                const shortError = errorMessage
+                  .split('\n')
+                  .slice(0, 5)
+                  .join('\n');
                   
                 failedDetail +=
                   `❌ ${spec.title}\n` +
-                  `💥 ${errorMessage.split('\n')[0]}\n\n`;
+                  `💥 ${shortError}\n\n`;
               }
 
               detail += `  • ${spec.title} — [ ${status} ]\n`;
