@@ -9,7 +9,7 @@ on:
         default: ""
 
       keyword:
-        description: : "Keyword test title (Playwright --grep)"
+        description: "Keyword test title (Playwright --grep)"
         required: false
         default: ""
         
@@ -44,7 +44,7 @@ jobs:
           CMD="npx playwright test"
 
           if [ -n "${{ github.event.inputs.test_file }}" ]; then
-            CMD="$CMD ./test/${{ github.event.inputs.test_file }}"
+            CMD="$CMD ./tests/${{ github.event.inputs.test_file }}"
           fi
 
           if [ -n "${{ github.event.inputs.keyword }}" ]; then
@@ -67,7 +67,7 @@ jobs:
             const totalSeconds = Math.floor(ms / 1000);
             const hours = Math.floor(totalSeconds / 3600);
             const minutes = Math.floor((totalSeconds % 3600) / 60);
-            const seconds = totalSeconds & 60;
+            const seconds = totalSeconds % 60;
 
             return [
               String(hours).padStart(2, '0'),
@@ -99,7 +99,7 @@ jobs:
 
             (suite.specs || []).forEach(spec => {
               const test = spec.tests?.[0];
-              const status = test?.expectedStatus || 'unknown';
+              const status = test?.results?.[0]?.status || 'unknown';
 
               total++;
               if (status === 'passed') passed++;
