@@ -127,6 +127,7 @@ jobs:
 
                 const errorMessage = String(rawError)
                   .replace(/\x1B\[[0-9;]*m/g, '')
+                  .replace(/\n\s*\n+/g, '\n')
                   .trim();
 
                 const shortError = errorMessage
