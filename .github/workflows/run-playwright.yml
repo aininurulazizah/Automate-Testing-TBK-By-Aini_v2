@@ -102,9 +102,13 @@ jobs:
             (suite.specs || []).forEach(spec => {
               const test = spec.tests?.[0];
               const results = test?.results || [];
+
+              const hasPassed = results.some(r => r.status === 'passed');
+              const hasFailed = results.some(r => r.status !== 'passed');
+              
               let status = results.at(-1)?.status || 'unknown';
 
-              if (results.length > 1 && results.some(r => r.status === 'failed') && results.some(r => r.status === 'passed')) {
+              if (results.length > 1 && hasPassed && hasFailed) {
                 status = 'flaky';
               }
 
