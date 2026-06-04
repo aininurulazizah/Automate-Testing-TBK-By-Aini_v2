@@ -158,7 +158,7 @@ export class Daytrans{
         if (selected !== `${value} Orang`) {
             await this.jumlah_penumpang.click();
             await this.page.locator(`.ss-option:has-text("${value}")`).click();
-            await this.page.locator('body').click({ force: true }); // klik body untuk menutup dropdown setelah pilih opsi
+            await this.keberangkatan.click(); // klik untuk menutup dropdown setelah pilih opsi
         }
     }
 
