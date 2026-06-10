@@ -1,6 +1,6 @@
 import { expect } from "@playwright/test";
 
-export class Baraya {
+export class Joglosemar {
     constructor(page){
 
         // General
@@ -8,23 +8,21 @@ export class Baraya {
         this.close_popup = page.locator('.close-pop-info');
         
         // Reservation Form
-        this.keberangkatan_field = page.locator('input#berangkat');
-        this.tujuan_field = page.locator('input#tujuan');
-        this.dropdown_keberangkatan = page.locator('div#dropdown-outlet > div.dropdown-scroll');
-        this.dropdown_tujuan = page.locator('div#dropdown-outlet2 > div.dropdown-scroll');
+        this.keberangkatan_field = page.locator('p:text-is("Keberangkatan") ~ div.form-pp');
+        this.tujuan_field = page.locator('p:text-is("Tujuan") ~ div.form-pp');
+        this.dropdown_keberangkatan = this.keberangkatan_field.locator('div.ss-list');
+        this.dropdown_tujuan = this.tujuan_field.locator('div.ss-list');
         this.search_lokasi = page.locator('#dropdown-outlet2 #searchQuery');
-        this.tanggal_pergi = page.locator('#tanggal');
-        this.pp_checkbox =  page.locator('input#is_pp');
+        this.tanggal_pergi = page.locator('#tanggal_pergi');
+        this.pp_checkbox =  page.locator('#is_pp');
         this.tanggal_pulang = page.locator('#tanggal_pulang');
         this.next_month_btn = page.locator('.flatpickr-next-month');
         this.next_month_btn2 = page.locator('.flatpickr-next-month').nth(1);
-        this.jumlah_penumpang = page.locator('#penumpangInput');
-        this.add_dewasa_btn = page.locator('#btnPlusDewasa');
-        this.add_bayi_btn = page.locator('#btnPlusBayi');
-        this.simpan_penumpang_btn = page.locator('button:has-text("Simpan")');
-        this.cari_btn = page.locator('#submit'); 
-        this.jadwal_card = page.locator('ul#jadwal-list-pergi > li');
-        this.jadwal_plg_card = page.locator('div#jadwal-list-pulang > li');
+        this.jumlah_penumpang = page.locator('p:text-is("Penumpang") ~ div.form-pp');
+        this.dropdown_jml_penumpang = this.jumlah_penumpang.locator('div.ss-list');
+        this.cari_btn = page.locator('button[onclick="return cek()"]'); 
+        this.jadwal_card = page.locator('div#users li');
+        this.jadwal_plg_card = page.locator('div#users').nth(1).locator('li');
 
         // User Data
         this.nama_pemesan = page.locator('#pemesan');
@@ -35,15 +33,12 @@ export class Baraya {
 
         // Seat Page
         this.kursi_tersedia = page.locator('div.seat-blank');
-        this.tab_plg = page.locator('a:has-text("Pulang")');
-        this.kursi_plg_tersedia = page.locator('div.seat-blank[onclick*="books_pp"]');
-        this.diskon_label_seat_page = page.locator('p.totalDiskon');
+        this.tab_plg = page.locator('button:has-text("Kursi Pulang")');
+        this.kursi_plg_tersedia = page.locator('div.seat-blank');
+        this.diskon_label_seat_page = page.locator('span#display_diskon');
         this.pembayaran_btn = page.locator('button:has-text("Pembayaran")');
 
         // Payment Confirmation Page
-        this.diskon_label_payment_page = page.locator('p.totalDiskon');
-        this.biaya_tambahan_label_payment_page = page.locator('p#biayalayanan');
-        this.total_bayar_label_payment_page = page.locator('p#totalbayar');
         this.check_ketentuan_btn = page.locator('label[for="tandaicheck"]');
         this.konfirmasi_pembayaran_btn = page.locator('button#submit:has-text("Konfirmasi")');
         this.konfirmasi_pembayaran_btn_modal = page.locator('.modal-body button:has-text("Konfirmasi")');
@@ -75,8 +70,8 @@ export class Baraya {
         return this.page.locator(`#penumpang${i}`);
     }
 
-    getNamaBayi(i) {
-        return this.page.locator(`#bayi${i}`);
+    getPenumpangTerdaftar(i, n) { // Untuk mendapatkan data penumpang setelah isi data untuk memilih kursi
+        return this.page.locator(`[data-passenger-index="${i}"]`).nth(n);
     }
 
     getPlatformBayar(platform) { // Untuk mendapatkan platform pembayaran setelah pilih metode bayar
@@ -110,20 +105,13 @@ export class Baraya {
     }
 
     async isiKeberangkatan(value) {
-        await this.waitForLoader('img#loadT', 'd-none', true);
-
         await this.keberangkatan_field.click();
-        await this.dropdown_keberangkatan.locator(`p.btn-text:has-text("${value}")`).click();
+        await this.dropdown_keberangkatan.locator(`div:text-is("${value}")`).click();
     }
 
     async isiTujuan(value) {
-        await this.waitForLoader('img#loadT', 'd-none', true);
-
-        if (!this.dropdown_tujuan.isVisible()) {
-            await this.tujuan_field.click();
-        }
-
-        await this.dropdown_tujuan.locator(`p.btn-text:has-text("${value}")`).click();
+        await this.tujuan_field.click();
+        await this.dropdown_tujuan.locator(`div:text-is("${value}")`).click();
     }
 
     async isiTanggalPergi(value) {
@@ -136,7 +124,7 @@ export class Baraya {
     }
 
     async checklistPP() {
-        await this.pp_checkbox.click();
+        await this.pp_checkbox.evaluate(el => el.click());
     }
 
     async isiTanggalPulang(value) {
@@ -149,18 +137,8 @@ export class Baraya {
     }
 
     async isiJumlahPenumpang(value) {
-        let value_dewasa = Number(await this.page.locator('#inputDewasa').getAttribute('value'));
-        let value_bayi = Number(await this.page.locator('#inputBayi').getAttribute('value'));
         await this.jumlah_penumpang.click();
-        while(value_dewasa !== value.Dewasa){
-            await this.add_dewasa_btn.click();
-            value_dewasa++;
-        }
-        while(value_bayi !== value.Bayi){
-            await this.add_bayi_btn.click();
-            value_bayi++;
-        }
-        await this.simpan_penumpang_btn.click();
+        await this.dropdown_jml_penumpang.locator(`div:text-is("${value} Orang")`).click();
     }
 
     async cariTiket() {
@@ -171,7 +149,7 @@ export class Baraya {
         await this.waitForLoader('div#modal-load', 'show', false);
 
         const first_jadwal = await this.jadwal_card.first();
-        const harga_tiket = await first_jadwal.locator('h4.harga').first().innerText();
+        const harga_tiket = await first_jadwal.locator('div.harga > p').first().innerText();
         await first_jadwal.locator('button:has-text("Pilih")').first().click();
         return harga_tiket;
     }
@@ -180,7 +158,7 @@ export class Baraya {
         await this.waitForLoader('div#modal-load', 'show', false);
 
         const first_jadwal = await this.jadwal_plg_card.first();
-        const harga_tiket = await first_jadwal.locator('h4.harga').first().innerText();
+        const harga_tiket = await first_jadwal.locator('p:has-text("Rp")').first().innerText();
         await first_jadwal.locator('button:has-text("Pilih")').first().click();
         return harga_tiket;
     }
@@ -188,20 +166,13 @@ export class Baraya {
     async isiDataPenumpang(jml_penumpang, pemesan, penumpang) {
         await this.waitForLoader('div#modal-load', 'show', false);
 
-        const jml_dewasa = jml_penumpang.Dewasa;
-        const jml_bayi = jml_penumpang.Bayi;
         const penumpang_dewasa = penumpang.PenumpangDewasa;
-        const penumpang_bayi = penumpang.PenumpangBayi;
         await this.nama_pemesan.fill(pemesan.NamaPemesan);
         await this.email_pemesan.fill(pemesan.Email);
         await this.nohp_pemesan.fill(pemesan.NoHP);
 
-        for (let i = 0; i < jml_dewasa; i++) {
-            await this.getNamaPenumpang(i+1).fill(penumpang_dewasa[`Penumpang_${i+1}`].NamaPenumpang);
-        }
-    
-        for (let i = 0; i < jml_bayi; i++) {
-            await this.getNamaBayi(i+1).fill(penumpang_bayi[`PenumpangBayi_${i+1}`].NamaPenumpang);
+        for(let i = 0; i < jml_penumpang; i++){
+            await this.getNamaPenumpang(i+1).fill(penumpang_dewasa[`Penumpang_${i+1}`].NamaPenumpang); 
         }
     }
 
@@ -212,8 +183,8 @@ export class Baraya {
     async pilihKursi(jml_penumpang) {
         await this.waitForLoader('div#modal-load', 'show', false);
 
-        const jml_dewasa = jml_penumpang.Dewasa;
-        for(let i = 0; i < jml_dewasa; i++) {
+        for(let i = 0; i < jml_penumpang; i++) {
+            await this.getPenumpangTerdaftar(i+1, 0).click();
             await this.kursi_tersedia.nth(i).click();
         }
     }
@@ -221,15 +192,14 @@ export class Baraya {
     async pilihKursiPulang(jml_penumpang) {
         await this.waitForLoader('div#modal-load', 'show', false);
 
-        const jml_dewasa = jml_penumpang.Dewasa;
         await this.tab_plg.click();
-        for(let i = 0; i < jml_dewasa; i++) {
+        for(let i = 0; i < jml_penumpang; i++) {
+            await this.getPenumpangTerdaftar(i+1, 0).click();
             await this.kursi_plg_tersedia.nth(i).click();
         }
     }
 
     async validasiHargaTiketKursi(harga_tiket, jml_penumpang, kursi_tersedia) { //Validasi harga tiket yang terpampang di kursi
-        const jml_penumpang_d = jml_penumpang.Dewasa;
         const harga_type = harga_tiket.includes(" - ") ? "range" : "fixed";
         let harga_min;
         let harga_max;
@@ -239,8 +209,8 @@ export class Baraya {
             harga_min = this.normalizeRupiah(harga_min);
             harga_max = this.normalizeRupiah(harga_max);
 
-            for (let i = 0; i < jml_penumpang_d; i++) {
-                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').innerText());
+            for (let i = 0; i < jml_penumpang; i++) {
+                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
                 expect(harga_kursi).toBeGreaterThanOrEqual(harga_min);
                 expect(harga_kursi).toBeLessThanOrEqual(harga_max);
             }
@@ -248,8 +218,8 @@ export class Baraya {
         }
         
         if (harga_type === "fixed") {
-            for (let i = 0; i < jml_penumpang_d; i++) {
-                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').innerText());
+            for (let i = 0; i < jml_penumpang; i++) {
+                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
                 expect(harga_kursi).toBe(this.normalizeRupiah(harga_tiket));
             }
         }
@@ -258,9 +228,7 @@ export class Baraya {
 
     }
 
-    async validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, current_page, biaya_lainnya, case_flag) {
-
-        const jml_penumpang_d = jml_penumpang.Dewasa;
+    async validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, current_page, biaya_lainnya, case_flag, expected_temp) {
 
         switch(current_page) {
             case("seat-page") :
@@ -268,33 +236,41 @@ export class Baraya {
             const list_kursi_tersedia = case_flag === "round-trip" ? this.kursi_plg_tersedia : this.kursi_tersedia;
 
                 if (await this.validasiHargaTiketKursi(harga_tiket, jml_penumpang, list_kursi_tersedia)) {
-                    for (let i = 0; i < jml_penumpang_d; i++) {
-                        const current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').innerText());
+                    for (let i = 0; i < jml_penumpang; i++) {
+                        const current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(1).innerText());
                         expected_total_tiket += current_harga_tiket;
+                        expected_temp += current_harga_tiket;
                     }
                 }   
 
-                const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected').innerText());
-                expect(actual_total_tiket_seat_1).toBe(expected_total_tiket);
-
-                const diskon = this.normalizeRupiah(await this.diskon_label_seat_page.innerText());
-                expected_total_tiket -= diskon;
-                const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('p#totalbayar').innerText());
-                expect(actual_total_tiket_seat_2).toBe(expected_total_tiket);
+                if (case_flag === "round-trip" && expected_temp) {
+                    const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected').innerText());
+                    expect(actual_total_tiket_seat_1).toBe(expected_temp);
+    
+                    const diskon = this.normalizeRupiah(await this.diskon_label_seat_page.innerText());
+                    expected_total_tiket -= diskon;
+                    const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
+                    expect(actual_total_tiket_seat_2).toBe(expected_temp);
+                } else {
+                    const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected').innerText());
+                    expect(actual_total_tiket_seat_1).toBe(expected_total_tiket);
+    
+                    const diskon = this.normalizeRupiah(await this.diskon_label_seat_page.innerText());
+                    expected_total_tiket -= diskon;
+                    const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
+                    expect(actual_total_tiket_seat_2).toBe(expected_total_tiket);
+                }
 
                 return expected_total_tiket;
 
                 break;
 
             case("payment-page") :
-                const total_diskon = this.normalizeRupiah(await this.diskon_label_payment_page.innerText());
-                const biaya_tambahan = this.normalizeRupiah(await this.biaya_tambahan_label_payment_page.innerText());
-                const actual_total_tiket_payment = this.normalizeRupiah(await this.total_bayar_label_payment_page.innerText());
+                const actual_total_tiket_payment_1 = this.normalizeRupiah(await this.page.locator('div:has-text("Total Bayar") + div > p ').innerText());
+                const actual_total_tiket_payment_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
 
-                expected_total_tiket -= total_diskon;
-                expected_total_tiket += biaya_tambahan;
-
-                expect(actual_total_tiket_payment).toBe(expected_total_tiket);
+                expect(actual_total_tiket_payment_1).toBe(expected_total_tiket);
+                expect(actual_total_tiket_payment_2).toBe(expected_total_tiket);
 
                 return expected_total_tiket;
                 break;

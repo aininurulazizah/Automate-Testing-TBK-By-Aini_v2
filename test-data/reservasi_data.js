@@ -95,6 +95,23 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
+    Joglosemar: {
+        Keberangkatan: "BANJARNEGARA ALFAMART PRIGI [VIRTUAL POINT]",
+        Tujuan: "NEX KOPI KLAMPOK [VIRTUAL POINT]",
+        TanggalPergi: tanggalPergi,
+        TanggalPulang: (() => {
+            const d = new Date(tanggalPulang);
+            d.setDate(d.getDate() - 1);
+            return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric',});
+        })(),
+        JumlahPenumpang: 2,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS",
+        BiayaLainnya: {
+
+        }
+    },
+
     Pemesan1: {
         NamaPemesan: "Pemesan",
         Email: "pemesan@harakirimail.com",

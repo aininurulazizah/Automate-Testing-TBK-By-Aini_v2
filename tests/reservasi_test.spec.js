@@ -5,6 +5,7 @@ import { Aragon } from "../pages/aragon";
 import { Jackal } from "../pages/jackal";
 import { Btm } from "../pages/btm";
 import { Semeru } from "../pages/semeru"
+import { Joglosemar } from "../pages/joglosemar";
 import { testData } from "../test-data/reservasi_data";
 import { saveToCsv } from "../utils/helper";
 
@@ -14,7 +15,8 @@ const sites = [
     {tag: '@aragon', url: 'https://www.aragontrans.com/', locator: Aragon, data: testData.Aragon, roundTrip: false, connectingRes: false},
     {tag: '@jackal', url: 'https://www.jackalholidays.com/', locator: Jackal, data: testData.Jackal, roundTrip: true, connectingRes: false},
     {tag: '@btm', url: 'https://www.btmshuttle.id/', locator: Btm, data: testData.Btm, roundTrip: false, connectingRes: false},
-    {tag: '@semeru', url: 'https://www.semerutrans.com/', locator: Semeru, data: testData.Semeru, roundTrip: false, connectingRes: false}
+    {tag: '@semeru', url: 'https://www.semerutrans.com/', locator: Semeru, data: testData.Semeru, roundTrip: false, connectingRes: false},
+    {tag: '@joglosemar', url: 'https://www.joglosemarbus.com/', locator: Joglosemar, data: testData.Joglosemar, roundTrip: true, connectingRes: false},
 ]
 
 const data_Pemesan_1 = testData.Pemesan1;
@@ -140,7 +142,12 @@ for (const site of sites) {
             expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya);
                 
             await web.pilihKursiPulang(site.data.JumlahPenumpang);
-            expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket_plg, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya, "round-trip");
+            if (site.tag === "@joglosemar") {
+                let expected_total_tiket_temp = 0
+                expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket_plg, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya, "round-trip", expected_total_tiket_temp);
+            } else {
+                expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket_plg, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya, "round-trip");
+            }
 
             await web.klikBayar();
     
