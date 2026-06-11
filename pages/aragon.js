@@ -195,7 +195,7 @@ export class Aragon {
                 break
 
             case("payment-page") :
-                const total_bayar_label = await this.detail_bayar_card_payment_page.nth(2).locator('p:has-text("Rp")');
+                const total_bayar_label = await this.detail_bayar_card_payment_page.nth(1).locator('p:has-text("Rp")');
                 const actual_total_tiket_payment_1 = this.normalizeRupiah(await total_bayar_label.innerText());
                 const actual_total_tiket_payment_2 = this.normalizeRupiah(await this.total_bayar_label.innerText())
 

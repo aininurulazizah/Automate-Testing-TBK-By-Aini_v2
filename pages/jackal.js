@@ -5,7 +5,7 @@ export class Jackal{
 
         // General
         this.page = page;
-        this.keberangkatan = page.locator('#keberangkatan');
+        this.keberangkatan = page.locator('#keberangkatan + div');
         
         // Reservation Form
         this.tujuan = page.locator('#tujuan');
@@ -122,7 +122,7 @@ export class Jackal{
         if (selected !== `${value} Orang`) {
             await this.jumlah_penumpang.click();
             await this.page.locator(`.ss-option:has-text("${value} Orang")`).click();
-            await this.page.locator('body').click({ force: true }); // klik body untuk menutup dropdown setelah pilih opsi
+            await this.keberangkatan.click(); // klik field keberangkatan (elemen terjauh dari tombol cari) untuk menutup dropdown setelah pilih opsi
         }
     }
 

@@ -131,6 +131,26 @@ export const testData = {
         }
     },
 
+    Gracias: {
+        Keberangkatan: "BALTOS",
+        Tujuan: "BEKASI (MEGA BEKASI HYPERMALL)",
+        TanggalPergi: (() => {
+            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
+            d.setDate(d.getDate() - 7);         // Dikurangi 7 hari
+            return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric',});
+        })(),
+        TanggalPulang: (() => {
+            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
+            return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric',});
+        })(),
+        JumlahPenumpang: 2,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS",
+        BiayaLainnya: {
+
+        }
+    },
+
     Pemesan1: {
         NamaPemesan: "Pemesan",
         Email: "pemesan@harakirimail.com",

@@ -228,12 +228,13 @@ export class Kruzz {
 
     }
 
-    async validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, current_page, biaya_lainnya, case_flag, expected_temp) {
+    async validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, current_page, biaya_lainnya, case_flag) {
 
         switch(current_page) {
             case("seat-page") :
 
             const list_kursi_tersedia = case_flag === "round-trip" ? this.kursi_plg_tersedia : this.kursi_tersedia;
+            let expected_temp = 0;
 
                 if (await this.validasiHargaTiketKursi(harga_tiket, jml_penumpang, list_kursi_tersedia)) {
                     for (let i = 0; i < jml_penumpang; i++) {
@@ -243,7 +244,7 @@ export class Kruzz {
                     }
                 }   
 
-                if (case_flag === "round-trip" && expected_temp) {
+                if (case_flag === "round-trip") {
                     const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected').innerText());
                     expect(actual_total_tiket_seat_1).toBe(expected_temp);
     

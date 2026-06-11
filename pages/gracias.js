@@ -1,6 +1,6 @@
 import { expect } from "@playwright/test";
 
-export class Joglosemar {
+export class Gracias {
     constructor(page){
 
         // General
@@ -8,17 +8,17 @@ export class Joglosemar {
         this.close_popup = page.locator('.close-pop-info');
         
         // Reservation Form
-        this.keberangkatan_field = page.locator('p:text-is("Keberangkatan") ~ div.form-pp');
-        this.tujuan_field = page.locator('p:text-is("Tujuan") ~ div.form-pp');
+        this.keberangkatan_field = page.locator('p:text-is("Keberangkatan") + div');
+        this.tujuan_field = page.locator('p:text-is("Tujuan") + div');
         this.dropdown_keberangkatan = this.keberangkatan_field.locator('div.ss-list');
         this.dropdown_tujuan = this.tujuan_field.locator('div.ss-list');
         this.search_lokasi = page.locator('#dropdown-outlet2 #searchQuery');
-        this.tanggal_pergi = page.locator('#tanggal_pergi');
+        this.tanggal_pergi = page.locator('p:has-text("Tanggal Pergi") + div');
         this.pp_checkbox =  page.locator('#is_pp');
-        this.tanggal_pulang = page.locator('#tanggal_pulang');
+        this.tanggal_pulang = page.locator('div.d-flex:has(p:text("Tanggal Pulang")) + div').first();
         this.next_month_btn = page.locator('.flatpickr-next-month');
         this.next_month_btn2 = page.locator('.flatpickr-next-month').nth(1);
-        this.jumlah_penumpang = page.locator('p:text-is("Penumpang") ~ div.form-pp');
+        this.jumlah_penumpang = page.locator('p:text-is("Penumpang") + div');
         this.dropdown_jml_penumpang = this.jumlah_penumpang.locator('div.ss-list');
         this.cari_btn = page.locator('button[onclick="return cek()"]'); 
         this.jadwal_card = page.locator('div#users li');
@@ -128,7 +128,7 @@ export class Joglosemar {
     }
 
     async isiTanggalPulang(value) {
-        const tanggal_target = this.page.locator(`[aria-label="${value}"]`);
+        const tanggal_target = this.page.locator(`[aria-label="${value}"]`).nth(1);
         await this.tanggal_pulang.click();
         while(!(await tanggal_target.isVisible())){
             await this.next_month_btn2.click();
@@ -139,6 +139,7 @@ export class Joglosemar {
     async isiJumlahPenumpang(value) {
         await this.jumlah_penumpang.click();
         await this.dropdown_jml_penumpang.locator(`div:text-is("${value} Orang")`).click();
+        await this.keberangkatan_field.click(); // Untuk menghilangkan dropdown
     }
 
     async cariTiket() {
@@ -210,7 +211,7 @@ export class Joglosemar {
             harga_max = this.normalizeRupiah(harga_max);
 
             for (let i = 0; i < jml_penumpang; i++) {
-                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(2).innerText());
                 expect(harga_kursi).toBeGreaterThanOrEqual(harga_min);
                 expect(harga_kursi).toBeLessThanOrEqual(harga_max);
             }
@@ -219,7 +220,7 @@ export class Joglosemar {
         
         if (harga_type === "fixed") {
             for (let i = 0; i < jml_penumpang; i++) {
-                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(2).innerText());
                 expect(harga_kursi).toBe(this.normalizeRupiah(harga_tiket));
             }
         }
@@ -237,8 +238,9 @@ export class Joglosemar {
             let expected_temp = 0;
 
                 if (await this.validasiHargaTiketKursi(harga_tiket, jml_penumpang, list_kursi_tersedia)) {
+
                     for (let i = 0; i < jml_penumpang; i++) {
-                        const current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                        const current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(2).innerText());
                         expected_total_tiket += current_harga_tiket;
                         expected_temp += current_harga_tiket;
                     }
@@ -248,16 +250,13 @@ export class Joglosemar {
                     const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected').innerText());
                     expect(actual_total_tiket_seat_1).toBe(expected_temp);
     
-                    const diskon = this.normalizeRupiah(await this.diskon_label_seat_page.innerText());
-                    expected_total_tiket -= diskon;
                     const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
                     expect(actual_total_tiket_seat_2).toBe(expected_temp);
+
                 } else {
                     const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected').innerText());
                     expect(actual_total_tiket_seat_1).toBe(expected_total_tiket);
     
-                    const diskon = this.normalizeRupiah(await this.diskon_label_seat_page.innerText());
-                    expected_total_tiket -= diskon;
                     const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
                     expect(actual_total_tiket_seat_2).toBe(expected_total_tiket);
                 }
