@@ -1,6 +1,3 @@
-const tanggalPergi = getTanggal(1);
-
-const tanggalPulang = getTanggal(2);
 
 function getTanggal(bulan) {
     const today = new Date();
@@ -17,7 +14,7 @@ export const testData = {
     Daytrans: {
         Keberangkatan: "Dipatiukur",
         Tujuan: "Bekasi",
-        TanggalPergi: tanggalPergi,
+        TanggalPergi: getTanggal(1),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS",
@@ -41,8 +38,8 @@ export const testData = {
     Baraya: {
         Keberangkatan: "Buah Batu",
         Tujuan: "Cibubur",
-        TanggalPergi: tanggalPergi,
-        TanggalPulang: tanggalPulang,
+        TanggalPergi: getTanggal(1),
+        TanggalPulang: getTanggal(2),
         JumlahPenumpang: {
             Dewasa: 2,
             Bayi: 0
@@ -57,7 +54,7 @@ export const testData = {
     Aragon: {
         Keberangkatan: "Bandung",
         Tujuan: "Jakarta",
-        TanggalPergi: tanggalPergi,
+        TanggalPergi: getTanggal(1),
         JumlahPenumpang : 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "qrissp"
@@ -66,8 +63,8 @@ export const testData = {
     Jackal: {
         Keberangkatan: "DIPATIUKUR 89 SEBRANG UNIKOM",
         Tujuan: "LIPPO CIKARANG",
-        TanggalPergi: tanggalPergi,
-        TanggalPulang: tanggalPulang,
+        TanggalPergi: getTanggal(1),
+        TanggalPulang: getTanggal(2),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
@@ -76,7 +73,7 @@ export const testData = {
     Btm: {
         Keberangkatan: "PASTEUR (KUNAFE PUSAT OLEH-OLEH )",
         Tujuan: "BTM PANDEGLANG",
-        TanggalPergi: tanggalPergi,
+        TanggalPergi: getTanggal(1),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS",
@@ -89,7 +86,7 @@ export const testData = {
     Semeru: {
         Keberangkatan: "KALIDERES PERTAMINA",
         Tujuan: "BEKASI",
-        TanggalPergi: tanggalPergi,
+        TanggalPergi: getTanggal(1),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
@@ -98,11 +95,33 @@ export const testData = {
     Joglosemar: {
         Keberangkatan: "BANJARNEGARA ALFAMART PRIGI [VIRTUAL POINT]",
         Tujuan: "NEX KOPI KLAMPOK [VIRTUAL POINT]",
-        TanggalPergi: tanggalPergi,
+        TanggalPergi: getTanggal(1),
         TanggalPulang: (() => {
-            const d = new Date(tanggalPulang);
-            d.setDate(d.getDate() - 1);
+            const d = new Date(getTanggal(2));  // Dua bulan dari hari ini
+            d.setDate(d.getDate() - 1);         // Dikurang 1 hari
             return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric',});
+        })(),
+        JumlahPenumpang: 2,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS",
+        BiayaLainnya: {
+
+        }
+    },
+
+    Kruzz: {
+        Keberangkatan: "KRUZZ BANDUNG CIKAPAYANG",
+        Tujuan: "KRUZZ SOREANG",
+        TanggalPergi: (() => {
+            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
+            d.setDate(d.getDate() - 7);         // Dikurangi 7 hari
+            const bulan = d.toLocaleDateString('id-ID', { month: 'long',});
+            return  `${bulan} ${d.getDate()}, ${d.getFullYear()}`   // Format bulan saja dalam ID
+        })(),
+        TanggalPulang: (() => {
+            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
+            const bulan = d.toLocaleDateString('id-ID', { month: 'long',});
+            return  `${bulan} ${d.getDate()}, ${d.getFullYear()}`   // Format bulan saja dalam ID
         })(),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",

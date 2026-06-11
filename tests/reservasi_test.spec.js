@@ -6,6 +6,8 @@ import { Jackal } from "../pages/jackal";
 import { Btm } from "../pages/btm";
 import { Semeru } from "../pages/semeru"
 import { Joglosemar } from "../pages/joglosemar";
+import { Kruzz } from "../pages/kruzz";
+
 import { testData } from "../test-data/reservasi_data";
 import { saveToCsv } from "../utils/helper";
 
@@ -17,6 +19,7 @@ const sites = [
     {tag: '@btm', url: 'https://www.btmshuttle.id/', locator: Btm, data: testData.Btm, roundTrip: false, connectingRes: false},
     {tag: '@semeru', url: 'https://www.semerutrans.com/', locator: Semeru, data: testData.Semeru, roundTrip: false, connectingRes: false},
     {tag: '@joglosemar', url: 'https://www.joglosemarbus.com/', locator: Joglosemar, data: testData.Joglosemar, roundTrip: true, connectingRes: false},
+    {tag: '@kruzz', url: 'https://www.kruzz.id/', locator: Kruzz, data: testData.Kruzz, roundTrip: true, connectingRes: false},
 ]
 
 const data_Pemesan_1 = testData.Pemesan1;
@@ -142,7 +145,7 @@ for (const site of sites) {
             expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya);
                 
             await web.pilihKursiPulang(site.data.JumlahPenumpang);
-            if (site.tag === "@joglosemar") {
+            if (site.tag === "@joglosemar" || site.tag === "@kruzz") {
                 let expected_total_tiket_temp = 0
                 expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket_plg, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya, "round-trip", expected_total_tiket_temp);
             } else {
