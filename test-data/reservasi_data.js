@@ -195,6 +195,28 @@ export const testData = {
         }
     },
 
+    Sadya: {
+        Keberangkatan: "Bandung",
+        Tujuan: "Bandar lampung",
+        TanggalPergi: (() => {
+            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
+            d.setDate(d.getDate() - 7);         // Dikurangi 7 hari
+            const bulan = d.toLocaleDateString('id-ID', { month: 'long',});
+            return  `${bulan} ${d.getDate()}, ${d.getFullYear()}`   // Format bulan saja dalam ID
+        })(),
+        TanggalPulang: (() => {
+            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
+            const bulan = d.toLocaleDateString('id-ID', { month: 'long',});
+            return  `${bulan} ${d.getDate()}, ${d.getFullYear()}`   // Format bulan saja dalam ID
+        })(),
+        JumlahPenumpang: 2,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS",
+        BiayaLainnya: {
+
+        }
+    },
+
     Pemesan1: {
         NamaPemesan: "Pemesan",
         Email: "pemesan@harakirimail.com",
