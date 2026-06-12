@@ -95,6 +95,7 @@ export class Semeru {
     }
 
     async pilihJadwal() {
+        await this.page.waitForTimeout(3000);
         const harga_tiket =  await this.jadwal_card.first().locator('p.harga').innerText();
         const jadwal_button = await this.jadwal_card.first().locator('button:has-text("Pilih")');
         await jadwal_button.click();

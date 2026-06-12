@@ -9,6 +9,7 @@ import { Joglosemar } from "../pages/joglosemar";
 import { Kruzz } from "../pages/kruzz";
 import { Gracias } from "../pages/gracias";
 import { Kpm } from "../pages/kpm";
+import { Wbtrans } from "../pages/wbtrans";
 
 import { testData } from "../test-data/reservasi_data";
 import { saveToCsv } from "../utils/helper";
@@ -24,6 +25,7 @@ const sites = [
     {tag: '@kruzz', url: 'https://www.kruzz.id/', locator: Kruzz, data: testData.Kruzz, roundTrip: true, connectingRes: false},
     {tag: '@gracias', url: 'https://www.graciasshuttle.co.id/', locator: Gracias, data: testData.Gracias, roundTrip: true, connectingRes: false},
     {tag: '@kpm', url: 'https://www.kpmtrans.id/', locator: Kpm, data: testData.Kpm, roundTrip: true, connectingRes: false},
+    {tag: '@wbtrans', url: 'https://www.wbtrans.id/', locator: Wbtrans, data: testData.Wbtrans, roundTrip: true, connectingRes: false},
 ]
 
 const data_Pemesan_1 = testData.Pemesan1;
