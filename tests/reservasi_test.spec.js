@@ -11,6 +11,7 @@ import { Gracias } from "../pages/gracias";
 import { Kpm } from "../pages/kpm";
 import { Wbtrans } from "../pages/wbtrans";
 import { Sadya } from "../pages/sadya";
+import { Mstrans } from "../pages/mstrans";
 
 import { testData } from "../test-data/reservasi_data";
 import { saveToCsv } from "../utils/helper";
@@ -28,6 +29,7 @@ const sites = [
     {tag: '@kpm', url: 'https://www.kpmtrans.id/', locator: Kpm, data: testData.Kpm, roundTrip: true, connectingRes: false},
     {tag: '@wbtrans', url: 'https://www.wbtrans.id/', locator: Wbtrans, data: testData.Wbtrans, roundTrip: true, connectingRes: false},
     {tag: '@sadya', url: 'https://booking.sadyatrans.com/', locator: Sadya, data: testData.Sadya, roundTrip: true, connectingRes: false},
+    {tag: '@mstrans', url: 'https://www.mstrans.id/', locator: Mstrans, data: testData.Mstrans, roundTrip: true, connectingRes: false},
 ]
 
 const data_Pemesan_1 = testData.Pemesan1;
