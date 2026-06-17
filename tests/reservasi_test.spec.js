@@ -13,6 +13,7 @@ import { Wbtrans } from "../pages/wbtrans";
 import { Sadya } from "../pages/sadya";
 import { Mstrans } from "../pages/mstrans";
 import { Raputri } from "../pages/raputri";
+import { Mrtrans } from "../pages/mrtrans";
 
 import { testData } from "../test-data/reservasi_data";
 import { saveToCsv } from "../utils/helper";
@@ -32,6 +33,7 @@ const sites = [
     {tag: '@sadya', url: 'https://booking.sadyatrans.com/', locator: Sadya, data: testData.Sadya, roundTrip: true, connectingRes: false},
     {tag: '@mstrans', url: 'https://www.mstrans.id/', locator: Mstrans, data: testData.Mstrans, roundTrip: true, connectingRes: false},
     {tag: '@raputri', url: 'https://www.raputri.com/', locator: Raputri, data: testData.Raputri, roundTrip: true, connectingRes: false},
+    {tag: '@mrtrans', url: 'https://www.mrtrans.co.id/', locator: Mrtrans, data: testData.Mrtrans, roundTrip: false, connectingRes: false},
 ]
 
 const data_Pemesan_1 = testData.Pemesan1;
@@ -39,9 +41,9 @@ const data_Pemesan_2 = testData.Pemesan2;
 
 const data_Penumpang = testData.Penumpang;
 
-for (const site of sites) {
+test.setTimeout(60000);
 
-    test.setTimeout(60000);
+for (const site of sites) {
 
     test(`${site.tag} - Test Case 1 - One Way Trip`, async({page}) => {
 
