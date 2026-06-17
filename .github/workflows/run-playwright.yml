@@ -45,6 +45,8 @@ jobs:
 
           if [ -n "${{ github.event.inputs.test_file }}" ]; then
             CMD="$CMD ./tests/${{ github.event.inputs.test_file }}"
+          else
+            CMD="$CMD ./tests/reservasi_test.spec.js"
           fi
 
           if [ -n "${{ github.event.inputs.keyword }}" ]; then
