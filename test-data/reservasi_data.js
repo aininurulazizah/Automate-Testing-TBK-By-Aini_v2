@@ -1,5 +1,5 @@
 
-function getTanggal(bulan) {
+function getTanggalBasedBulan(bulan) {
     const today = new Date();
     const day = today.getDate(); //Ambil tanggal di hari ini
     today.setDate(1); //Set tanggal jadi 1 agar tidak overflow
@@ -9,12 +9,34 @@ function getTanggal(bulan) {
     return today.toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'}); //Mengembalikan nilai tanggal tujuan
 }
 
+function getTanggalCustom({
+    selang_bulan = 1,
+    kurang_hari = 0,
+    customMonthToIndo = false
+}) {
+    const d = new Date(getTanggalBasedBulan(selang_bulan));
+
+    d.setDate(d.getDate() - kurang_hari);
+
+    if (customMonthToIndo) {
+        const namaBulan = d.toLocaleDateString('id-ID', { month: 'long' });
+        return `${namaBulan} ${d.getDate()}, ${d.getFullYear()}`;
+
+    } else {
+        return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric'});
+    }
+}
+
 export const testData = {
 
     Daytrans: {
         Keberangkatan: "Dipatiukur",
         Tujuan: "Bekasi",
-        TanggalPergi: getTanggal(1),
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: false
+        }),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS",
@@ -38,23 +60,32 @@ export const testData = {
     Baraya: {
         Keberangkatan: "Buah Batu",
         Tujuan: "Cibubur",
-        TanggalPergi: getTanggal(1),
-        TanggalPulang: getTanggal(2),
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: false
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 2,
+            kurang_hari: 0,
+            customMonthToIndo: false
+        }),
         JumlahPenumpang: {
             Dewasa: 2,
             Bayi: 0
         },
         MetodeBayar: "Pembayaran Instan",
-        PlatformBayar: "QRIS",
-        BiayaLainnya: {
-
-        }
+        PlatformBayar: "QRIS"
     },
 
     Aragon: {
         Keberangkatan: "Bandung",
         Tujuan: "Jakarta",
-        TanggalPergi: getTanggal(1),
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: false
+        }),
         JumlahPenumpang : 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "qrissp"
@@ -63,8 +94,16 @@ export const testData = {
     Jackal: {
         Keberangkatan: "DIPATIUKUR 89 SEBRANG UNIKOM",
         Tujuan: "LIPPO CIKARANG",
-        TanggalPergi: getTanggal(1),
-        TanggalPulang: getTanggal(2),
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: false
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 2,
+            kurang_hari: 0,
+            customMonthToIndo: false
+        }),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
@@ -73,7 +112,11 @@ export const testData = {
     Btm: {
         Keberangkatan: "PASTEUR (KUNAFE PUSAT OLEH-OLEH )",
         Tujuan: "BTM PANDEGLANG",
-        TanggalPergi: getTanggal(1),
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: false
+        }),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS",
@@ -86,7 +129,11 @@ export const testData = {
     Semeru: {
         Keberangkatan: "KALIDERES PERTAMINA",
         Tujuan: "BEKASI",
-        TanggalPergi: getTanggal(1),
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: false
+        }),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
@@ -95,206 +142,189 @@ export const testData = {
     Joglosemar: {
         Keberangkatan: "BANJARNEGARA ALFAMART PRIGI [VIRTUAL POINT]",
         Tujuan: "NEX KOPI KLAMPOK [VIRTUAL POINT]",
-        TanggalPergi: getTanggal(1),
-        TanggalPulang: (() => {
-            const d = new Date(getTanggal(2));  // Dua bulan dari hari ini
-            d.setDate(d.getDate() - 1);         // Dikurang 1 hari
-            return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric',});
-        })(),
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: false
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 2,
+            kurang_hari: 1,
+            customMonthToIndo: false
+        }),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
-        PlatformBayar: "QRIS",
-        BiayaLainnya: {
-
-        }
+        PlatformBayar: "QRIS"
     },
 
     Kruzz: {
         Keberangkatan: "KRUZZ BANDUNG CIKAPAYANG",
         Tujuan: "KRUZZ SOREANG",
-        TanggalPergi: (() => {
-            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
-            d.setDate(d.getDate() - 7);         // Dikurangi 7 hari
-            const bulan = d.toLocaleDateString('id-ID', { month: 'long',});
-            return  `${bulan} ${d.getDate()}, ${d.getFullYear()}`   // Format bulan saja dalam ID
-        })(),
-        TanggalPulang: (() => {
-            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
-            const bulan = d.toLocaleDateString('id-ID', { month: 'long',});
-            return  `${bulan} ${d.getDate()}, ${d.getFullYear()}`   // Format bulan saja dalam ID
-        })(),
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 7,
+            customMonthToIndo: true
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: true
+        }),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
-        PlatformBayar: "QRIS",
-        BiayaLainnya: {
-
-        }
+        PlatformBayar: "QRIS"
     },
 
     Gracias: {
         Keberangkatan: "BALTOS",
         Tujuan: "BEKASI (MEGA BEKASI HYPERMALL)",
-        TanggalPergi: (() => {
-            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
-            d.setDate(d.getDate() - 7);         // Dikurangi 7 hari
-            return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric',});
-        })(),
-        TanggalPulang: (() => {
-            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
-            return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric',});
-        })(),
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 7,
+            customMonthToIndo: false
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: false
+        }),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
-        PlatformBayar: "QRIS",
-        BiayaLainnya: {
-
-        }
+        PlatformBayar: "QRIS"
     },
 
     Kpm: {
         Keberangkatan: "BALTOS",
         Tujuan: "PERINTIS",
-        TanggalPergi: (() => {
-            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
-            d.setDate(d.getDate() - 7);         // Dikurangi 7 hari
-            const bulan = d.toLocaleDateString('id-ID', { month: 'long',});
-            return  `${bulan} ${d.getDate()}, ${d.getFullYear()}`   // Format bulan saja dalam ID
-        })(),
-        TanggalPulang: (() => {
-            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
-            const bulan = d.toLocaleDateString('id-ID', { month: 'long',});
-            return  `${bulan} ${d.getDate()}, ${d.getFullYear()}`   // Format bulan saja dalam ID
-        })(),
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 7,
+            customMonthToIndo: true
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: true
+        }),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
-        PlatformBayar: "QRIS",
-        BiayaLainnya: {
-
-        }
+        PlatformBayar: "QRIS"
     },
 
     Wbtrans: {
         Keberangkatan: "BUAH BATU",
         Tujuan: "JABABEKA",
-        TanggalPergi: (() => {
-            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
-            d.setDate(d.getDate() - 7);         // Dikurangi 7 hari
-            const bulan = d.toLocaleDateString('id-ID', { month: 'long',});
-            return  `${bulan} ${d.getDate()}, ${d.getFullYear()}`   // Format bulan saja dalam ID
-        })(),
-        TanggalPulang: (() => {
-            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
-            const bulan = d.toLocaleDateString('id-ID', { month: 'long',});
-            return  `${bulan} ${d.getDate()}, ${d.getFullYear()}`   // Format bulan saja dalam ID
-        })(),
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 7,
+            customMonthToIndo: true
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: true
+        }),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
-        PlatformBayar: "QRIS",
-        BiayaLainnya: {
-
-        }
+        PlatformBayar: "QRIS"
     },
 
     Sadya: {
         Keberangkatan: "Bandung",
         Tujuan: "Bandar lampung",
-        TanggalPergi: (() => {
-            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
-            d.setDate(d.getDate() - 7);         // Dikurangi 7 hari
-            const bulan = d.toLocaleDateString('id-ID', { month: 'long',});
-            return  `${bulan} ${d.getDate()}, ${d.getFullYear()}`   // Format bulan saja dalam ID
-        })(),
-        TanggalPulang: (() => {
-            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
-            const bulan = d.toLocaleDateString('id-ID', { month: 'long',});
-            return  `${bulan} ${d.getDate()}, ${d.getFullYear()}`   // Format bulan saja dalam ID
-        })(),
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 7,
+            customMonthToIndo: true
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: true
+        }),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
-        PlatformBayar: "QRIS",
-        BiayaLainnya: {
-
-        }
+        PlatformBayar: "QRIS"
     },
 
     Mstrans: {
         Keberangkatan: "BUAH BATU",
         Tujuan: "BANJARAN",
-        TanggalPergi: (() => {
-            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
-            d.setDate(d.getDate() - 7);         // Dikurangi 7 hari
-            const bulan = d.toLocaleDateString('id-ID', { month: 'long',});
-            return  `${bulan} ${d.getDate()}, ${d.getFullYear()}`   // Format bulan saja dalam ID
-        })(),
-        TanggalPulang: (() => {
-            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
-            const bulan = d.toLocaleDateString('id-ID', { month: 'long',});
-            return  `${bulan} ${d.getDate()}, ${d.getFullYear()}`   // Format bulan saja dalam ID
-        })(),
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 7,
+            customMonthToIndo: true
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: true
+        }),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
-        PlatformBayar: "QRIS",
-        BiayaLainnya: {
-
-        }
+        PlatformBayar: "QRIS"
     },
 
     Raputri: {
         Keberangkatan: "BUAH BATU",
         Tujuan: "CIGANEA",
-        TanggalPergi: (() => {
-            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
-            d.setDate(d.getDate() - 7);         // Dikurangi 7 hari
-            return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric',});
-        })(),
-        TanggalPulang: (() => {
-            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
-            return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric',});
-        })(),
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 7,
+            customMonthToIndo: false
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: false
+        }),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
-        PlatformBayar: "QRIS",
-        BiayaLainnya: {
-
-        }
+        PlatformBayar: "QRIS"
     },
 
     Mrtrans: {
         Keberangkatan: "Pasteur",
         Tujuan: "KEBON JERUK",
-        TanggalPergi: (() => {
-            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
-            const bulan = d.toLocaleDateString('id-ID', { month: 'long',});
-            return  `${bulan} ${d.getDate()}, ${d.getFullYear()}`   // Format bulan saja dalam ID
-        })(),
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: true
+        }),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
-        PlatformBayar: "QRIS",
-        BiayaLainnya: {
-
-        }
+        PlatformBayar: "QRIS"
     },
 
     Sunjaya : {
         Keberangkatan: "BALIKPAPAN",
         Tujuan: "SANGATTA",
-        TanggalPergi: (() => {
-            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
-            d.setDate(d.getDate() - 7);         // Dikurangi 7 hari
-            const bulan = d.toLocaleDateString('id-ID', { month: 'long',});
-            return  `${bulan} ${d.getDate()}, ${d.getFullYear()}`   // Format bulan saja dalam ID
-        })(),
-        TanggalPulang: (() => {
-            const d = new Date(getTanggal(1));  // Satu bulan dari hari ini
-            const bulan = d.toLocaleDateString('id-ID', { month: 'long',});
-            return  `${bulan} ${d.getDate()}, ${d.getFullYear()}`   // Format bulan saja dalam ID
-        })(),
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 7,
+            customMonthToIndo: true
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: true
+        }),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
-        PlatformBayar: "GOPAY",
-        BiayaLainnya: {
+        PlatformBayar: "GOPAY"
+    },
 
-        }
+    Binasarana : {
+        Keberangkatan: "BINA SARANA PASTEUR KUNAFE",
+        Tujuan: "BINASARANA X BURGERKING SAWANGAN",
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: true
+        }),
+        JumlahPenumpang: 2,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS"
     },
 
     Pemesan1: {
