@@ -14,7 +14,7 @@ export class Btm{
         this.next_month_btn = page.locator('.flatpickr-next-month');
         this.jumlah_penumpang = page.locator('.ss-main .ss-single-selected span:has-text("Orang")');
         this.cari_btn = page.locator('button:has-text("Cari Tiket")');
-        this.jadwal_card = page.locator('div#users > div > li');
+        this.jadwal_card = page.locator('div#users li');
 
         // User Data
         this.nama_pemesan = page.locator('#pemesan');
