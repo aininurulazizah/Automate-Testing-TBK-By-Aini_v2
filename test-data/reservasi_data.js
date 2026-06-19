@@ -327,6 +327,24 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
+    Transkita : {
+        Keberangkatan: "PASTEUR - KUNAFE SUPERMARKET OLEH-OLEH",
+        Tujuan: "BALARAJA BARAT",
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 7,
+            customMonthToIndo: true
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: true
+        }),
+        JumlahPenumpang: 2,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS"
+    },
+
     Pemesan1: {
         NamaPemesan: "Pemesan",
         Email: "pemesan@harakirimail.com",

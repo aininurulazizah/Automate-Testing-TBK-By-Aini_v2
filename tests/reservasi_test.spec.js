@@ -16,6 +16,7 @@ import { Raputri } from "../pages/raputri";
 import { Mrtrans } from "../pages/mrtrans";
 import { Sunjaya } from "../pages/sunjaya";
 import { Binasarana } from "../pages/binasarana";
+import { Transkita } from "../pages/transkita";
 
 import { testData } from "../test-data/reservasi_data";
 import { saveToCsv } from "../utils/helper";
@@ -38,6 +39,7 @@ const sites = [
     {tag: '@mrtrans', url: 'https://www.mrtrans.co.id/', locator: Mrtrans, data: testData.Mrtrans, roundTrip: false, connectingRes: false},
     {tag: '@sunjaya', url: 'https://www.sunjayaabadi.com/', locator: Sunjaya, data: testData.Sunjaya, roundTrip: true, connectingRes: false},
     {tag: '@binasarana', url: 'https://www.booking.binasarana.co.id/', locator: Binasarana, data: testData.Binasarana, roundTrip: false, connectingRes: false},
+    {tag: '@transkita', url: 'https://www.transkitashuttle.co.id/', locator: Transkita, data: testData.Transkita, roundTrip: true, connectingRes: false},
 ]
 
 const data_Pemesan_1 = testData.Pemesan1;
