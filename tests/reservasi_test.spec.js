@@ -18,6 +18,7 @@ import { Sunjaya } from "../pages/sunjaya";
 import { Binasarana } from "../pages/binasarana";
 import { Transkita } from "../pages/transkita";
 import { Cgtrans } from "../pages/cgtrans";
+import { Ztrans } from "../pages/ztrans";
 
 import { testData } from "../test-data/reservasi_data";
 import { saveToCsv } from "../utils/helper";
@@ -42,6 +43,7 @@ const sites = [
     {tag: '@binasarana', url: 'https://www.booking.binasarana.co.id/', locator: Binasarana, data: testData.Binasarana, roundTrip: false, connectingRes: false},
     {tag: '@transkita', url: 'https://www.transkitashuttle.co.id/', locator: Transkita, data: testData.Transkita, roundTrip: true, connectingRes: false},
     {tag: '@cgtrans', url: 'https://www.cgtrans.co.id/', locator: Cgtrans, data: testData.Cgtrans, roundTrip: true, connectingRes: false},
+    {tag: '@ztrans', url: 'https://www.ztrans.id/', locator: Ztrans, data: testData.Ztrans, roundTrip: true, connectingRes: false},
 ]
 
 const data_Pemesan_1 = testData.Pemesan1;
