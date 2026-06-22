@@ -20,6 +20,7 @@ import { Transkita } from "../pages/transkita";
 import { Cgtrans } from "../pages/cgtrans";
 import { Ztrans } from "../pages/ztrans";
 import { Putraremaja } from "../pages/putraremaja";
+import { Banyumili } from "../pages/banyumili";
 
 import { testData } from "../test-data/reservasi_data";
 import { saveToCsv } from "../utils/helper";
@@ -46,6 +47,7 @@ const sites = [
     {tag: '@cgtrans', url: 'https://www.cgtrans.co.id/', locator: Cgtrans, data: testData.Cgtrans, roundTrip: true, connectingRes: false},
     {tag: '@ztrans', url: 'https://www.ztrans.id/', locator: Ztrans, data: testData.Ztrans, roundTrip: true, connectingRes: false},
     {tag: '@putraremaja', url: 'https://shuttle.putraremaja.co.id/', locator: Putraremaja, data: testData.Putraremaja, roundTrip: true, connectingRes: false},
+    {tag: '@banyumili', url: 'https://www.banyumilitravel.id/', locator: Banyumili, data: testData.Banyumili, roundTrip: true, connectingRes: false},
 ]
 
 const data_Pemesan_1 = testData.Pemesan1;

@@ -399,18 +399,40 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
+    Banyumili : {
+        Keberangkatan: "BALIKPAPAN BANDARA",
+        Tujuan: "BONTANG (SIMPANG 3 BONTANG)",
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: true
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 2,
+            kurang_hari: 0,
+            customMonthToIndo: true
+        }),
+        JumlahPenumpang: 2,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS"
+    },
+
     Pemesan1: {
         NamaPemesan: "Pemesan",
         Email: "pemesan@harakirimail.com",
         NoHP: "0812345678901",
-        Alamat: "Bandung"
+        Alamat: "Bandung",
+        AlamatJemput: "Jl. Jemput",
+        AlamatAntar: "Jl. Antar"
     },
 
     Pemesan2: {
         NamaPemesan: "Pemesan",
         Email: "pemesan2@harakirimail.com",
         NoHP: "0812345678902",
-        Alamat: "Bandung"
+        Alamat: "Bandung",
+                AlamatJemput: "Jl. Jemput",
+        AlamatAntar: "Jl. Antar"
     },
 
     Penumpang: {
