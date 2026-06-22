@@ -417,6 +417,24 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
+    Ctu : {
+        Keberangkatan: "BAROS/ ALFAMART RAYA",
+        Tujuan: "GARUT/ INDOMARET ALADIN",
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 7,
+            customMonthToIndo: true
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: true
+        }),
+        JumlahPenumpang: 2,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS"
+    },
+
     Pemesan1: {
         NamaPemesan: "Pemesan",
         Email: "pemesan@harakirimail.com",
