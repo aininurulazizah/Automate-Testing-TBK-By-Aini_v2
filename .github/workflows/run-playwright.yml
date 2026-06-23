@@ -56,7 +56,7 @@ jobs:
           CMD="$CMD --reporter=json --project=chromium --list"
 
           echo "Running: $CMD"
-          eval "$CMD" > result.json || true
+          eval "$CMD"
           
         continue-on-error: true
 
