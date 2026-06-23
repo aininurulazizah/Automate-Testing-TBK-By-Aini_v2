@@ -53,7 +53,7 @@ jobs:
             CMD="$CMD --grep '${{ github.event.inputs.keyword }}'"
           fi
 
-          CMD="$CMD --reporter=json --project=chromium"
+          CMD="$CMD --reporter=json --project=chromium --list"
 
           echo "Running: $CMD"
           eval "$CMD" > result.json || true
