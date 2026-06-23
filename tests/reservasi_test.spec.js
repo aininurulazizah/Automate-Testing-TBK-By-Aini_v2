@@ -21,7 +21,8 @@ import { Cgtrans } from "../pages/cgtrans";
 import { Ztrans } from "../pages/ztrans";
 import { Putraremaja } from "../pages/putraremaja";
 import { Banyumili } from "../pages/banyumili";
-import { Ctu } from "../pages/Ctu";
+import { Ctu } from "../pages/ctu";
+import { Krakaline } from "../pages/krakaline";
 
 import { testData } from "../test-data/reservasi_data";
 import { saveToCsv } from "../utils/helper";
@@ -50,6 +51,7 @@ const sites = [
     {tag: '@putraremaja', url: 'https://shuttle.putraremaja.co.id/', locator: Putraremaja, data: testData.Putraremaja, roundTrip: true, connectingRes: false},
     {tag: '@banyumili', url: 'https://www.banyumilitravel.id/', locator: Banyumili, data: testData.Banyumili, roundTrip: true, connectingRes: false},
     {tag: '@ctu', url: 'https://www.ctu-shuttle.com/', locator: Ctu, data: testData.Ctu, roundTrip: true, connectingRes: false},
+    {tag: '@krakaline', url: 'https://www.krakaline.com/', locator: Krakaline, data: testData.Krakaline, roundTrip: true, connectingRes: false},
 ]
 
 const data_Pemesan_1 = testData.Pemesan1;
@@ -114,10 +116,10 @@ for (const site of sites) {
 
         await web.konfirmasiPembayaran();
 
-        await page.waitForURL(/selesai/);
+        await page.waitForURL(/selesai|tiket\/detail/);
 
         //Expected Result
-        await expect(page).toHaveURL(/selesai/);
+        await expect(page).toHaveURL(/selesai|tiket\/detail/);
         await expect(web.pesanan_dibuat_label).toBeVisible();
         await expect(web.kode_booking_label).toBeVisible();
         await expect(web.kode_pembayaran_label).toBeVisible();
@@ -187,10 +189,10 @@ for (const site of sites) {
     
             await web.konfirmasiPembayaran();
 
-            await page.waitForURL(/selesai/);
+            await page.waitForURL(/selesai|tiket\/detail/);
 
             //Expected Result
-            await expect(page).toHaveURL(/selesai/);
+            await expect(page).toHaveURL(/selesai|tiket\/detail/);
             await expect(web.pesanan_dibuat_label).toBeVisible();
             await expect(web.kode_booking_label).toBeVisible();
             await expect(web.kode_pembayaran_label).toBeVisible();
@@ -266,10 +268,10 @@ for (const site of sites) {
     
             await web.konfirmasiPembayaran();
 
-            await page.waitForURL(/selesai/);
+            await page.waitForURL(/selesai|tiket\/detail/);
 
             //Expected Result
-            await expect(page).toHaveURL(/selesai/);
+            await expect(page).toHaveURL(/selesai|tiket\/detail/);
             await expect(web.pesanan_dibuat_label).toBeVisible();
             await expect(web.kode_booking_label).toBeVisible();
             await expect(web.kode_pembayaran_label).toBeVisible();  
