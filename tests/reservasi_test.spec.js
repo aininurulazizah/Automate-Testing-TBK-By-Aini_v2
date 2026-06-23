@@ -118,8 +118,6 @@ for (const site of sites) {
 
         await web.konfirmasiPembayaran();
 
-        await page.pause();
-
         await page.waitForURL(/selesai|tiket\/detail/);
 
         //Expected Result
@@ -192,8 +190,6 @@ for (const site of sites) {
             await web.checklistKetentuan();
     
             await web.konfirmasiPembayaran();
-
-            await page.pause();
 
             await page.waitForURL(/selesai|tiket\/detail/);
 
