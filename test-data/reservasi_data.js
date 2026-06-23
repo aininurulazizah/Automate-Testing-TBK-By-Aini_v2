@@ -453,10 +453,28 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
+    Pelitamas : {
+        Keberangkatan: "TANGKEL SURAMADU BANGKALAN",
+        Tujuan: "TERMINAL RONGGOSUKOWATI PAMEKASAN",
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 7,
+            customMonthToIndo: true
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: true
+        }),
+        JumlahPenumpang: 2,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS"
+    },
+
     Pemesan1: {
         NamaPemesan: "Pemesan",
-        Email: "pemesan@harakirimail.com",
-        NoHP: "0812345678901",
+        Email: "pemesan3@harakirimail.com",
+        NoHP: "0812345678903",
         Alamat: "Bandung",
         AlamatJemput: "Jl. Jemput",
         AlamatAntar: "Jl. Antar"
@@ -464,8 +482,8 @@ export const testData = {
 
     Pemesan2: {
         NamaPemesan: "Pemesan",
-        Email: "pemesan2@harakirimail.com",
-        NoHP: "0812345678902",
+        Email: "pemesan4@harakirimail.com",
+        NoHP: "0812345678904",
         Alamat: "Bandung",
                 AlamatJemput: "Jl. Jemput",
         AlamatAntar: "Jl. Antar"

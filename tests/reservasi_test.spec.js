@@ -23,6 +23,7 @@ import { Putraremaja } from "../pages/putraremaja";
 import { Banyumili } from "../pages/banyumili";
 import { Ctu } from "../pages/ctu";
 import { Krakaline } from "../pages/krakaline";
+import { Pelitamas } from "../pages/pelitamas";
 
 import { testData } from "../test-data/reservasi_data";
 import { saveToCsv } from "../utils/helper";
@@ -52,6 +53,7 @@ const sites = [
     {tag: '@banyumili', url: 'https://www.banyumilitravel.id/', locator: Banyumili, data: testData.Banyumili, roundTrip: true, connectingRes: false},
     {tag: '@ctu', url: 'https://www.ctu-shuttle.com/', locator: Ctu, data: testData.Ctu, roundTrip: true, connectingRes: false},
     {tag: '@krakaline', url: 'https://www.krakaline.com/', locator: Krakaline, data: testData.Krakaline, roundTrip: true, connectingRes: false},
+    {tag: '@pelitamas', url: 'https://www.pelitamas.id/', locator: Pelitamas, data: testData.Pelitamas, roundTrip: true, connectingRes: false},
 ]
 
 const data_Pemesan_1 = testData.Pemesan1;
@@ -115,6 +117,8 @@ for (const site of sites) {
         await web.checklistKetentuan();
 
         await web.konfirmasiPembayaran();
+
+        await page.pause();
 
         await page.waitForURL(/selesai|tiket\/detail/);
 
@@ -188,6 +192,8 @@ for (const site of sites) {
             await web.checklistKetentuan();
     
             await web.konfirmasiPembayaran();
+
+            await page.pause();
 
             await page.waitForURL(/selesai|tiket\/detail/);
 
