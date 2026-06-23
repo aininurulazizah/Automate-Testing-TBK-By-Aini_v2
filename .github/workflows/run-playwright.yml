@@ -99,8 +99,6 @@ jobs:
           suites.forEach(suite => {
             if (!suite.file) return;
 
-            detail += `📁 File: ${suite.file}\n`;
-
             (suite.specs || []).forEach(spec => {
               const test = spec.tests?.[0];
               const results = test?.results || [];
@@ -146,10 +144,8 @@ jobs:
                   `💥 ${shortError}\n\n`;
               }
 
-              detail += `  • ${spec.title} — [ ${status} ]\n`;
             });
 
-            detail += '\n';
           });
 
           const report =
@@ -164,9 +160,6 @@ jobs:
              ✅ Passed: ${passed}
              ⚠️ Flaky: ${flaky}
              ❌ Failed: ${failed}
-
-             Detail
-             ${detail}
 
              Failed Detail
              ${failedDetail || 'None'}
