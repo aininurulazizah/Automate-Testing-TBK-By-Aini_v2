@@ -24,6 +24,7 @@ import { Banyumili } from "../pages/banyumili";
 import { Ctu } from "../pages/ctu";
 import { Krakaline } from "../pages/krakaline";
 import { Pelitamas } from "../pages/pelitamas";
+import { Aoshuttle } from "../pages/aoshuttle";
 
 import { testData } from "../test-data/reservasi_data";
 import { saveToCsv } from "../utils/helper";
@@ -54,6 +55,7 @@ const sites = [
     {tag: '@ctu', url: 'https://www.ctu-shuttle.com/', locator: Ctu, data: testData.Ctu, roundTrip: true, connectingRes: false},
     {tag: '@krakaline', url: 'https://www.krakaline.com/', locator: Krakaline, data: testData.Krakaline, roundTrip: true, connectingRes: false},
     {tag: '@pelitamas', url: 'https://www.pelitamas.id/', locator: Pelitamas, data: testData.Pelitamas, roundTrip: true, connectingRes: false},
+    {tag: '@aoshuttle', url: 'https://web.aotransportbus.com/', locator: Aoshuttle, data: testData.Aoshuttle, roundTrip: true, connectingRes: false},
 ]
 
 const data_Pemesan_1 = testData.Pemesan1;

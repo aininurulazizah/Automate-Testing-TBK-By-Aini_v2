@@ -471,10 +471,28 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
+    Aoshuttle : {
+        Keberangkatan: "AEON MALL DELTAMAS",
+        Tujuan: "HALTE CITY TOUR MONAS",
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: false
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 2,
+            kurang_hari: 0,
+            customMonthToIndo: false
+        }),
+        JumlahPenumpang: 2,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS"
+    },
+
     Pemesan1: {
         NamaPemesan: "Pemesan",
-        Email: "pemesan3@harakirimail.com",
-        NoHP: "0812345678903",
+        Email: "pemesan@harakirimail.com",
+        NoHP: "0812345678901",
         Alamat: "Bandung",
         AlamatJemput: "Jl. Jemput",
         AlamatAntar: "Jl. Antar"
@@ -482,8 +500,8 @@ export const testData = {
 
     Pemesan2: {
         NamaPemesan: "Pemesan",
-        Email: "pemesan4@harakirimail.com",
-        NoHP: "0812345678904",
+        Email: "pemesan2@harakirimail.com",
+        NoHP: "0812345678902",
         Alamat: "Bandung",
                 AlamatJemput: "Jl. Jemput",
         AlamatAntar: "Jl. Antar"
