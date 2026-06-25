@@ -553,8 +553,8 @@ export const testData = {
 
     Pemesan1: {
         NamaPemesan: "Pemesan",
-        Email: "pemesan5@harakirimail.com",
-        NoHP: "0812345678905",
+        Email: "pemesan3@harakirimail.com",
+        NoHP: "0812345678903",
         Alamat: "Bandung",
         JenisAntarJemput : "Jemput - Antar",
         AlamatJemput: "Jl. Jemput",

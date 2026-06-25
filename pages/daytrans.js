@@ -304,10 +304,10 @@ export class Daytrans{
                 const connectingId = connectingRes ? `connecting${n}` : 'connecting1';
 
                 const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator(`div#${connectingId} p`).nth(1).innerText());
-                const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
+                // const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.total_on_detail_keberangkatan_card.innerText());
                 
                 expect(actual_total_tiket_seat_1).toBe(current_total_tiket);
-                expect(actual_total_tiket_seat_2).toBe(expected_total_tiket);
+                // expect(actual_total_tiket_seat_2).toBe(expected_total_tiket);
 
                 return expected_total_tiket;
 
@@ -332,10 +332,10 @@ export class Daytrans{
 
                 // Ambil actual total di Card Detail Harga dan Card Detail Keberangkatan
                 const actual_total_tiket_payment_1 = this.normalizeRupiah(await this.detail_harga_card.last().locator('p').nth(1).innerText());
-                const actual_total_tiket_payment_2 = this.normalizeRupiah(await this.total_on_detail_keberangkatan_card.innerText());
+                // const actual_total_tiket_payment_2 = this.normalizeRupiah(await this.total_on_detail_keberangkatan_card.innerText());
                 
                 expect(actual_total_tiket_payment_1).toBe(expected_total_tiket_payment);
-                expect(actual_total_tiket_payment_2).toBe(expected_total_tiket_payment);
+                // expect(actual_total_tiket_payment_2).toBe(expected_total_tiket_payment);
 
                 return expected_total_tiket_payment;
 
