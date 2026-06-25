@@ -26,6 +26,7 @@ import { Krakaline } from "../pages/krakaline";
 import { Pelitamas } from "../pages/pelitamas";
 import { Aoshuttle } from "../pages/aoshuttle";
 import { Adibuzz } from "../pages/adibuzz";
+import { Marita } from "../pages/marita";
 
 import { testData } from "../test-data/reservasi_data";
 import { saveToCsv } from "../utils/helper";
@@ -58,6 +59,7 @@ const sites = [
     {tag: '@pelitamas', url: 'https://www.pelitamas.id/', locator: Pelitamas, data: testData.Pelitamas, roundTrip: true, connectingRes: false},
     {tag: '@aoshuttle', url: 'https://web.aotransportbus.com/', locator: Aoshuttle, data: testData.Aoshuttle, roundTrip: true, connectingRes: false},
     {tag: '@adibuzz', url: 'https://www.adi-buzz.com/', locator: Adibuzz, data: testData.Adibuzz, roundTrip: true, connectingRes: false},
+    {tag: '@marita', url: 'https://www.maritatrans.com/', locator: Marita, data: testData.Marita, roundTrip: true, connectingRes: false},
 ]
 
 const data_Pemesan_1 = testData.Pemesan1;
