@@ -27,6 +27,7 @@ import { Pelitamas } from "../pages/pelitamas";
 import { Aoshuttle } from "../pages/aoshuttle";
 import { Adibuzz } from "../pages/adibuzz";
 import { Marita } from "../pages/marita";
+import { Trikusuma } from "../pages/trikusuma";
 
 import { testData } from "../test-data/reservasi_data";
 import { saveToCsv } from "../utils/helper";
@@ -60,6 +61,7 @@ const sites = [
     {tag: '@aoshuttle', url: 'https://web.aotransportbus.com/', locator: Aoshuttle, data: testData.Aoshuttle, roundTrip: true, connectingRes: false},
     {tag: '@adibuzz', url: 'https://www.adi-buzz.com/', locator: Adibuzz, data: testData.Adibuzz, roundTrip: true, connectingRes: false},
     {tag: '@marita', url: 'https://www.maritatrans.com/', locator: Marita, data: testData.Marita, roundTrip: true, connectingRes: false},
+    {tag: '@trikusuma', url: 'https://www.trikusuma.com/', locator: Trikusuma, data: testData.Trikusuma, roundTrip: true, connectingRes: false},
 ]
 
 const data_Pemesan_1 = testData.Pemesan1;
@@ -101,7 +103,7 @@ for (const site of sites) {
         let expected_total_tiket = 0;
 
         if(path === "/book/pemesan") {
-            await web.isiDataPenumpang(jml_penumpang, data_Pemesan_1, data_Penumpang);
+            await web.isiDataPenumpang(jml_penumpang, data_Pemesan_1, data_Penumpang, site.data.BiayaLainnya);
             await web.cariKursi();
             await web.pilihKursi(jml_penumpang);
             expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya);
@@ -110,7 +112,7 @@ for (const site of sites) {
         if(path === "/book/pilihkursi") {
             await web.pilihKursi(jml_penumpang, harga_tiket);
             expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya);
-            await web.isiDataPenumpang(jml_penumpang, data_Pemesan_1, data_Penumpang);
+            await web.isiDataPenumpang(jml_penumpang, data_Pemesan_1, data_Penumpang, site.data.BiayaLainnya);
             await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "data-page", site.data.BiayaLainnya);
         }
 
@@ -177,7 +179,7 @@ for (const site of sites) {
 
             let expected_total_tiket = 0;
 
-            await web.isiDataPenumpang(jml_penumpang, data_Pemesan_2, data_Penumpang);
+            await web.isiDataPenumpang(jml_penumpang, data_Pemesan_2, data_Penumpang, site.data.BiayaLainnya);
                 
             await web.cariKursi();
                 
@@ -246,7 +248,7 @@ for (const site of sites) {
 
             let expected_total_tiket = 0;
 
-            await web.isiDataPenumpang(jml_penumpang, data_Pemesan_2, data_Penumpang);
+            await web.isiDataPenumpang(jml_penumpang, data_Pemesan_2, data_Penumpang, site.data.BiayaLainnya);
                 
             await web.cariKursi();
 

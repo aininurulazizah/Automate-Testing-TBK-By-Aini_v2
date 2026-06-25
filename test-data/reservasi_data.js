@@ -525,21 +525,49 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
+    Trikusuma : {
+        Keberangkatan: "BANJARNEGARA",
+        Tujuan: "PURWOKERTO",
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 7,
+            customMonthToIndo: true
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: true
+        }),
+        JumlahPenumpang: 2,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS",
+        BiayaLainnya: {
+            Tambahan: [
+                {
+                    biaya_antar: 0,
+                    biaya_jemput: 0 
+                }
+            ]  
+        }
+    },
+
     Pemesan1: {
         NamaPemesan: "Pemesan",
-        Email: "pemesan@harakirimail.com",
-        NoHP: "0812345678901",
+        Email: "pemesan5@harakirimail.com",
+        NoHP: "0812345678905",
         Alamat: "Bandung",
+        JenisAntarJemput : "Jemput - Antar",
         AlamatJemput: "Jl. Jemput",
         AlamatAntar: "Jl. Antar"
     },
 
     Pemesan2: {
         NamaPemesan: "Pemesan",
-        Email: "pemesan2@harakirimail.com",
-        NoHP: "0812345678902",
+        Email: "pemesan4@harakirimail.com",
+        NoHP: "0812345678904",
         Alamat: "Bandung",
-                AlamatJemput: "Jl. Jemput",
+        JenisAntarJemput : "Jemput - Antar",
+        AlamatJemput: "Jl. Jemput",
         AlamatAntar: "Jl. Antar"
     },
 
