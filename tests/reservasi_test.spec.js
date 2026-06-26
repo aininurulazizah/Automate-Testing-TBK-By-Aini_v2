@@ -29,6 +29,7 @@ import { Adibuzz } from "../pages/adibuzz";
 import { Marita } from "../pages/marita";
 import { Trikusuma } from "../pages/trikusuma";
 import { Wisatakomodo } from "../pages/wisatakomodo";
+import { Sariharum } from "../pages/sariharum";
 
 import { testData } from "../test-data/reservasi_data";
 import { saveToCsv } from "../utils/helper";
@@ -64,6 +65,7 @@ const sites = [
     {tag: '@marita', url: 'https://www.maritatrans.com/', locator: Marita, data: testData.Marita, roundTrip: true, connectingRes: false},
     {tag: '@trikusuma', url: 'https://www.trikusuma.com/', locator: Trikusuma, data: testData.Trikusuma, roundTrip: true, connectingRes: false},
     {tag: '@wisatakomodo', url: 'https://www.buswisatakomodo.com/', locator: Wisatakomodo, data: testData.Wisatakomodo, roundTrip: true, connectingRes: false},
+    {tag: '@sariharum', url: 'https://www.sariharum.com/', locator: Sariharum, data: testData.Sariharum, roundTrip: true, connectingRes: false},
 ]
 
 const data_Pemesan_1 = testData.Pemesan1;
