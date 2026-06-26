@@ -30,6 +30,7 @@ import { Marita } from "../pages/marita";
 import { Trikusuma } from "../pages/trikusuma";
 import { Wisatakomodo } from "../pages/wisatakomodo";
 import { Sariharum } from "../pages/sariharum";
+import { Ats } from "../pages/ats";
 
 import { testData } from "../test-data/reservasi_data";
 import { saveToCsv } from "../utils/helper";
@@ -66,6 +67,7 @@ const sites = [
     {tag: '@trikusuma', url: 'https://www.trikusuma.com/', locator: Trikusuma, data: testData.Trikusuma, roundTrip: true, connectingRes: false},
     {tag: '@wisatakomodo', url: 'https://www.buswisatakomodo.com/', locator: Wisatakomodo, data: testData.Wisatakomodo, roundTrip: true, connectingRes: false},
     {tag: '@sariharum', url: 'https://www.sariharum.com/', locator: Sariharum, data: testData.Sariharum, roundTrip: true, connectingRes: false},
+    {tag: '@ats', url: 'https://www.bus-ats.id/', locator: Ats, data: testData.Ats, roundTrip: true, connectingRes: false},
 ]
 
 const data_Pemesan_1 = testData.Pemesan1;

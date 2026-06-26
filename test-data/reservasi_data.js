@@ -587,6 +587,24 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
+    Ats : {
+        Keberangkatan: "PONTIANAK",
+        Tujuan: "SEKADAU",
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 28,
+            customMonthToIndo: true
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 24,
+            customMonthToIndo: true
+        }),
+        JumlahPenumpang: 2,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS"
+    },
+
     Pemesan1: {
         NamaPemesan: "Pemesan",
         Email: "pemesan@harakirimail.com",
