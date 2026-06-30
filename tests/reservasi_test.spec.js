@@ -32,6 +32,7 @@ import { Wisatakomodo } from "../pages/wisatakomodo";
 import { Sariharum } from "../pages/sariharum";
 import { Ats } from "../pages/ats";
 import { Ans } from "../pages/ans";
+import { Riyan } from "../pages/riyan";
 
 import { testData } from "../test-data/reservasi_data";
 import { saveToCsv } from "../utils/helper";
@@ -70,6 +71,7 @@ const sites = [
     {tag: '@sariharum', url: 'https://www.sariharum.com/', locator: Sariharum, data: testData.Sariharum, roundTrip: true, connectingRes: false},
     {tag: '@ats', url: 'https://www.bus-ats.id/', locator: Ats, data: testData.Ats, roundTrip: true, connectingRes: false},
     {tag: '@ans', url: 'https://www.bus-ans.com/', locator: Ans, data: testData.Ans, roundTrip: true, connectingRes: false},
+    {tag: '@riyan', url: 'https://www.riyantransport.com/', locator: Riyan, data: testData.Riyan, roundTrip: false, connectingRes: false}, //Round-trip true tapi belum ditemukan rute-nya
 ]
 
 const data_Pemesan_1 = testData.Pemesan1;
