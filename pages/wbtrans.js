@@ -106,12 +106,12 @@ export class Wbtrans {
 
     async isiKeberangkatan(value) {
         await this.keberangkatan_field.click();
-        await this.dropdown_keberangkatan.locator(`div:text-is("${value}")`).click();
+        await this.dropdown_keberangkatan.locator(`div.ss-option:text-is("${value}")`).click();
     }
 
     async isiTujuan(value) {
         await this.tujuan_field.click();
-        await this.dropdown_tujuan.locator(`div:text-is("${value}")`).click();
+        await this.dropdown_tujuan.locator(`div.ss-option:text-is("${value}")`).click();
     }
 
     async isiTanggalPergi(value) {

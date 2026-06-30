@@ -14,8 +14,8 @@ export class Jackal{
         this.tanggal_pulang = page.locator('input.tgl_pulang[readonly]');
         this.next_month_btn = page.locator('.flatpickr-next-month');
         this.next_month_btn2 = page.locator('.flatpickr-next-month').nth(1);
-        this.jumlah_penumpang = page.locator('.ss-main .ss-single-selected span:has-text("Orang")');
-        this.cari_btn = page.locator('button:has-text("Cari Tiket")');
+        this.jumlah_penumpang = page.locator('span:has-text("Number of Passengers") + div');
+        this.cari_btn = page.locator('button:has-text("Search for Tickets")');
         this.jadwal_card = page.locator('ul.list.list-jadwal > li.list-jadwal-li');
         this.jadwal_card_plg = page.locator('div#pulang ul.list.list-jadwal > li.list-jadwal-li');
 
@@ -24,25 +24,25 @@ export class Jackal{
         this.email_pemesan = page.locator('#email');
         this.nohp_pemesan = page.locator('#nohp');
         this.alamat_pemesan = page.locator('#alamat');
-        this.carikursi_btn = page.locator('button:has-text("Selanjutnya")');
+        this.carikursi_btn = page.locator('button:has-text("Next")');
 
         // Seat Page
         this.kursi_tersedia = page.locator('div.seat-blank');
-        this.tab_plg = page.locator('a:has-text("Pulang")');
+        this.tab_plg = page.locator('a:has-text("Return")');
         this.kursi_plg_tersedia = page.locator('div.seat-blank[onclick*="books_pp"]');
-        this.pembayaran_btn = page.locator('button:has-text("Selanjutnya")');
+        this.pembayaran_btn = page.locator('button:has-text("Next")');
 
         // Payment Confirmation Page
         this.detail_bayar_card = page.locator('table.tbl-harga');
         this.check_ketentuan_btn = page.locator('label[for="ketentuan"]');
-        this.konfirmasi_pembayaran_btn = page.locator('button#submit:has-text("Konfirmasi Reservasi")');
-        this.konfirmasi_pembayaran_btn_modal = page.locator('.modal-footer button:has-text("Ya, Lanjutkan")');
+        this.konfirmasi_pembayaran_btn = page.locator('button#submit:has-text("Confirm Reservation")');
+        this.konfirmasi_pembayaran_btn_modal = page.locator('.modal-footer button:has-text("Yes, Continue")');
 
         // Booked Page
-        this.pesanan_dibuat_label = page.locator('h5:has-text("Transaksi Berhasil !")');
-        this.kode_booking_label = page.locator('p:has-text("kode booking") + h4');
-        this.kode_pembayaran_label = page.locator('p:has-text("kode bayar") + h4');
-        this.total_bayar_label_success_page = page.locator('p:has-text("Total Bayar") + h2');
+        this.pesanan_dibuat_label = page.locator('h5:has-text("Transaction Successful!")');
+        this.kode_booking_label = page.locator('p:has-text("Booking Code") + h4');
+        this.kode_pembayaran_label = page.locator('p:has-text("Payment Code") + h4');
+        this.total_bayar_label_success_page = page.locator('p:has-text("Total Payment") + h2');
 
         // Login
         this.login_btn = page.locator('a:has-text("Login")').first();
@@ -118,10 +118,10 @@ export class Jackal{
     }
 
     async isiJumlahPenumpang(value) {
-        const selected = await this.page.locator('.ss-single-selected span:has-text("Orang")').innerText();
-        if (selected !== `${value} Orang`) {
+        const selected = await this.page.locator('.ss-single-selected span.placeholder:has-text("Person")').innerText();
+        if (selected !== `${value} Person`) {
             await this.jumlah_penumpang.click();
-            await this.page.locator(`.ss-option:has-text("${value} Orang")`).click();
+            await this.page.locator(`.ss-option:has-text("${value} Person")`).click();
             await this.keberangkatan.click(); // klik field keberangkatan (elemen terjauh dari tombol cari) untuk menutup dropdown setelah pilih opsi
         }
     }
@@ -132,14 +132,14 @@ export class Jackal{
 
     async pilihJadwal() {
         const harga_tiket = await this.jadwal_card.first().locator('h4.harga.pcapital > p').innerText();
-        const jadwal_button = await this.jadwal_card.first().locator('button:has-text("Pilih")');
+        const jadwal_button = await this.jadwal_card.first().locator('button:has-text("Select")');
         await jadwal_button.click();
         return harga_tiket;
     }
 
     async pilihJadwalPulang() {
         const harga_tiket = await this.jadwal_card_plg.first().locator('h4.harga.pcapital > p').innerText();
-        const jadwal_button = await this.jadwal_card_plg.first().locator('button:has-text("Pilih")');
+        const jadwal_button = await this.jadwal_card_plg.first().locator('button:has-text("Select")');
         await jadwal_button.click();
         return harga_tiket;
     }

@@ -213,7 +213,7 @@ export const testData = {
 
     Wbtrans: {
         Keberangkatan: "BUAH BATU",
-        Tujuan: "JABABEKA",
+        Tujuan: "SUBANG",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
             kurang_hari: 7,

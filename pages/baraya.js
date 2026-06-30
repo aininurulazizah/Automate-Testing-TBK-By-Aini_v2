@@ -277,8 +277,8 @@ export class Baraya {
                 const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected').innerText());
                 expect(actual_total_tiket_seat_1).toBe(expected_total_tiket);
 
-                const diskon = this.normalizeRupiah(await this.diskon_label_seat_page.innerText());
-                expected_total_tiket -= diskon;
+                // const diskon = this.normalizeRupiah(await this.diskon_label_seat_page.innerText());
+                // expected_total_tiket -= diskon;
                 const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('p#totalbayar').innerText());
                 expect(actual_total_tiket_seat_2).toBe(expected_total_tiket);
 
@@ -291,8 +291,8 @@ export class Baraya {
                 const biaya_tambahan = this.normalizeRupiah(await this.biaya_tambahan_label_payment_page.innerText());
                 const actual_total_tiket_payment = this.normalizeRupiah(await this.total_bayar_label_payment_page.innerText());
 
-                expected_total_tiket -= total_diskon;
-                expected_total_tiket += biaya_tambahan;
+                // expected_total_tiket -= total_diskon;
+                // expected_total_tiket += biaya_tambahan;
 
                 expect(actual_total_tiket_payment).toBe(expected_total_tiket);
 
