@@ -659,6 +659,24 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
+    Harumbsi : {
+        Keberangkatan: "KOTA BARU ITERA",
+        Tujuan: "BORMA RANCAEKEK",
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 14,
+            customMonthToIndo: true
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 7,
+            customMonthToIndo: true
+        }),
+        JumlahPenumpang: 2,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS"
+    },
+
     Pemesan1: {
         NamaPemesan: "Pemesan",
         Email: "pemesan@harakirimail.com",
