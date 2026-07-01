@@ -114,8 +114,8 @@ export const testData = {
         Tujuan: "BTM PANDEGLANG",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
-            kurang_hari: 0,
-            customMonthToIndo: false
+            kurang_hari: 7,
+            customMonthToIndo: true
         }),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
@@ -141,7 +141,7 @@ export const testData = {
 
     Joglosemar: {
         Keberangkatan: "BANJARNEGARA ALFAMART PRIGI [VIRTUAL POINT]",
-        Tujuan: "NEX KOPI KLAMPOK [VIRTUAL POINT]",
+        Tujuan: "KLAMPOK NEX KOPI [VIRTUAL POINT]",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
             kurang_hari: 0,
@@ -149,12 +149,17 @@ export const testData = {
         }),
         TanggalPulang: getTanggalCustom({
             selang_bulan: 2,
-            kurang_hari: 1,
+            kurang_hari: 7,
             customMonthToIndo: false
         }),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
-        PlatformBayar: "QRIS"
+        PlatformBayar: "QRIS",
+        BiayaLainnya: {
+            Potongan: [
+                'diskon_promo_pas_banget'
+            ]
+        }
     },
 
     Kruzz: {
@@ -221,7 +226,7 @@ export const testData = {
         }),
         TanggalPulang: getTanggalCustom({
             selang_bulan: 1,
-            kurang_hari: 0,
+            kurang_hari: 1,
             customMonthToIndo: true
         }),
         JumlahPenumpang: 2,
@@ -239,7 +244,7 @@ export const testData = {
         }),
         TanggalPulang: getTanggalCustom({
             selang_bulan: 1,
-            kurang_hari: 0,
+            kurang_hari: 1,
             customMonthToIndo: true
         }),
         JumlahPenumpang: 2,
@@ -445,7 +450,7 @@ export const testData = {
         }),
         TanggalPulang: getTanggalCustom({
             selang_bulan: 1,
-            kurang_hari: 0,
+            kurang_hari: 1,
             customMonthToIndo: true
         }),
         JumlahPenumpang: 2,
@@ -463,7 +468,7 @@ export const testData = {
         }),
         TanggalPulang: getTanggalCustom({
             selang_bulan: 1,
-            kurang_hari: 0,
+            kurang_hari: 1,
             customMonthToIndo: true
         }),
         JumlahPenumpang: 2,
@@ -517,7 +522,7 @@ export const testData = {
         }),
         TanggalPulang: getTanggalCustom({
             selang_bulan: 1,
-            kurang_hari: 0,
+            kurang_hari: 1,
             customMonthToIndo: true
         }),
         JumlahPenumpang: 2,
@@ -615,7 +620,7 @@ export const testData = {
         }),
         TanggalPulang: getTanggalCustom({
             selang_bulan: 1,
-            kurang_hari: 0,
+            kurang_hari: 1,
             customMonthToIndo: true
         }),
         JumlahPenumpang: 2,
@@ -679,8 +684,8 @@ export const testData = {
 
     Pemesan1: {
         NamaPemesan: "Pemesan",
-        Email: "pemesan@harakirimail.com",
-        NoHP: "0812345678901",
+        Email: "pemesan3@harakirimail.com",
+        NoHP: "0812345678903",
         Alamat: "Bandung",
         JenisAntarJemput : "Jemput - Antar",
         AlamatJemput: "Jl. Jemput",
@@ -689,8 +694,8 @@ export const testData = {
 
     Pemesan2: {
         NamaPemesan: "Pemesan",
-        Email: "pemesan2@harakirimail.com",
-        NoHP: "0812345678902",
+        Email: "pemesan4@harakirimail.com",
+        NoHP: "0812345678904",
         Alamat: "Bandung",
         JenisAntarJemput : "Jemput - Antar",
         AlamatJemput: "Jl. Jemput",

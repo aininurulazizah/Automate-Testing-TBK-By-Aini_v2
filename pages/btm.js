@@ -10,7 +10,7 @@ export class Btm{
         // Reservation Form
         this.keberangkatan = page.locator('.ss-single-selected').first();
         this.tujuan = page.locator('.ss-single-selected').nth(1);
-        this.tanggal_pergi = page.locator('input.datepicker[readonly]');
+        this.tanggal_pergi = page.locator('input#tanggal_pergi + input');
         this.next_month_btn = page.locator('.flatpickr-next-month');
         this.jumlah_penumpang = page.locator('.ss-main .ss-single-selected span:has-text("Orang")');
         this.cari_btn = page.locator('button:has-text("Cari Tiket")');
@@ -95,12 +95,15 @@ export class Btm{
 
     normalizeRupiah(value) {
         if (!value) return 0;
-
-        return Number(
-            value
-                .toString()
-                .replace(/[^0-9]/g, "") // hapus semua selain angka
-        );
+    
+        const text = value.toString().toLowerCase().trim();
+        const number = Number(text.replace(/[^0-9]/g, ""));
+    
+        if (text.includes("rb")) {
+            return number * 1000;
+        }
+    
+        return number;
     }
 
     async closePopup(value) {
@@ -121,7 +124,12 @@ export class Btm{
     }
 
     async isiTanggalPergi(value) {
-        await this.isiTanggal(value, "next", this.tanggal_pergi, "id-ID");
+        const tanggal_target = this.page.locator(`[aria-label="${value}"]`).first();
+        await this.tanggal_pergi.click();
+        while(!(await tanggal_target.isVisible())){
+            await this.next_month_btn.click();
+        }
+        await tanggal_target.click();
     }
 
     async isiJumlahPenumpang(value) {

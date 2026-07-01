@@ -117,7 +117,7 @@ export class Banyumili {
     }
 
     async isiTanggalPergi(value) {
-        const tanggal_target = this.page.locator(`[aria-label="${value}"]`);
+        const tanggal_target = this.page.locator(`[aria-label="${value}"]`).first();
         await this.tanggal_pergi.click();
         while(!(await tanggal_target.isVisible())){
             await this.next_month_btn.click();
@@ -130,7 +130,7 @@ export class Banyumili {
     }
 
     async isiTanggalPulang(value) {
-        const tanggal_target = this.page.locator(`[aria-label="${value}"]`);
+        const tanggal_target = this.page.locator(`[aria-label="${value}"]`).nth(1);
         await this.tanggal_pulang.click();
         while(!(await tanggal_target.isVisible())){
             await this.next_month_btn2.click();

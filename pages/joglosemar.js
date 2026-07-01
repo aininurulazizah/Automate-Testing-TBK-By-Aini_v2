@@ -88,6 +88,14 @@ export class Joglosemar {
         );
     }
 
+    parseText(text) {
+        return text
+            .toLowerCase()
+            .replace(/[\s\-().]+/g, '_')
+            .replace(/^_+|_+$/g, '')
+            .trim()
+    }
+
     async waitForLoader(element, loader_class, to_have) {
         const loader = await this.page.locator(`${element}`);
         if (to_have) {
@@ -128,7 +136,7 @@ export class Joglosemar {
     }
 
     async isiTanggalPulang(value) {
-        const tanggal_target = this.page.locator(`[aria-label="${value}"]`);
+        const tanggal_target = this.page.locator(`[aria-label="${value}"]`).nth(1);
         await this.tanggal_pulang.click();
         while(!(await tanggal_target.isVisible())){
             await this.next_month_btn2.click();
@@ -149,7 +157,15 @@ export class Joglosemar {
         await this.waitForLoader('div#modal-load', 'show', false);
 
         const first_jadwal = await this.jadwal_card.first();
-        const harga_tiket = await first_jadwal.locator('div.harga > p').first().innerText();
+        const harga_container = await first_jadwal.locator('div.harga');
+        let harga_tiket;
+
+        if (await harga_container.locator('del').count() > 0) { // kalau ada promo
+            harga_tiket = await harga_container.locator('del').innerText(); // ambil harga sebelum promo
+        } else {
+            harga_tiket = await harga_container.locator('p').innerText();
+        }
+
         await first_jadwal.locator('button:has-text("Pilih")').first().click();
         return harga_tiket;
     }
@@ -158,7 +174,15 @@ export class Joglosemar {
         await this.waitForLoader('div#modal-load', 'show', false);
 
         const first_jadwal = await this.jadwal_plg_card.first();
-        const harga_tiket = await first_jadwal.locator('p:has-text("Rp")').first().innerText();
+        const harga_container = await first_jadwal.locator('div.d-table-cell.w-100.text-right');
+        let harga_tiket;
+
+        if (await harga_container.locator('del').count() > 0) { // kalau ada promo
+            harga_tiket = await harga_container.locator('del').innerText(); // ambil harga sebelum promo
+        } else {
+            harga_tiket = await harga_container.locator('p').innerText();
+        }
+        
         await first_jadwal.locator('button:has-text("Pilih")').first().click();
         return harga_tiket;
     }
@@ -267,7 +291,23 @@ export class Joglosemar {
                 break;
 
             case("payment-page") :
-                const actual_total_tiket_payment_1 = this.normalizeRupiah(await this.page.locator('div:has-text("Total Bayar") + div > p ').innerText());
+
+                await this.waitForLoader('div#load-container-price', 'd-none', true);
+
+                const detail_card = await this.page.locator('div#container-price div.d-table.w-100.my-3');
+                const detail_card_count = await detail_card.count();
+
+                for (let i = 0; i < detail_card_count; i++ ){
+                    const label = this.parseText(await detail_card.nth(i).locator('div.d-table-cell').nth(0).innerText());
+                    const nominal = this.normalizeRupiah(await detail_card.nth(i).locator('div.d-table-cell').nth(1).innerText());
+                    
+                    if (biaya_lainnya.Potongan.includes(label)) {
+                        expected_total_tiket -= nominal;
+                    }
+
+                }
+
+                const actual_total_tiket_payment_1 = this.normalizeRupiah(await detail_card.locator('div:has-text("Total Bayar") + div > p ').innerText());
                 const actual_total_tiket_payment_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
 
                 expect(actual_total_tiket_payment_1).toBe(expected_total_tiket);

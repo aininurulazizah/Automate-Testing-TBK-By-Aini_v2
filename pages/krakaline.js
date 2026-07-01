@@ -46,7 +46,7 @@ export class Krakaline{
         this.pesanan_dibuat_label = page.locator('p:has-text("Detail Pesanan")');
         this.kode_booking_label = page.locator('p:has-text("Detail Pesanan") + p');
         this.kode_pembayaran_label = page.locator('p:has-text("Kode Pembayaran") + p');
-        this.total_bayar_label_success_page = page.locator('div:has-text("Total Bayar") + div');
+        this.total_bayar_label_success_page = page.locator('div:has-text("Total Harga") + div');
 
         // Login
         this.login_btn = page.locator('a:has-text("Masuk")');

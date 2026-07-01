@@ -109,7 +109,7 @@ export class Jackal{
     }
 
     async isiTanggalPulang(value) {
-        const tanggal_target = this.page.locator(`[aria-label="${value}"]`);
+        const tanggal_target = this.page.locator(`[aria-label="${value}"]`).nth(1);
         await this.tanggal_pulang.click();
         while(!(await tanggal_target.isVisible())){
             await this.next_month_btn2.click();
