@@ -700,6 +700,19 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
+    Selamat : {
+        Keberangkatan: "BANDUNG - PASTEUR",
+        Tujuan: "CIKAMPEK",
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: false
+        }),
+        JumlahPenumpang: 2,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS"
+    },
+
     Pemesan1: {
         NamaPemesan: "Pemesan",
         Email: "pemesan@harakirimail.com",
