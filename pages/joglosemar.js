@@ -114,11 +114,13 @@ export class Joglosemar {
 
     async isiKeberangkatan(value) {
         await this.keberangkatan_field.click();
+        await this.page.waitForTimeout(1000);
         await this.dropdown_keberangkatan.locator(`div:text-is("${value}")`).click();
     }
 
     async isiTujuan(value) {
         await this.tujuan_field.click();
+        await this.page.waitForTimeout(1000);
         await this.dropdown_tujuan.locator(`div:text-is("${value}")`).click();
     }
 

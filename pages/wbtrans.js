@@ -223,7 +223,7 @@ export class Wbtrans {
                 
                 let harga_kursi;
 
-                if (await kursi_tersedia.nth(i).locator('p').filter({ hasText : "Sale" })) {
+                if (await kursi_tersedia.nth(i).locator('p').filter({ hasText : "Sale" }).count() > 0) {
                     harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(2).innerText());
                 } else {
                     harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
@@ -242,8 +242,8 @@ export class Wbtrans {
         switch(current_page) {
             case("seat-page") :
 
-            const list_kursi_tersedia = case_flag === "round-trip" ? this.kursi_plg_tersedia : this.kursi_tersedia;
-            let expected_temp = 0;
+                const list_kursi_tersedia = case_flag === "round-trip" ? this.kursi_plg_tersedia : this.kursi_tersedia;
+                let expected_temp = 0;
 
                 if (await this.validasiHargaTiketKursi(harga_tiket, jml_penumpang, list_kursi_tersedia)) {
 
@@ -251,7 +251,7 @@ export class Wbtrans {
 
                         let current_harga_tiket;
 
-                        if (await list_kursi_tersedia.nth(i).locator('p').filter({ hasText : "Sale" })) {
+                        if (await list_kursi_tersedia.nth(i).locator('p').filter({ hasText : "Sale" }).count() > 0) {
                             current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(2).innerText());
                         } else {
                             current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(1).innerText());

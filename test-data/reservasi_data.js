@@ -620,7 +620,7 @@ export const testData = {
         }),
         TanggalPulang: getTanggalCustom({
             selang_bulan: 1,
-            kurang_hari: 1,
+            kurang_hari: 7,
             customMonthToIndo: true
         }),
         JumlahPenumpang: 2,
