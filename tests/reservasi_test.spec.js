@@ -35,6 +35,7 @@ import { Ans } from "../pages/ans";
 import { Riyan } from "../pages/riyan";
 import { Minanga } from "../pages/minanga";
 import { Harumbsi } from "../pages/harumbsi";
+import { Yantigroup } from "../pages/yantigroup";
 
 import { testData } from "../test-data/reservasi_data";
 import { saveToCsv } from "../utils/helper";
@@ -76,6 +77,7 @@ const sites = [
     {tag: '@riyan', url: 'https://www.riyantransport.com/', locator: Riyan, data: testData.Riyan, roundTrip: false, connectingRes: false}, //Round-trip true tapi belum ditemukan rute-nya
     {tag: '@minanga', url: 'https://www.minangaexpress.id/', locator: Minanga, data: testData.Minanga, roundTrip: true, connectingRes: false},
     {tag: '@harumbsi', url: 'https://www.harumbsi.com/', locator: Harumbsi, data: testData.Harumbsi, roundTrip: true, connectingRes: false},
+    {tag: '@yantigroup', url: 'https://www.yantigroup.com/', locator: Yantigroup, data: testData.Yantigroup, roundTrip: true, connectingRes: false},
 ]
 
 const data_Pemesan_1 = testData.Pemesan1;
