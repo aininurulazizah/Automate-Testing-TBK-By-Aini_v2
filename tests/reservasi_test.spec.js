@@ -39,6 +39,7 @@ import { Yantigroup } from "../pages/yantigroup";
 import { Selamat } from "../pages/selamat";
 import { Namaste } from "../pages/namaste";
 import { Royalkencana } from "../pages/royalkencana";
+import { Sabila } from "../pages/sabila";
 
 import { testData } from "../test-data/reservasi_data";
 import { saveToCsv } from "../utils/helper";
@@ -84,6 +85,7 @@ const sites = [
     {tag: '@selamat', url: 'https://www.selamattrans.co.id/reservasi', locator: Selamat, data: testData.Selamat, roundTrip: false, connectingRes: false},
     {tag: '@namaste', url: 'https://www.namasteshuttle.com/', locator: Namaste, data: testData.Namaste, roundTrip: true, connectingRes: false},
     {tag: '@royalkencana', url: 'https://www.royalkencanabus.id/', locator: Royalkencana, data: testData.Royalkencana, roundTrip: true, connectingRes: false},
+    {tag: '@sabila', url: 'https://booking.sabilashuttle.co.id/', locator: Sabila, data: testData.Sabila, roundTrip: false, connectingRes: false}, // Round trip true tapi belum ditemukan rute tersedia
 ]
 
 const data_Pemesan_1 = testData.Pemesan1;

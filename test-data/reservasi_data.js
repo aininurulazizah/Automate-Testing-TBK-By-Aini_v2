@@ -749,6 +749,19 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
+    Sabila : {
+        Keberangkatan: "4U RESTO N CAFE UNGARAN",
+        Tujuan: "TAPE KETAN MUNTILAN 187",
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
+            customMonthToIndo: false
+        }),
+        JumlahPenumpang: 2,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS"
+    },
+
     Pemesan1: {
         NamaPemesan: "Pemesan",
         Email: "pemesan@harakirimail.com",
