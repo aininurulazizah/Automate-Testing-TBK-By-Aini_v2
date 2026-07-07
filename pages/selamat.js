@@ -133,6 +133,7 @@ export class Selamat {
     async isiJumlahPenumpang(value) {
         await this.jumlah_penumpang.click();
         await this.dropdown_jml_penumpang.locator(`div:text-is("${value} Penumpang")`).click();
+        await this.keberangkatan_field.click();
     }
 
     async cariTiket() {

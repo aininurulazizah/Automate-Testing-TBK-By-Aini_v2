@@ -5,7 +5,7 @@ import { testData } from "../test-data/reservasi_data";
 
 const ENV = process.env.ENV || 'production';
 
-test.setTimeout(120000);
+test.setTimeout(90000);
 
 for (const site of sites) {
 

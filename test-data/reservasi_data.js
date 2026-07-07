@@ -715,7 +715,7 @@ export const testData = {
 
     Namaste : {
         Keberangkatan: "MENGWI",
-        Tujuan: "BANJAR",
+        Tujuan: "ALFAMART DENCARIK",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
             kurang_hari: 7,
@@ -741,7 +741,7 @@ export const testData = {
         }),
         TanggalPulang: getTanggalCustom({
             selang_bulan: 1,
-            kurang_hari: 0,
+            kurang_hari: 1,
             customMonthToIndo: true
         }),
         JumlahPenumpang: 2,
