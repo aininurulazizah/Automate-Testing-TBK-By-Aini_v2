@@ -1,6 +1,18 @@
 // @ts-check
 import { defineConfig, devices } from '@playwright/test';
 
+import dotenv from 'dotenv';
+dotenv.config();
+
+const isStaging = process.env.ENV === 'staging';
+
+const httpCredentials = isStaging
+  ? {
+      username: /** @type {string} */ (process.env.STAGING_USERNAME),
+      password: /** @type {string} */ (process.env.STAGING_PASSWORD),
+    }
+  : undefined;
+
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -32,6 +44,8 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
+
+    httpCredentials,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'retain-on-failure',

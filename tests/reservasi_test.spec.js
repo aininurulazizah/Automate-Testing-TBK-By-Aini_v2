@@ -1,99 +1,9 @@
 import { test, expect } from "@playwright/test"
-import { Daytrans } from "../pages/daytrans";
-import { Baraya } from "../pages/baraya";
-import { Aragon } from "../pages/aragon";
-import { Jackal } from "../pages/jackal";
-import { Btm } from "../pages/btm";
-import { Semeru } from "../pages/semeru"
-import { Joglosemar } from "../pages/joglosemar";
-import { Kruzz } from "../pages/kruzz";
-import { Gracias } from "../pages/gracias";
-import { Kpm } from "../pages/kpm";
-import { Wbtrans } from "../pages/wbtrans";
-import { Sadya } from "../pages/sadya";
-import { Mstrans } from "../pages/mstrans";
-import { Raputri } from "../pages/raputri";
-import { Mrtrans } from "../pages/mrtrans";
-import { Sunjaya } from "../pages/sunjaya";
-import { Binasarana } from "../pages/binasarana";
-import { Transkita } from "../pages/transkita";
-import { Cgtrans } from "../pages/cgtrans";
-import { Ztrans } from "../pages/ztrans";
-import { Putraremaja } from "../pages/putraremaja";
-import { Banyumili } from "../pages/banyumili";
-import { Ctu } from "../pages/ctu";
-import { Krakaline } from "../pages/krakaline";
-import { Pelitamas } from "../pages/pelitamas";
-import { Aoshuttle } from "../pages/aoshuttle";
-import { Adibuzz } from "../pages/adibuzz";
-import { Marita } from "../pages/marita";
-import { Trikusuma } from "../pages/trikusuma";
-import { Wisatakomodo } from "../pages/wisatakomodo";
-import { Sariharum } from "../pages/sariharum";
-import { Ats } from "../pages/ats";
-import { Ans } from "../pages/ans";
-import { Riyan } from "../pages/riyan";
-import { Minanga } from "../pages/minanga";
-import { Harumbsi } from "../pages/harumbsi";
-import { Yantigroup } from "../pages/yantigroup";
-import { Selamat } from "../pages/selamat";
-import { Namaste } from "../pages/namaste";
-import { Royalkencana } from "../pages/royalkencana";
-import { Sabila } from "../pages/sabila";
-import { Kupuayu } from "../pages/kupuayu";
-
-import { testData } from "../test-data/reservasi_data";
+import { sites } from "../utils/sites";
 import { saveToCsv } from "../utils/helper";
+import { testData } from "../test-data/reservasi_data";
 
-const sites = [
-    {tag: '@daytrans', url: 'https://www.daytrans.co.id/', locator: Daytrans, data: testData.Daytrans, roundTrip: false, connectingRes: true},
-    {tag: '@baraya', url: 'https://www.baraya-travel.com/', locator: Baraya, data: testData.Baraya, roundTrip: true, connectingRes: false},
-    {tag: '@aragon', url: 'https://www.aragontrans.com/', locator: Aragon, data: testData.Aragon, roundTrip: false, connectingRes: false},
-    {tag: '@jackal', url: 'https://www.jackalholidays.com/', locator: Jackal, data: testData.Jackal, roundTrip: true, connectingRes: false},
-    {tag: '@btm', url: 'https://www.btmshuttle.id/', locator: Btm, data: testData.Btm, roundTrip: false, connectingRes: false},
-    {tag: '@semeru', url: 'https://www.semerutrans.com/', locator: Semeru, data: testData.Semeru, roundTrip: false, connectingRes: false},
-    {tag: '@joglosemar', url: 'https://www.joglosemarbus.com/', locator: Joglosemar, data: testData.Joglosemar, roundTrip: true, connectingRes: false},
-    {tag: '@kruzz', url: 'https://www.kruzz.id/', locator: Kruzz, data: testData.Kruzz, roundTrip: true, connectingRes: false},
-    {tag: '@gracias', url: 'https://www.graciasshuttle.co.id/', locator: Gracias, data: testData.Gracias, roundTrip: true, connectingRes: false},
-    {tag: '@kpm', url: 'https://www.kpmtrans.id/', locator: Kpm, data: testData.Kpm, roundTrip: true, connectingRes: false},
-    {tag: '@wbtrans', url: 'https://www.wbtrans.id/', locator: Wbtrans, data: testData.Wbtrans, roundTrip: true, connectingRes: false},
-    {tag: '@sadya', url: 'https://booking.sadyatrans.com/', locator: Sadya, data: testData.Sadya, roundTrip: true, connectingRes: false},
-    {tag: '@mstrans', url: 'https://www.mstrans.id/', locator: Mstrans, data: testData.Mstrans, roundTrip: true, connectingRes: false},
-    {tag: '@raputri', url: 'https://www.raputri.com/', locator: Raputri, data: testData.Raputri, roundTrip: true, connectingRes: false},
-    {tag: '@mrtrans', url: 'https://www.mrtrans.co.id/', locator: Mrtrans, data: testData.Mrtrans, roundTrip: false, connectingRes: false},
-    {tag: '@sunjaya', url: 'https://www.sunjayaabadi.com/', locator: Sunjaya, data: testData.Sunjaya, roundTrip: true, connectingRes: false},
-    {tag: '@binasarana', url: 'https://www.booking.binasarana.co.id/', locator: Binasarana, data: testData.Binasarana, roundTrip: false, connectingRes: false},
-    {tag: '@transkita', url: 'https://www.transkitashuttle.co.id/', locator: Transkita, data: testData.Transkita, roundTrip: true, connectingRes: false},
-    {tag: '@cgtrans', url: 'https://www.cgtrans.co.id/', locator: Cgtrans, data: testData.Cgtrans, roundTrip: true, connectingRes: false},
-    {tag: '@ztrans', url: 'https://www.ztrans.id/', locator: Ztrans, data: testData.Ztrans, roundTrip: true, connectingRes: false},
-    {tag: '@putraremaja', url: 'https://shuttle.putraremaja.co.id/', locator: Putraremaja, data: testData.Putraremaja, roundTrip: true, connectingRes: false},
-    {tag: '@banyumili', url: 'https://www.banyumilitravel.id/', locator: Banyumili, data: testData.Banyumili, roundTrip: true, connectingRes: false},
-    {tag: '@ctu', url: 'https://www.ctu-shuttle.com/', locator: Ctu, data: testData.Ctu, roundTrip: true, connectingRes: false},
-    {tag: '@krakaline', url: 'https://www.krakaline.com/', locator: Krakaline, data: testData.Krakaline, roundTrip: true, connectingRes: false},
-    {tag: '@pelitamas', url: 'https://www.pelitamas.id/', locator: Pelitamas, data: testData.Pelitamas, roundTrip: true, connectingRes: false},
-    {tag: '@aoshuttle', url: 'https://web.aotransportbus.com/', locator: Aoshuttle, data: testData.Aoshuttle, roundTrip: true, connectingRes: false},
-    {tag: '@adibuzz', url: 'https://www.adi-buzz.com/', locator: Adibuzz, data: testData.Adibuzz, roundTrip: true, connectingRes: false},
-    {tag: '@marita', url: 'https://www.maritatrans.com/', locator: Marita, data: testData.Marita, roundTrip: true, connectingRes: false},
-    {tag: '@trikusuma', url: 'https://www.trikusuma.com/', locator: Trikusuma, data: testData.Trikusuma, roundTrip: true, connectingRes: false},
-    {tag: '@wisatakomodo', url: 'https://www.buswisatakomodo.com/', locator: Wisatakomodo, data: testData.Wisatakomodo, roundTrip: true, connectingRes: false},
-    {tag: '@sariharum', url: 'https://www.sariharum.com/', locator: Sariharum, data: testData.Sariharum, roundTrip: true, connectingRes: false},
-    {tag: '@ats', url: 'https://www.bus-ats.id/', locator: Ats, data: testData.Ats, roundTrip: true, connectingRes: false},
-    {tag: '@ans', url: 'https://www.bus-ans.com/', locator: Ans, data: testData.Ans, roundTrip: true, connectingRes: false},
-    {tag: '@riyan', url: 'https://www.riyantransport.com/', locator: Riyan, data: testData.Riyan, roundTrip: false, connectingRes: false}, //Round-trip true tapi belum ditemukan rute-nya
-    {tag: '@minanga', url: 'https://www.minangaexpress.id/', locator: Minanga, data: testData.Minanga, roundTrip: true, connectingRes: false},
-    {tag: '@harumbsi', url: 'https://www.harumbsi.com/', locator: Harumbsi, data: testData.Harumbsi, roundTrip: true, connectingRes: false},
-    {tag: '@yantigroup', url: 'https://www.yantigroup.com/', locator: Yantigroup, data: testData.Yantigroup, roundTrip: true, connectingRes: false},
-    {tag: '@selamat', url: 'https://www.selamattrans.co.id/reservasi', locator: Selamat, data: testData.Selamat, roundTrip: false, connectingRes: false},
-    {tag: '@namaste', url: 'https://www.namasteshuttle.com/', locator: Namaste, data: testData.Namaste, roundTrip: true, connectingRes: false},
-    {tag: '@royalkencana', url: 'https://www.royalkencanabus.id/', locator: Royalkencana, data: testData.Royalkencana, roundTrip: true, connectingRes: false},
-    {tag: '@sabila', url: 'https://booking.sabilashuttle.co.id/', locator: Sabila, data: testData.Sabila, roundTrip: false, connectingRes: false}, // Round trip true tapi belum ditemukan rute tersedia
-    {tag: '@kupuayu', url: 'https://www.kupuayutrans.com/', locator: Kupuayu, data: testData.Kupuayu, roundTrip: true, connectingRes: false},
-]
-
-const data_Pemesan_1 = testData.Pemesan1;
-const data_Pemesan_2 = testData.Pemesan2;
-
-const data_Penumpang = testData.Penumpang;
+const ENV = process.env.ENV || 'production';
 
 test.setTimeout(120000);
 
@@ -103,7 +13,7 @@ for (const site of sites) {
 
         const web = new site.locator(page);
     
-        await page.goto(site.url);
+        await page.goto(site.urls[ENV]);
         
         if(web.close_popup){ // Close popup jika ada
             await web.closePopup(web.close_popup);
@@ -129,7 +39,7 @@ for (const site of sites) {
         let expected_total_tiket = 0;
 
         if(path === "/book/pemesan") {
-            await web.isiDataPenumpang(jml_penumpang, data_Pemesan_1, data_Penumpang, site.data.BiayaLainnya);
+            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan1, testData.Penumpang, site.data.BiayaLainnya);
             await web.cariKursi();
             await web.pilihKursi(jml_penumpang);
             expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya);
@@ -138,7 +48,7 @@ for (const site of sites) {
         if(path === "/book/pilihkursi") {
             await web.pilihKursi(jml_penumpang, harga_tiket);
             expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya);
-            await web.isiDataPenumpang(jml_penumpang, data_Pemesan_1, data_Penumpang, site.data.BiayaLainnya);
+            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan1, testData.Penumpang, site.data.BiayaLainnya);
             await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "data-page", site.data.BiayaLainnya);
         }
 
@@ -176,7 +86,7 @@ for (const site of sites) {
     
             const web = new site.locator(page);
     
-            await page.goto(site.url);
+            await page.goto(site.urls[ENV]);
     
             if(web.close_popup) {
                 await web.closePopup(web.close_popup);
@@ -205,7 +115,7 @@ for (const site of sites) {
 
             let expected_total_tiket = 0;
 
-            await web.isiDataPenumpang(jml_penumpang, data_Pemesan_2, data_Penumpang, site.data.BiayaLainnya);
+            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan2, testData.Penumpang, site.data.BiayaLainnya);
                 
             await web.cariKursi();
                 
@@ -251,7 +161,7 @@ for (const site of sites) {
     
             const web = new site.locator(page);
     
-            await page.goto(site.url);
+            await page.goto(site.urls[ENV]);
     
             if(web.close_popup) {
                 await web.closePopup(web.close_popup);
@@ -274,7 +184,7 @@ for (const site of sites) {
 
             let expected_total_tiket = 0;
 
-            await web.isiDataPenumpang(jml_penumpang, data_Pemesan_2, data_Penumpang, site.data.BiayaLainnya);
+            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan2, testData.Penumpang, site.data.BiayaLainnya);
                 
             await web.cariKursi();
 
