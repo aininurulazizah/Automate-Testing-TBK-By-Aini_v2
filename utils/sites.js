@@ -454,7 +454,7 @@ export const sites = [
         tag: '@selamat',  
         urls: {
             production: 'https://www.selamattrans.co.id/reservasi',
-            staging: 'https://selamat-web.asmat.app/'
+            staging: 'https://selamat-web.asmat.app/reservasi'
         },
         locator: Selamat, 
         data: testData.Selamat, 

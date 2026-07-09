@@ -5,6 +5,8 @@ export class Jackal{
 
         // General
         this.page = page;
+        this.toggle_bahasa = page.locator('button#dropdown-toggle-mobile-5 > div');
+        this.list_bahasa = page.locator('button#dropdown-toggle-mobile-5 + div')
         this.keberangkatan = page.locator('#keberangkatan + div');
         
         // Reservation Form
@@ -87,7 +89,19 @@ export class Jackal{
         }
     }
 
+    async cekBahasa() {
+        const id = await this.toggle_bahasa.locator('span:has-text("ID")').count();
+        console.log(id);
+
+        if (id === 0) {   //Jika elemen bahasa "ID" 0
+            await this.toggle_bahasa.click();
+            await this.list_bahasa.locator('a[data-lang="id"]').click();
+            await this.page.pause();
+        }
+    }
+
     async isiKeberangkatan(value) {
+        await this.cekBahasa();
         await this.page.selectOption('#keberangkatan', { label: value }, { force: true });
     }
 

@@ -12,7 +12,6 @@ export class Mrtrans {
         this.tujuan_field = page.locator('select#tujuan + div');
         this.dropdown_keberangkatan = this.keberangkatan_field.locator('div.ss-list');
         this.dropdown_tujuan = this.tujuan_field.locator('div.ss-list');
-        this.search_lokasi = page.locator('#dropdown-outlet2 #searchQuery');
         this.tanggal_pergi = page.locator('input[name="tglberangkat"] + input');
         this.next_month_btn = page.locator('.flatpickr-next-month');
         this.jumlah_penumpang = page.locator('select#jmlpenumpang + div');

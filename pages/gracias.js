@@ -8,17 +8,16 @@ export class Gracias {
         this.close_popup = page.locator('.close-pop-info');
         
         // Reservation Form
-        this.keberangkatan_field = page.locator('p:text-is("Keberangkatan") + div');
-        this.tujuan_field = page.locator('p:text-is("Tujuan") + div');
+        this.keberangkatan_field = page.locator('select#asal + div');
+        this.tujuan_field = page.locator('select#tujuan + div');
         this.dropdown_keberangkatan = this.keberangkatan_field.locator('div.ss-list');
         this.dropdown_tujuan = this.tujuan_field.locator('div.ss-list');
-        this.search_lokasi = page.locator('#dropdown-outlet2 #searchQuery');
-        this.tanggal_pergi = page.locator('p:has-text("Tanggal Pergi") + div');
+        this.tanggal_pergi = page.locator('input#tanggal_pergi');
         this.pp_checkbox =  page.locator('#is_pp');
-        this.tanggal_pulang = page.locator('div.d-flex:has(p:text("Tanggal Pulang")) + div').first();
+        this.tanggal_pulang = page.locator('input#tanggal_pulang');
         this.next_month_btn = page.locator('.flatpickr-next-month');
         this.next_month_btn2 = page.locator('.flatpickr-next-month').nth(1);
-        this.jumlah_penumpang = page.locator('p:text-is("Penumpang") + div');
+        this.jumlah_penumpang = page.locator('select#jmlpenumpang + div');
         this.dropdown_jml_penumpang = this.jumlah_penumpang.locator('div.ss-list');
         this.cari_btn = page.locator('button[onclick="return cek()"]'); 
         this.jadwal_card = page.locator('div#users li');
@@ -211,7 +210,14 @@ export class Gracias {
             harga_max = this.normalizeRupiah(harga_max);
 
             for (let i = 0; i < jml_penumpang; i++) {
-                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(2).innerText());
+                let harga_kursi;
+                const seat_text_content = await kursi_tersedia.nth(i).locator('p').innerText();
+
+                if (seat_text_content.includes('Sale')) {
+                    harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(2).innerText());
+                } else {
+                    harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                }
                 expect(harga_kursi).toBeGreaterThanOrEqual(harga_min);
                 expect(harga_kursi).toBeLessThanOrEqual(harga_max);
             }
@@ -220,7 +226,14 @@ export class Gracias {
         
         if (harga_type === "fixed") {
             for (let i = 0; i < jml_penumpang; i++) {
-                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(2).innerText());
+                let harga_kursi;
+                const seat_text_content = await kursi_tersedia.nth(i).locator('p').innerText();
+
+                if (seat_text_content.includes('Sale')) {
+                    harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(2).innerText());
+                } else {
+                    harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                }
                 expect(harga_kursi).toBe(this.normalizeRupiah(harga_tiket));
             }
         }
@@ -240,7 +253,14 @@ export class Gracias {
                 if (await this.validasiHargaTiketKursi(harga_tiket, jml_penumpang, list_kursi_tersedia)) {
 
                     for (let i = 0; i < jml_penumpang; i++) {
-                        const current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(2).innerText());
+                        let current_harga_tiket;
+                        const seat_text_content = await list_kursi_tersedia.nth(i).locator('p').innerText();
+        
+                        if (seat_text_content.includes('Sale')) {
+                            current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(2).innerText());
+                        } else {
+                            current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                        }
                         expected_total_tiket += current_harga_tiket;
                         expected_temp += current_harga_tiket;
                     }

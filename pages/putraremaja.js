@@ -8,8 +8,8 @@ export class Putraremaja {
         this.close_popup = page.locator('.close-pop-info');
         
         // Reservation Form
-        this.keberangkatan_field = page.locator('p:text-is("Asal") + div');
-        this.tujuan_field = page.locator('p:text-is("Tujuan") + div');
+        this.keberangkatan_field = page.locator('input#berangkat');
+        this.tujuan_field = page.locator('input#tujuan');
         this.dropdown_keberangkatan = page.locator('p:text-is("Asal") + div div#dropdown-outlet');
         this.dropdown_tujuan = page.locator('p:text-is("Tujuan") + div div#dropdown-outlet2');
         this.tanggal_pergi = page.locator('input#tanggal_pergi');
@@ -17,7 +17,7 @@ export class Putraremaja {
         this.tanggal_pulang = page.locator('input#tanggal_pulang');
         this.next_month_btn = page.locator('.flatpickr-next-month');
         this.next_month_btn2 = page.locator('.flatpickr-next-month').nth(1);
-        this.jumlah_penumpang = page.locator('p:text-is("Penumpang") ~ div');
+        this.jumlah_penumpang = page.locator('select#jmlpenumpang + div');
         this.dropdown_jml_penumpang = this.jumlah_penumpang.locator('div.ss-list');
         this.cari_btn = page.locator('button[onclick="return cek()"]'); 
         this.jadwal_card = page.locator('div#users li');

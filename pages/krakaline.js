@@ -8,8 +8,8 @@ export class Krakaline{
         this.close_popup = page.locator('.close-pop-info');
         
         // Reservation Form
-        this.keberangkatan_field = page.locator('p:text-is("Keberangkatan") ~ div.form-pp');
-        this.tujuan_field = page.locator('p:text-is("Tujuan") ~ div.form-pp');
+        this.keberangkatan_field = page.locator('select#asal + div');
+        this.tujuan_field = page.locator('select#tujuan + div');
         this.dropdown_keberangkatan = this.keberangkatan_field.locator('div.ss-list');
         this.dropdown_tujuan = this.tujuan_field.locator('div.ss-list');
         this.tanggal_pergi = page.locator('input#tanggal_pergi + input');
@@ -17,7 +17,7 @@ export class Krakaline{
         this.tanggal_pulang = page.locator('input#tanggal_pulang + input');
         this.next_month_btn = page.locator('.flatpickr-next-month');
         this.next_month_btn2 = page.locator('.flatpickr-next-month').nth(1);
-        this.jumlah_penumpang = page.locator('p:text-is("Penumpang") ~ div.form-pp');
+        this.jumlah_penumpang = page.locator('select#jmlpenumpang + div');
         this.dropdown_jml_penumpang = this.jumlah_penumpang.locator('div.ss-list');
         this.cari_btn = page.locator('button[onclick="return cek()"]'); 
         this.jadwal_card = page.locator('div#users li');
@@ -47,6 +47,7 @@ export class Krakaline{
         this.kode_booking_label = page.locator('p:has-text("Detail Pesanan") + p');
         this.kode_pembayaran_label = page.locator('p:has-text("Kode Pembayaran") + p');
         this.total_bayar_label_success_page = page.locator('div:has-text("Total Harga") + div');
+        this.total_bayar_label_success_page_2 = page.locator('div:has-text("Total Bayar") + div');
 
         // Login
         this.login_btn = page.locator('a:has-text("Masuk")');
@@ -275,7 +276,14 @@ export class Krakaline{
                 break;
 
             case("success-page") :
-                const actual_total_tiket_success = this.normalizeRupiah(await this.total_bayar_label_success_page.innerText());
+                let actual_total_tiket_success;
+
+                if (await this.total_bayar_label_success_page.count() > 0) {
+                    actual_total_tiket_success = this.normalizeRupiah(await this.total_bayar_label_success_page.innerText());
+                } else {
+                    actual_total_tiket_success = this.normalizeRupiah(await this.total_bayar_label_success_page_2.innerText());
+                }
+                
                 expect(actual_total_tiket_success).toBe(expected_total_tiket);
 
                 return expected_total_tiket;

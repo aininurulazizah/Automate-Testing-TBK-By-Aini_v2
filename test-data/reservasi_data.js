@@ -576,7 +576,7 @@ export const testData = {
 
     Sariharum : {
         Keberangkatan: "SARI HARUM BANDUNG",
-        Tujuan: "LAMPUNG ITERA KOTA BARU",
+        Tujuan: "BAKAUHENI",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
             kurang_hari: 7,
