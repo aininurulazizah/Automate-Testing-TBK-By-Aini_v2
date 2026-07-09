@@ -39,7 +39,7 @@ for (const site of sites) {
         let expected_total_tiket = 0;
 
         if(path === "/book/pemesan") {
-            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan1, testData.Penumpang, site.data.BiayaLainnya);
+            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan1[ENV], testData.Penumpang, site.data.BiayaLainnya);
             await web.cariKursi();
             await web.pilihKursi(jml_penumpang);
             expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya);
@@ -48,7 +48,7 @@ for (const site of sites) {
         if(path === "/book/pilihkursi") {
             await web.pilihKursi(jml_penumpang, harga_tiket);
             expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya);
-            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan1, testData.Penumpang, site.data.BiayaLainnya);
+            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan1[ENV], testData.Penumpang, site.data.BiayaLainnya);
             await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "data-page", site.data.BiayaLainnya);
         }
 
@@ -66,18 +66,22 @@ for (const site of sites) {
 
         //Expected Result
         await expect(page).toHaveURL(/selesai|tiket\/detail/);
-        await expect(web.pesanan_dibuat_label).toBeVisible();
-        await expect(web.kode_booking_label).toBeVisible();
-        await expect(web.kode_pembayaran_label).toBeVisible();
+        
+        const bookedPageElements = await web.cekBookedPageVersion();
+        
+        for (const locator of Object.values(bookedPageElements)) {
+            await expect(locator).toBeVisible();
+        }
+        
         await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "success-page", site.data.BiayaLainnya);
 
-        const booking_code = await web.kode_booking_label.innerText();
+        //Save booking code
+        const booking_code = await bookedPageElements.label_kode_booking.innerText();
 
         saveToCsv(site.tag, booking_code, 'One Way Trip');
 
         // await page.pause();
-
-        
+   
     })
 
     if(site.roundTrip) {
@@ -115,7 +119,7 @@ for (const site of sites) {
 
             let expected_total_tiket = 0;
 
-            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan2, testData.Penumpang, site.data.BiayaLainnya);
+            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan2[ENV], testData.Penumpang, site.data.BiayaLainnya);
                 
             await web.cariKursi();
                 
@@ -139,12 +143,17 @@ for (const site of sites) {
 
             //Expected Result
             await expect(page).toHaveURL(/selesai|tiket\/detail/);
-            await expect(web.pesanan_dibuat_label).toBeVisible();
-            await expect(web.kode_booking_label).toBeVisible();
-            await expect(web.kode_pembayaran_label).toBeVisible();
+            
+            const bookedPageElements = await web.cekBookedPageVersion();
+        
+            for (const locator of Object.values(bookedPageElements)) {
+                await expect(locator).toBeVisible();
+            }
+            
             await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "success-page", site.data.BiayaLainnya);
 
-            const booking_code = await web.kode_booking_label.innerText();
+            // Save booking code
+            const booking_code = await bookedPageElements.label_kode_booking.innerText();
 
             saveToCsv(site.tag, booking_code, 'Round Trip');
 
@@ -184,7 +193,7 @@ for (const site of sites) {
 
             let expected_total_tiket = 0;
 
-            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan2, testData.Penumpang, site.data.BiayaLainnya);
+            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan2[ENV], testData.Penumpang, site.data.BiayaLainnya);
                 
             await web.cariKursi();
 
@@ -218,12 +227,17 @@ for (const site of sites) {
 
             //Expected Result
             await expect(page).toHaveURL(/selesai|tiket\/detail/);
-            await expect(web.pesanan_dibuat_label).toBeVisible();
-            await expect(web.kode_booking_label).toBeVisible();
-            await expect(web.kode_pembayaran_label).toBeVisible();  
+
+            const bookedPageElements = await web.cekBookedPageVersion();
+        
+            for (const locator of Object.values(bookedPageElements)) {
+                await expect(locator).toBeVisible();
+            }
+
             await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "success-page", site.data.BiayaLainnya);
 
-            const booking_code = await web.kode_booking_label.innerText();
+            //Save booking code
+            const booking_code = await bookedPageElements.label_kode_booking.innerText();
 
             saveToCsv(site.tag, booking_code, 'Connecting Reservation');
 

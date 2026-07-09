@@ -20,8 +20,8 @@ export class Sadya {
         this.jumlah_penumpang = page.locator('select#jmlpenumpang + div');
         this.dropdown_jml_penumpang = this.jumlah_penumpang.locator('div.ss-list');
         this.cari_btn = page.locator('button[onclick="return cek()"]'); 
-        this.jadwal_card = page.locator('div#users li');
-        this.jadwal_plg_card = page.locator('div#users').nth(1).locator('li');
+        this.jadwal_card = page.locator('div#users li:not(.offschedule)');
+        this.jadwal_plg_card = page.locator('div#users').nth(1).locator('li:not(.offschedule)');
 
         // User Data
         this.nama_pemesan = page.locator('#pemesan');
@@ -42,11 +42,19 @@ export class Sadya {
         this.konfirmasi_pembayaran_btn = page.locator('button#submit:has-text("Konfirmasi")');
         this.konfirmasi_pembayaran_btn_modal = page.locator('.modal-body button:has-text("Konfirmasi")');
 
-        //Booked Page
-        this.pesanan_dibuat_label = page.locator('p:has-text("Detail Pesanan")');
-        this.kode_booking_label = page.locator('p:has-text("Detail Pesanan") + p');
-        this.kode_pembayaran_label = page.locator('p:has-text("Kode Pembayaran") + p');
-        this.total_bayar_label_success_page = page.locator('div:has-text("Total Harga") + div');
+        //Booked Page v1
+        this.pesanan_dibuat_label = page.locator('p:has-text("Pesanan Dibuat !")');
+        this.kode_booking_label = page.locator('p:has-text("Kode Booking") + h3');
+        this.kode_pembayaran_label = page.locator('p:has-text("Kode Pembayaran") + h3');
+        this.total_bayar_label = page.locator('p:has-text("Total Bayar") + h3');
+        this.total_harga_label = page.locator('p:has-text("Total Harga") + h3');
+
+        //Booked Page v2
+        this.pesanan_dibuat_label_2 = page.locator('p:has-text("Detail Pesanan")');
+        this.kode_booking_label_2 = page.locator('p:has-text("Detail Pesanan") + p');
+        this.kode_pembayaran_label_2 = page.locator('p:has-text("Kode Pembayaran") + p');
+        this.total_bayar_label_2 = page.locator('div:has-text("Total Bayar") + div');
+        this.total_harga_label_2 = page.locator('div:has-text("Total Harga") + div');
 
         // Login
         this.login_btn = page.locator('a:has-text("Masuk")');
@@ -275,7 +283,18 @@ export class Sadya {
                 break;
 
             case("success-page") :
-                const actual_total_tiket_success = this.normalizeRupiah(await this.total_bayar_label_success_page.innerText());
+                let actual_total_tiket_success;
+
+                if (await this.total_bayar_label.count() > 0) {
+                    actual_total_tiket_success = this.normalizeRupiah(await this.total_bayar_label.innerText());
+                } else if (await this.total_harga_label.count() > 0) {
+                    actual_total_tiket_success = this.normalizeRupiah(await this.total_harga_label.innerText());
+                } else if (await this.total_bayar_label_2.count() > 0) {
+                    actual_total_tiket_success = this.normalizeRupiah(await this.total_bayar_label_2.innerText());
+                } else if (await this.total_harga_label_2.count() > 0) {
+                    actual_total_tiket_success = this.normalizeRupiah(await this.total_harga_label_2.innerText());
+                }
+
                 expect(actual_total_tiket_success).toBe(expected_total_tiket);
 
                 return expected_total_tiket;
@@ -304,6 +323,24 @@ export class Sadya {
 
         await this.waitForLoader('div#modal-load', 'show', false);
     }
+
+    async cekBookedPageVersion() {
+        let elements;
+        if (await this.pesanan_dibuat_label.count() > 0) {
+            elements = {
+                label_berhasil : this.pesanan_dibuat_label,
+                label_kode_booking : this.kode_booking_label,
+                label_kode_pembayaran : this.kode_pembayaran_label
+            }
+        } else {
+            elements = {
+                label_berhasil : this.pesanan_dibuat_label_2,
+                label_kode_booking : this.kode_booking_label_2,
+                label_kode_pembayaran : this.kode_pembayaran_label_2
+            }
+        }
+        return elements;
+    }	
 
     // Login
 

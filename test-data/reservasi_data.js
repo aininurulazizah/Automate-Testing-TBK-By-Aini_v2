@@ -781,23 +781,45 @@ export const testData = {
     },
 
     Pemesan1: {
-        NamaPemesan: "Pemesan",
-        Email: "pemesan@harakirimail.com",
-        NoHP: "0812345678901",
-        Alamat: "Bandung",
-        JenisAntarJemput : "Jemput - Antar",
-        AlamatJemput: "Jl. Jemput",
-        AlamatAntar: "Jl. Antar"
+        production : {
+            NamaPemesan: "Pemesan",
+            Email: "pemesan@harakirimail.com",
+            NoHP: "0812345678901",
+            Alamat: "Bandung",
+            JenisAntarJemput : "Jemput - Antar",
+            AlamatJemput: "Jl. Jemput",
+            AlamatAntar: "Jl. Antar"
+        },
+        staging : {
+            NamaPemesan: "Pemesan",
+            Email: "pemesan_stg@harakirimail.com",
+            NoHP: "0812345678903",
+            Alamat: "Bandung",
+            JenisAntarJemput : "Jemput - Antar",
+            AlamatJemput: "Jl. Jemput",
+            AlamatAntar: "Jl. Antar"
+        }
     },
 
     Pemesan2: {
-        NamaPemesan: "Pemesan",
-        Email: "pemesan2@harakirimail.com",
-        NoHP: "0812345678902",
-        Alamat: "Bandung",
-        JenisAntarJemput : "Jemput - Antar",
-        AlamatJemput: "Jl. Jemput",
-        AlamatAntar: "Jl. Antar"
+        production : {
+            NamaPemesan: "Pemesan",
+            Email: "pemesan2@harakirimail.com",
+            NoHP: "0812345678902",
+            Alamat: "Bandung",
+            JenisAntarJemput : "Jemput - Antar",
+            AlamatJemput: "Jl. Jemput",
+            AlamatAntar: "Jl. Antar"
+        },
+        staging : {
+            NamaPemesan: "Pemesan",
+            Email: "pemesan2_stg@harakirimail.com",
+            NoHP: "0812345678904",
+            Alamat: "Bandung",
+            JenisAntarJemput : "Jemput - Antar",
+            AlamatJemput: "Jl. Jemput",
+            AlamatAntar: "Jl. Antar"
+        }
     },
 
     Penumpang: {
