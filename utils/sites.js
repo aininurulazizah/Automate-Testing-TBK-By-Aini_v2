@@ -415,7 +415,7 @@ export const sites = [
         },
         locator: Riyan, 
         data: testData.Riyan, 
-        roundTrip: false, 
+        roundTrip: true, 
         connectingRes: false //Round-trip true tapi belum ditemukan rute-nya
     }, 
     {
