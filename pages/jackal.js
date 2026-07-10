@@ -91,12 +91,10 @@ export class Jackal{
 
     async cekBahasa() {
         const id = await this.toggle_bahasa.locator('span:has-text("ID")').count();
-        console.log(id);
 
-        if (id === 0) {   //Jika elemen bahasa "ID" 0
+        if (id > 0) {   //Jika elemen bahasa "ID" 0
             await this.toggle_bahasa.click();
-            await this.list_bahasa.locator('a[data-lang="id"]').click();
-            await this.page.pause();
+            await this.list_bahasa.locator('a[data-lang="en"]').click();
         }
     }
 
