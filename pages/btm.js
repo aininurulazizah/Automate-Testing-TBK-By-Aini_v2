@@ -241,6 +241,8 @@ export class Btm{
                 break;
 
             case("payment-page") :
+                await this.page.waitForTimeout(1000);
+
                 const actual_total_tiket_payment_1 = this.normalizeRupiah(await this.total_bayar_label_general.innerText());
                 const actual_total_tiket_payment_2 = this.normalizeRupiah(await this.total_bayar_label_payment.innerText());
 
@@ -274,6 +276,18 @@ export class Btm{
     async konfirmasiPembayaran() {
         await this.konfirmasi_pembayaran_btn.click();
         await this.konfirmasi_pembayaran_btn_modal.click();
+    }
+
+    async cekBookedPageVersion() {
+        let elements;
+
+        elements = {
+            label_berhasil : this.pesanan_dibuat_label,
+            label_kode_booking : this.kode_booking_label,
+            label_kode_pembayaran : this.kode_pembayaran_label
+        }
+
+        return elements;
     }
 
     // Login

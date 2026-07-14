@@ -99,7 +99,7 @@ export class Jackal{
     }
 
     async isiKeberangkatan(value) {
-        await this.cekBahasa();
+        // await this.cekBahasa();
         await this.page.selectOption('#keberangkatan', { label: value }, { force: true });
     }
 
@@ -267,6 +267,18 @@ export class Jackal{
     async konfirmasiPembayaran() {
         await this.konfirmasi_pembayaran_btn.click()
         await this.konfirmasi_pembayaran_btn_modal.click();
+    }
+
+    async cekBookedPageVersion() {
+        let elements;
+
+        elements = {
+            label_berhasil : this.pesanan_dibuat_label,
+            label_kode_booking : this.kode_booking_label,
+            label_kode_pembayaran : this.kode_pembayaran_label
+        }
+
+        return elements;
     }
 
     // Login

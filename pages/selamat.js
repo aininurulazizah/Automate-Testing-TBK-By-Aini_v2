@@ -14,7 +14,7 @@ export class Selamat {
         this.dropdown_tujuan = this.tujuan_field.locator('div.ss-list');
         this.tanggal_pergi = page.locator('input#tglberangkat + input');
         this.pp_checkbox =  page.locator('#is_pp');
-        this.next_month_btn = page.locator('.flatpickr-next-month');
+        this.next_month_btn = page.locator('.flatpickr-next-month').first();
         this.jumlah_penumpang = page.locator('select#jmlpenumpang + div');
         this.dropdown_jml_penumpang = this.jumlah_penumpang.locator('div.ss-list');
         this.cari_btn = page.locator('button[onclick="return cek()"]'); 
@@ -251,6 +251,24 @@ export class Selamat {
         await this.konfirmasi_pembayaran_btn_modal.click();
 
         await this.waitForLoader('div#modal-load', 'show', false);
+    }
+
+    async cekBookedPageVersion() {
+        let elements;
+        if (await this.pesanan_dibuat_label.count() > 0) {
+            elements = {
+                label_berhasil : this.pesanan_dibuat_label,
+                label_kode_booking : this.kode_booking_label,
+                label_kode_pembayaran : this.kode_pembayaran_label
+            }
+        } else {
+            elements = {
+                label_berhasil : this.pesanan_dibuat_label_2,
+                label_kode_booking : this.kode_booking_label_2,
+                label_kode_pembayaran : this.kode_pembayaran_label_2
+            }
+        }
+        return elements;
     }
 
     // Login
