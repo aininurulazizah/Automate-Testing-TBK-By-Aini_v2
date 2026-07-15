@@ -27,6 +27,26 @@ function getTanggalCustom({
     }
 }
 
+function getLastDay({
+    customMonthToIndo = false
+}) {
+    const d = new Date();
+
+    // Hari terakhir bulan saat ini
+    d.setMonth(d.getMonth() + 1, 0);
+
+    if (customMonthToIndo) {
+        const namaBulan = d.toLocaleDateString('id-ID', { month: 'long' });
+        return `${namaBulan} ${d.getDate()}, ${d.getFullYear()}`;
+    } else {
+        return d.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
+}
+
 export const testData = {
 
     Daytrans: {
@@ -324,7 +344,7 @@ export const testData = {
         Tujuan: "BINASARANA X BURGERKING SAWANGAN",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
-            kurang_hari: 0,
+            kurang_hari: 1,
             customMonthToIndo: true
         }),
         JumlahPenumpang: 2,
@@ -584,7 +604,7 @@ export const testData = {
         }),
         TanggalPulang: getTanggalCustom({
             selang_bulan: 1,
-            kurang_hari: 0,
+            kurang_hari: 1,
             customMonthToIndo: true
         }),
         JumlahPenumpang: 2,
@@ -613,19 +633,15 @@ export const testData = {
     Ans : {
         Keberangkatan: "LUBUK BASUNG",
         Tujuan: "KOPO",
-        TanggalPergi: getTanggalCustom({
-            selang_bulan: 1,
-            kurang_hari: 7,
+        TanggalPergi: getLastDay({
             customMonthToIndo: true
         }),
-        TanggalPulang: getTanggalCustom({
-            selang_bulan: 1,
-            kurang_hari: 7,
+        TanggalPulang: getLastDay({
             customMonthToIndo: true
         }),
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
-        PlatformBayar: "QRIS"
+        PlatformBayar: "Shopeepay"
     },
 
     Riyan : {
@@ -656,7 +672,7 @@ export const testData = {
         }),
         TanggalPulang: getTanggalCustom({
             selang_bulan: 1,
-            kurang_hari: 0,
+            kurang_hari: 1,
             customMonthToIndo: false
         }),
         JumlahPenumpang: 2,
@@ -734,14 +750,10 @@ export const testData = {
     Royalkencana : {
         Keberangkatan: "BEKASI TIMUR",
         Tujuan: "GT BOYOLALI",
-        TanggalPergi: getTanggalCustom({
-            selang_bulan: 1,
-            kurang_hari: 7,
+        TanggalPergi: getLastDay({
             customMonthToIndo: true
         }),
-        TanggalPulang: getTanggalCustom({
-            selang_bulan: 1,
-            kurang_hari: 1,
+        TanggalPulang: getLastDay({
             customMonthToIndo: true
         }),
         JumlahPenumpang: 2,
