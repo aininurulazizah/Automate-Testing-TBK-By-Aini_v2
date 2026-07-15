@@ -39,7 +39,7 @@ for (const site of sites) {
         let expected_total_tiket = 0;
 
         if(path === "/book/pemesan") {
-            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan1[ENV], testData.Penumpang, site.data.BiayaLainnya);
+            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan, testData.Penumpang, site.data.BiayaLainnya);
             await web.cariKursi();
             await web.pilihKursi(jml_penumpang);
             expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya);
@@ -48,7 +48,7 @@ for (const site of sites) {
         if(path === "/book/pilihkursi") {
             await web.pilihKursi(jml_penumpang, harga_tiket);
             expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya);
-            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan1[ENV], testData.Penumpang, site.data.BiayaLainnya);
+            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan, testData.Penumpang, site.data.BiayaLainnya);
             await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "data-page", site.data.BiayaLainnya);
         }
 
@@ -119,8 +119,8 @@ for (const site of sites) {
 
             let expected_total_tiket = 0;
 
-            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan2[ENV], testData.Penumpang, site.data.BiayaLainnya);
-                
+            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan, testData.Penumpang, site.data.BiayaLainnya);   
+
             await web.cariKursi();
                 
             await web.pilihKursi(jml_penumpang);
@@ -193,8 +193,8 @@ for (const site of sites) {
 
             let expected_total_tiket = 0;
 
-            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan2[ENV], testData.Penumpang, site.data.BiayaLainnya);
-                
+            await web.isiDataPenumpang(jml_penumpang, testData.Pemesan, testData.Penumpang, site.data.BiayaLainnya);  
+
             await web.cariKursi();
 
             let n = 0; // armada ke berapa

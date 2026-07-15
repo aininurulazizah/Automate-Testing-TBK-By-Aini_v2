@@ -47,6 +47,18 @@ function getLastDay({
     }
 }
 
+function generateRandomPhoneNumber() {
+    const unique = Date.now().toString().slice(-10);
+    const phone_num = `08${unique}`;
+    return phone_num;
+}
+
+function generateRandomEmail() {
+    const unique = Date.now().toString().slice(-10);
+    const email = `qc${unique}@example.com`;
+    return email;
+}
+
 export const testData = {
 
     Daytrans: {
@@ -192,7 +204,7 @@ export const testData = {
         }),
         TanggalPulang: getTanggalCustom({
             selang_bulan: 1,
-            kurang_hari: 0,
+            kurang_hari: 1,
             customMonthToIndo: true
         }),
         JumlahPenumpang: 2,
@@ -380,7 +392,7 @@ export const testData = {
         }),
         TanggalPulang: getTanggalCustom({
             selang_bulan: 1,
-            kurang_hari: 0,
+            kurang_hari: 1,
             customMonthToIndo: true
         }),
         JumlahPenumpang: 2,
@@ -792,46 +804,14 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Pemesan1: {
-        production : {
-            NamaPemesan: "Pemesan",
-            Email: "pemesan@harakirimail.com",
-            NoHP: "0812345678901",
-            Alamat: "Bandung",
-            JenisAntarJemput : "Jemput - Antar",
-            AlamatJemput: "Jl. Jemput",
-            AlamatAntar: "Jl. Antar"
-        },
-        staging : {
-            NamaPemesan: "Pemesan",
-            Email: "pemesan_stg@harakirimail.com",
-            NoHP: "0812345678903",
-            Alamat: "Bandung",
-            JenisAntarJemput : "Jemput - Antar",
-            AlamatJemput: "Jl. Jemput",
-            AlamatAntar: "Jl. Antar"
-        }
-    },
-
-    Pemesan2: {
-        production : {
-            NamaPemesan: "Pemesan",
-            Email: "pemesan2@harakirimail.com",
-            NoHP: "0812345678902",
-            Alamat: "Bandung",
-            JenisAntarJemput : "Jemput - Antar",
-            AlamatJemput: "Jl. Jemput",
-            AlamatAntar: "Jl. Antar"
-        },
-        staging : {
-            NamaPemesan: "Pemesan",
-            Email: "pemesan2_stg@harakirimail.com",
-            NoHP: "0812345678904",
-            Alamat: "Bandung",
-            JenisAntarJemput : "Jemput - Antar",
-            AlamatJemput: "Jl. Jemput",
-            AlamatAntar: "Jl. Antar"
-        }
+    Pemesan: {
+        NamaPemesan: "Pemesan",
+        Email: generateRandomEmail(),
+        NoHP: generateRandomPhoneNumber(),
+        Alamat: "Bandung",
+        JenisAntarJemput : "Jemput - Antar",
+        AlamatJemput: "Jl. Jemput",
+        AlamatAntar: "Jl. Antar"
     },
 
     Penumpang: {
