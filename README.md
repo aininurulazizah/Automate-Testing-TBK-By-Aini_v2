@@ -11,13 +11,20 @@ Proyek automasi testing untuk proses pemesanan reservasi tiket bus/shuttle pada 
 - **Visual Studio Code** (atau editor lain) — Code editor
   
 ### Cara Menjalankan
-1. Install dependensi yang dibutuhkan
-2. Isi credential akses web staging (jika ingin menjalankan test di env staging) pada file .env.example lalu ubah nama file menjad .env
-3. Menjalankan test semua mitra :
+1. Clone repository :
+   ```
+   git clone https://github.com/aininurulazizah/Automate-Testing-WL-TBK.git
+   ```
+3. Install dependensi yang dibutuhkan :
+   ```
+   npm install
+   ```
+4. Isi credential akses web staging (jika ingin menjalankan test di env staging) pada file .env.example lalu ubah nama file menjad .env
+5. Menjalankan test semua mitra :
     ```
     npx playwright test ./reservasi_test.spec.js --project=chromium --headed --workers=1
     ```
-4. Menjalankan test pada mitra tertentu :
+6. Menjalankan test pada mitra tertentu :
     ```
     npx playwright test ./reservasi_test.spec.js --project=chromium --headed --workers=1 --grep '@[nama_mitra]'
     ```
@@ -25,7 +32,7 @@ Proyek automasi testing untuk proses pemesanan reservasi tiket bus/shuttle pada 
     ```
     npx playwright test ./reservasi_test.spec.js --project=chromium --headed --workers=1 --grep '@daytrans'
     ```
-5. Menjalankan test untuk kondisi case tertentu, misalnya jalankan test case reservasi dengan kondisi pulang pergi (Rountrip) :
+7. Menjalankan test untuk kondisi case tertentu, misalnya jalankan test case reservasi dengan kondisi pulang pergi (Rountrip) :
     ```
     npx playwright test ./reservasi_test.spec.js --project=chromium --headed --workers=1 --grep '[kondisi]'
     ```
@@ -34,7 +41,7 @@ Proyek automasi testing untuk proses pemesanan reservasi tiket bus/shuttle pada 
     npx playwright test ./reservasi_test.spec.js --project=chromium --headed --workers=1 --grep 'Round Trip'
     ```
     Ini akan dijalankan di semua mitra yang memiliki kondisi yang case tersebut.
-6. Menjalankan test spesifik (kondisi tertentu pada mitra tertentu) :
+8. Menjalankan test spesifik (kondisi tertentu pada mitra tertentu) :
     ```
     npx playwright test ./reservasi_test.spec.js --project=chromium --headed --workers=1 --grep '[nama test case spesifik]'
     ```
@@ -42,7 +49,7 @@ Proyek automasi testing untuk proses pemesanan reservasi tiket bus/shuttle pada 
     ```
     npx playwright test ./reservasi_test.spec.js --project=chromium --headed --workers=1 --grep '@btm - Test Case 3 - Connecting Reservation'
     ```
-7. Menjalankan test dengan lebih dari satu kata kunci (bisa mitra/test case) :
+9. Menjalankan test dengan lebih dari satu kata kunci (bisa mitra/test case) :
    ```
     npx playwright test ./reservasi_test.spec.js --project=chromium --headed --workers=1 --grep '[kata kunci 1]|[kata kunci 2]|[kata kunci n]'
     ```
@@ -50,7 +57,7 @@ Proyek automasi testing untuk proses pemesanan reservasi tiket bus/shuttle pada 
     ```
     npx playwright test ./reservasi_test.spec.js --project=chromium --headed --workers=1 --grep '@daytrans|@baraya|@btm'
     ```
-8. Jika ingin menjalankan automate test dengan environment tetentu, tambahkan `$env:ENV='production';` untuk env production atau `$env:ENV='staging'` untuk env staging sebelum command `npx playwright test ...`
+10. Jika ingin menjalankan automate test dengan environment tetentu, tambahkan `$env:ENV='production';` untuk env production atau `$env:ENV='staging'` untuk env staging sebelum command `npx playwright test ...`
    Contoh melakukan testing semua mitra pada env staging :
     ```
      $env:ENV='staging'; npx playwright test ./reservasi_test.spec.js --project=chromium --headed --workers=1
