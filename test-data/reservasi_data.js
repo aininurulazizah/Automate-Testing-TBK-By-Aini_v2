@@ -153,8 +153,8 @@ export const testData = {
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS",
         ConnectingReservation: {
-            Keberangkatan: "BAYAH",
-            Tujuan: "SUCI (HOTEL NINDYA BIODISTRICT )"
+            Keberangkatan: "JATINANGOR (APARTMENT SKYLAND)",
+            Tujuan: "BAYAH"
         }
     },
 

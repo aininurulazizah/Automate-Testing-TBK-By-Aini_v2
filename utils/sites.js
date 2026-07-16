@@ -97,7 +97,7 @@ export const sites = [
         locator: Btm, 
         data: testData.Btm, 
         roundTrip: false, 
-        connectingRes: false
+        connectingRes: true
     },
     {
         tag: '@semeru',  
