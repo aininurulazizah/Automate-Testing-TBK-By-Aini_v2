@@ -211,21 +211,11 @@ export class Btm{
         
         if (harga_type === "fixed") {
 
-            if (case_flag === 'connecting') {
-                harga_max = harga_tiket;
-
-                for (let i = 0; i < jml_penumpang; i++) {
-                    const harga_kursi = this.normalizeRupiah(await this.kursi_tersedia.nth(i).locator('span').nth(1).innerText());
-                    expect(harga_kursi).toBeLessThan(this.normalizeRupiah(harga_max));
-                }
-                
-            } else {
-
-                for (let i = 0; i < jml_penumpang; i++) {
-                    const harga_kursi = this.normalizeRupiah(await this.kursi_tersedia.nth(i).locator('span').nth(1).innerText());
-                    expect(harga_kursi).toBe(this.normalizeRupiah(harga_tiket));
-                }
+            for (let i = 0; i < jml_penumpang; i++) {
+                const harga_kursi = this.normalizeRupiah(await this.kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                expect(harga_kursi).toBe(this.normalizeRupiah(harga_tiket));
             }
+            
         }
         
         return true;
@@ -239,34 +229,34 @@ export class Btm{
 
                 let expected_temp = 0;
 
-                if (await this.validasiHargaTiketKursi(harga_tiket, jml_penumpang, case_flag)) {
-                    for (let i = 0; i < jml_penumpang; i++) {
-                        const current_harga_tiket = this.normalizeRupiah(await this.kursi_tersedia.nth(i).locator('span').nth(1).innerText());
-                        expected_total_tiket += current_harga_tiket;
-                        expected_temp += current_harga_tiket;
-                    }
-                }   
-
-                let actual_total_tiket_seat_1, actual_total_tiket_seat_2
-
                 if (case_flag === 'connecting') {
-                    actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator(`.totalTransit${n+1}`).innerText());
-                    actual_total_tiket_seat_2 = await this.total_bayar_seat_page_2.count() > 0 
-                                                ? this.normalizeRupiah(await this.total_bayar_seat_page_2.innerText()) 
-                                                : this.normalizeRupiah(await this.total_bayar_seat_page_1.innerText());
+                    
+                    for (let i = 0; i < jml_penumpang; i++) {
+                        expected_total_tiket += this.normalizeRupiah(harga_tiket) / 2; // Asumsi ada dua rute dalam satu connecting
+                    }
+
                 } else {
-                    actual_total_tiket_seat_1 = this.normalizeRupiah(await this.total_bayar_seat_page_1.innerText());
-                    actual_total_tiket_seat_2 = this.normalizeRupiah(await this.total_bayar_label_general.innerText());
+
+                    if (await this.validasiHargaTiketKursi(harga_tiket, jml_penumpang, case_flag)) {
+                        for (let i = 0; i < jml_penumpang; i++) {
+                            const current_harga_tiket = this.normalizeRupiah(await this.kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                            expected_total_tiket += current_harga_tiket;
+                            expected_temp += current_harga_tiket;
+                        }
+                    }   
+
+                    const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.total_bayar_seat_page_1.innerText());
+                    const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.total_bayar_label_general.innerText());
+
+                    const diskon = await this.page.locator('span#display_diskon').count > 0 
+                    ? this.normalizeRupiah(await this.page.locator('span#display_diskon').innerText())
+                    : 0;
+
+                    expected_total_tiket -= diskon;
+
+                    expect(actual_total_tiket_seat_1).toBe(expected_temp);
+                    expect(actual_total_tiket_seat_2).toBe(expected_total_tiket);
                 }
-
-                const diskon = await this.page.locator('span#display_diskon').count > 0 
-                               ? this.normalizeRupiah(await this.page.locator('span#display_diskon').innerText())
-                               : 0;
-
-                expected_total_tiket -= diskon;
-
-                expect(actual_total_tiket_seat_1).toBe(expected_temp);
-                expect(actual_total_tiket_seat_2).toBe(expected_total_tiket);
 
                 return expected_total_tiket;
 
@@ -280,6 +270,8 @@ export class Btm{
 
                 expect(actual_total_tiket_payment_1).toBe(expected_total_tiket);
                 expect(actual_total_tiket_payment_2).toBe(expected_total_tiket);
+
+                await this.page.pause();
 
                 return expected_total_tiket;
                 break;

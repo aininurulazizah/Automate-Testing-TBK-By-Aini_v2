@@ -149,7 +149,7 @@ export const testData = {
             kurang_hari: 7,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: 3,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS",
         ConnectingReservation: {

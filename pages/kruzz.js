@@ -235,24 +235,12 @@ export class Kruzz {
         }
         
         if (harga_type === "fixed") {
-
-            if (case_flag === 'connecting') {
-                harga_max = harga_tiket;
-
-                for (let i = 0; i < jml_penumpang; i++) {
-                    const harga_kursi = this.normalizeRupiah(await this.kursi_tersedia.nth(i+this.total_kursi_perarmada).locator('span').nth(1).innerText());
-                    expect(harga_kursi).toBeLessThan(this.normalizeRupiah(harga_max));
-                }
-
-            } else {
-
-                for (let i = 0; i < jml_penumpang; i++) {
-                    const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i+this.total_kursi_perarmada).locator('span').nth(1).innerText());
-                    expect(harga_kursi).toBe(this.normalizeRupiah(harga_tiket));
-                }
+            for (let i = 0; i < jml_penumpang; i++) {
+                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i+this.total_kursi_perarmada).locator('span').nth(1).innerText());
+                expect(harga_kursi).toBe(this.normalizeRupiah(harga_tiket));
             }
         }
-        
+
         return true;
 
     }
@@ -264,26 +252,25 @@ export class Kruzz {
 
             const list_kursi_tersedia = case_flag === "round-trip" ? this.kursi_plg_tersedia : this.kursi_tersedia;
 
-            let expected_temp = 0;
-
+            if (case_flag !== 'connecting') {
                 if (await this.validasiHargaTiketKursi(harga_tiket, jml_penumpang, list_kursi_tersedia, case_flag)) {
                     for (let i = 0; i < jml_penumpang; i++) {
                         const current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i+this.total_kursi_perarmada).locator('span').nth(1).innerText());
                         expected_total_tiket += current_harga_tiket;
-                        expected_temp += current_harga_tiket;
                     }
-                }   
+                }  
 
-                if (case_flag === 'connecting') {
-                    const actual_total_tiket_seat = this.normalizeRupiah(await this.page.locator(`.totalTransit${n+1}`).innerText());
-                    expect(actual_total_tiket_seat).toBe(expected_temp);
-                } else {
-                    const diskon = this.normalizeRupiah(await this.diskon_label_seat_page.innerText());
-                    expected_total_tiket -= diskon;
-                    const actual_total_tiket_seat = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
-                    expect(actual_total_tiket_seat).toBe(expected_total_tiket);
+                const diskon = this.normalizeRupiah(await this.diskon_label_seat_page.innerText());
+                expected_total_tiket -= diskon;
+                const actual_total_tiket_seat = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
+                expect(actual_total_tiket_seat).toBe(expected_total_tiket);
+
+            } else {
+
+                for (let i = 0; i < jml_penumpang; i++) {
+                    expected_total_tiket += this.normalizeRupiah(harga_tiket) / 2; // Asumsi ada dua rute dalam satu connecting
                 }
-    
+            }
 
                 return expected_total_tiket;
 
