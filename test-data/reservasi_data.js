@@ -62,8 +62,8 @@ function generateRandomEmail() {
 export const testData = {
 
     Daytrans: {
-        Keberangkatan: "Dipatiukur",
-        Tujuan: "Bekasi",
+        Keberangkatan: "Baros",
+        Tujuan: "Rest area km 62",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
             kurang_hari: 0,
@@ -207,6 +207,10 @@ export const testData = {
             kurang_hari: 1,
             customMonthToIndo: true
         }),
+        ConnectingReservation: {
+            Keberangkatan: 'KRUZZ PANCORAN',
+            Tujuan: 'KRUZZ JATINANGOR'
+        },
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"

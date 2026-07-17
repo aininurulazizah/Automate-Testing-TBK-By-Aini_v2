@@ -34,6 +34,8 @@ export class Kruzz {
         this.kursi_tersedia = page.locator('div.seat-blank');
         this.tab_plg = page.locator('button[data-trip="pulang"]');
         this.kursi_plg_tersedia = page.locator('div.seat-blank');
+        this.total_kursi_perarmada = 0;
+        this.pilih_next_kursi_btn = page.locator('button:has-text("Pilih Kursi Selanjutnya")');
         this.diskon_label_seat_page = page.locator('span#display_diskon');
         this.pembayaran_btn = page.locator('button:has-text("Pembayaran")');
 
@@ -187,26 +189,34 @@ export class Kruzz {
         await this.carikursi_btn.click();
     }
 
-    async pilihKursi(jml_penumpang) {
+    async pilihKursi(jml_penumpang, n=0) {
         await this.waitForLoader('div#modal-load', 'show', false);
 
         for(let i = 0; i < jml_penumpang; i++) {
-            await this.getPenumpangTerdaftar(i+1, 0).click();
-            await this.kursi_tersedia.nth(i).click();
+            await this.getPenumpangTerdaftar(i+1, n).click();
+            await this.kursi_tersedia.nth(i+this.total_kursi_perarmada).click();
         }
     }
 
-    async pilihKursiPulang(jml_penumpang) {
+    async pilihKursiPulang(jml_penumpang, n=0) {
         await this.waitForLoader('div#modal-load', 'show', false);
 
         await this.tab_plg.click();
-        for(let i = 0; i < jml_penumpang; i++) {
-            await this.getPenumpangTerdaftar(i+1, 0).click();
-            await this.kursi_plg_tersedia.nth(i).click();
-        }
+
+        await this.pilihKursi(jml_penumpang, n)
     }
 
-    async validasiHargaTiketKursi(harga_tiket, jml_penumpang, kursi_tersedia) { //Validasi harga tiket yang terpampang di kursi
+    async pilihKursiConnRes(jml_penumpang, n) {
+        await this.pilihKursi(jml_penumpang, n);
+    }
+
+    async pilihKursiNextArmada() {
+        this.total_kursi_perarmada += await this.page.locator('.seat-blank').count();
+        await this.pilih_next_kursi_btn.click();
+        await this.page.waitForTimeout(3000);
+    }
+
+    async validasiHargaTiketKursi(harga_tiket, jml_penumpang, kursi_tersedia, case_flag) { //Validasi harga tiket yang terpampang di kursi
         const harga_type = harga_tiket.includes(" - ") ? "range" : "fixed";
         let harga_min;
         let harga_max;
@@ -217,7 +227,7 @@ export class Kruzz {
             harga_max = this.normalizeRupiah(harga_max);
 
             for (let i = 0; i < jml_penumpang; i++) {
-                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i+this.total_kursi_perarmada).locator('span').nth(1).innerText());
                 expect(harga_kursi).toBeGreaterThanOrEqual(harga_min);
                 expect(harga_kursi).toBeLessThanOrEqual(harga_max);
             }
@@ -225,9 +235,21 @@ export class Kruzz {
         }
         
         if (harga_type === "fixed") {
-            for (let i = 0; i < jml_penumpang; i++) {
-                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
-                expect(harga_kursi).toBe(this.normalizeRupiah(harga_tiket));
+
+            if (case_flag === 'connecting') {
+                harga_max = harga_tiket;
+
+                for (let i = 0; i < jml_penumpang; i++) {
+                    const harga_kursi = this.normalizeRupiah(await this.kursi_tersedia.nth(i+this.total_kursi_perarmada).locator('span').nth(1).innerText());
+                    expect(harga_kursi).toBeLessThan(this.normalizeRupiah(harga_max));
+                }
+
+            } else {
+
+                for (let i = 0; i < jml_penumpang; i++) {
+                    const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i+this.total_kursi_perarmada).locator('span').nth(1).innerText());
+                    expect(harga_kursi).toBe(this.normalizeRupiah(harga_tiket));
+                }
             }
         }
         
@@ -235,27 +257,33 @@ export class Kruzz {
 
     }
 
-    async validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, current_page, biaya_lainnya, case_flag) {
+    async validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, current_page, biaya_lainnya, case_flag, n) {
 
         switch(current_page) {
             case("seat-page") :
 
             const list_kursi_tersedia = case_flag === "round-trip" ? this.kursi_plg_tersedia : this.kursi_tersedia;
 
-                if (await this.validasiHargaTiketKursi(harga_tiket, jml_penumpang, list_kursi_tersedia)) {
+            let expected_temp = 0;
+
+                if (await this.validasiHargaTiketKursi(harga_tiket, jml_penumpang, list_kursi_tersedia, case_flag)) {
                     for (let i = 0; i < jml_penumpang; i++) {
-                        const current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                        const current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i+this.total_kursi_perarmada).locator('span').nth(1).innerText());
                         expected_total_tiket += current_harga_tiket;
+                        expected_temp += current_harga_tiket;
                     }
                 }   
 
-                const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected').innerText());
-                expect(actual_total_tiket_seat_1).toBe(expected_total_tiket);
+                if (case_flag === 'connecting') {
+                    const actual_total_tiket_seat = this.normalizeRupiah(await this.page.locator(`.totalTransit${n+1}`).innerText());
+                    expect(actual_total_tiket_seat).toBe(expected_temp);
+                } else {
+                    const diskon = this.normalizeRupiah(await this.diskon_label_seat_page.innerText());
+                    expected_total_tiket -= diskon;
+                    const actual_total_tiket_seat = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
+                    expect(actual_total_tiket_seat).toBe(expected_total_tiket);
+                }
     
-                const diskon = this.normalizeRupiah(await this.diskon_label_seat_page.innerText());
-                expected_total_tiket -= diskon;
-                const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
-                expect(actual_total_tiket_seat_2).toBe(expected_total_tiket);
 
                 return expected_total_tiket;
 

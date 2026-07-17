@@ -191,7 +191,7 @@ export class Btm{
         await this.page.waitForTimeout(3000);
     }
 
-    async validasiHargaTiketKursi(harga_tiket, jml_penumpang, connectingRes) { //Validasi harga tiket yang terpampang di kursi
+    async validasiHargaTiketKursi(harga_tiket, jml_penumpang, case_flag) { //Validasi harga tiket yang terpampang di kursi
         const harga_type = harga_tiket.includes(" - ") ? "range" : "fixed";
         let harga_min;
         let harga_max;
@@ -211,7 +211,7 @@ export class Btm{
         
         if (harga_type === "fixed") {
 
-            if (connectingRes) {
+            if (case_flag === 'connecting') {
                 harga_max = harga_tiket;
 
                 for (let i = 0; i < jml_penumpang; i++) {
@@ -232,14 +232,14 @@ export class Btm{
 
     }
 
-    async validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, current_page, biaya_lainnya, connectingRes, n) {
+    async validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, current_page, biaya_lainnya, case_flag, n) {
 
         switch(current_page) {
             case("seat-page") :
 
                 let expected_temp = 0;
 
-                if (await this.validasiHargaTiketKursi(harga_tiket, jml_penumpang, connectingRes)) {
+                if (await this.validasiHargaTiketKursi(harga_tiket, jml_penumpang, case_flag)) {
                     for (let i = 0; i < jml_penumpang; i++) {
                         const current_harga_tiket = this.normalizeRupiah(await this.kursi_tersedia.nth(i).locator('span').nth(1).innerText());
                         expected_total_tiket += current_harga_tiket;
@@ -249,7 +249,7 @@ export class Btm{
 
                 let actual_total_tiket_seat_1, actual_total_tiket_seat_2
 
-                if (connectingRes) {
+                if (case_flag === 'connecting') {
                     actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator(`.totalTransit${n+1}`).innerText());
                     actual_total_tiket_seat_2 = await this.total_bayar_seat_page_2.count() > 0 
                                                 ? this.normalizeRupiah(await this.total_bayar_seat_page_2.innerText()) 

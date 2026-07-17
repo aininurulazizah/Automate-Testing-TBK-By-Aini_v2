@@ -201,7 +201,7 @@ for (const site of sites) {
             while(true) {
 
                 await web.pilihKursiConnRes(jml_penumpang, n); // Pilih kursi
-                expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya, site.connectingRes, n);
+                expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya, "connecting", n);
 
                 if(await web.pilih_next_kursi_btn.isVisible()) {
 

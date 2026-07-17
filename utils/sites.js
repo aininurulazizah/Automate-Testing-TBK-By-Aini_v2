@@ -130,7 +130,7 @@ export const sites = [
         locator: Kruzz, 
         data: testData.Kruzz, 
         roundTrip: true, 
-        connectingRes: false
+        connectingRes: true
     },
     {
         tag: '@gracias', 
