@@ -149,7 +149,7 @@ export const testData = {
             kurang_hari: 7,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 3,
+        JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS",
         ConnectingReservation: {
@@ -793,6 +793,24 @@ export const testData = {
     Kupuayu : {
         Keberangkatan: "BANJARNEGARA (DI DALAM TERMINAL KIOS NO. 24A)",
         Tujuan: "BARANANGSIANG (DI DALAM TERMINAL LOKET NO. 2)",
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 7,
+            customMonthToIndo: true
+        }),
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 1,
+            customMonthToIndo: true
+        }),
+        JumlahPenumpang: 2,
+        MetodeBayar: "Pembayaran Instan",
+        PlatformBayar: "QRIS"
+    },
+
+    Besttrans : {
+        Keberangkatan: "DIPATIUKUR",
+        Tujuan: "FATMAWATI",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
             kurang_hari: 7,
