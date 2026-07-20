@@ -271,8 +271,6 @@ export class Btm{
                 expect(actual_total_tiket_payment_1).toBe(expected_total_tiket);
                 expect(actual_total_tiket_payment_2).toBe(expected_total_tiket);
 
-                await this.page.pause();
-
                 return expected_total_tiket;
                 break;
 

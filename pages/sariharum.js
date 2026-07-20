@@ -5,7 +5,7 @@ export class Sariharum {
 
         // General
         this.page = page;
-        this.close_popup = page.locator('.close-pop-info');
+        this.close_popup = page.locator('.close-pop-info, .login-v2-close');
         
         // Reservation Form
         this.keberangkatan_field = page.locator('select#asal + div');
@@ -105,10 +105,13 @@ export class Sariharum {
     }
 
     async closePopup(value) {
-        while (await value.isVisible()) {
-            await value.click(); 
-            await this.page.waitForTimeout(1000);
+        for (let i=0; i < await value.count(); i++) {
+            while (await value.nth(i).isVisible()) {
+                await value.nth(i).click(); 
+                await this.page.waitForTimeout(1000);
+            }
         }
+        
     }
 
     async isiKeberangkatan(value) {
