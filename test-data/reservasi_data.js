@@ -59,6 +59,18 @@ function generateRandomEmail() {
     return email;
 }
 
+export function createPemesan() {
+    return {
+        NamaPemesan: "Pemesan",
+        Email: generateRandomEmail(),
+        NoHP: generateRandomPhoneNumber(),
+        Alamat: "Bandung",
+        JenisAntarJemput: "Jemput - Antar",
+        AlamatJemput: "Jl. Jemput",
+        AlamatAntar: "Jl. Antar"
+    };
+}
+
 export const testData = {
 
     Daytrans: {
@@ -824,16 +836,6 @@ export const testData = {
         JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
-    },
-
-    Pemesan: {
-        NamaPemesan: "Pemesan",
-        Email: generateRandomEmail(),
-        NoHP: generateRandomPhoneNumber(),
-        Alamat: "Bandung",
-        JenisAntarJemput : "Jemput - Antar",
-        AlamatJemput: "Jl. Jemput",
-        AlamatAntar: "Jl. Antar"
     },
 
     Penumpang: {
