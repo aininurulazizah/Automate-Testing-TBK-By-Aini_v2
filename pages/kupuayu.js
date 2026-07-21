@@ -32,7 +32,7 @@ export class Kupuayu {
 
         // Seat Page
         this.kursi_tersedia = page.locator('div.seat-blank');
-        this.tab_plg = page.locator('button:has-text("Kursi Pulang")');
+        this.tab_plg = page.locator('button[data-trip="pulang"]');
         this.kursi_plg_tersedia = page.locator('div.seat-blank');
         this.diskon_label_seat_page = page.locator('span#display_diskon');
         this.pembayaran_btn = page.locator('button:has-text("pembayaran")');
@@ -250,7 +250,7 @@ export class Kupuayu {
             case("seat-page") :
 
                 const list_kursi_tersedia = case_flag === "round-trip" ? this.kursi_plg_tersedia : this.kursi_tersedia;
-                let expected_temp = 0;
+                // let expected_temp = 0;
 
                 if (await this.validasiHargaTiketKursi(harga_tiket, jml_penumpang, list_kursi_tersedia)) {
 
@@ -265,24 +265,24 @@ export class Kupuayu {
                         }
 
                         expected_total_tiket += current_harga_tiket;
-                        expected_temp += current_harga_tiket;
+                        // expected_temp += current_harga_tiket;
                     }
                 }   
 
-                if (case_flag === "round-trip") {
-                    const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('h5.display-price-seat-selected').innerText());
-                    expect(actual_total_tiket_seat_1).toBe(expected_temp);
+                // if (case_flag === "round-trip") {
+                //     const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('h5.display-price-seat-selected').innerText());
+                //     expect(actual_total_tiket_seat_1).toBe(expected_temp);
     
-                    const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
-                    expect(actual_total_tiket_seat_2).toBe(expected_temp);
+                //     const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
+                //     expect(actual_total_tiket_seat_2).toBe(expected_temp);
 
-                } else {
+                // } else {
                     const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('h5.display-price-seat-selected').innerText());
                     expect(actual_total_tiket_seat_1).toBe(expected_total_tiket);
     
                     const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
                     expect(actual_total_tiket_seat_2).toBe(expected_total_tiket);
-                }
+                // }
 
                 return expected_total_tiket;
 

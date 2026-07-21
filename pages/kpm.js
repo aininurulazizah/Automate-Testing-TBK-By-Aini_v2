@@ -32,7 +32,7 @@ export class Kpm {
 
         // Seat Page
         this.kursi_tersedia = page.locator('div.seat-blank');
-        this.tab_plg = page.locator('button:has-text("Kursi Pulang")');
+        this.tab_plg = page.locator('button[data-trip="pulang"]');
         this.kursi_plg_tersedia = page.locator('div.seat-blank');
         this.diskon_label_seat_page = page.locator('span#display_diskon');
         this.pembayaran_btn = page.locator('button:has-text("Pembayaran")');

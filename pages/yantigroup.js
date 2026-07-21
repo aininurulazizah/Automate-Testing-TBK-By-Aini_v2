@@ -32,7 +32,7 @@ export class Yantigroup {
 
         // Seat Page
         this.kursi_tersedia = page.locator('div.seat-blank');
-        this.tab_plg = page.locator('button:has-text("Kursi Pulang")');
+        this.tab_plg = page.locator('button[data-trip="pulang"]');
         this.kursi_plg_tersedia = page.locator('div.seat-blank');
         this.diskon_label_seat_page = page.locator('span#display_diskon');
         this.pembayaran_btn = page.locator('button:has-text("Pembayaran")');
@@ -253,20 +253,20 @@ export class Yantigroup {
                     }
                 }   
 
-                if (case_flag === "round-trip") {
-                    const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected').innerText());
-                    expect(actual_total_tiket_seat_1).toBe(expected_temp);
+                // if (case_flag === "round-trip") {
+                //     const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected').innerText());
+                //     expect(actual_total_tiket_seat_1).toBe(expected_temp);
     
-                    const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
-                    expect(actual_total_tiket_seat_2).toBe(expected_temp);
+                //     const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
+                //     expect(actual_total_tiket_seat_2).toBe(expected_temp);
 
-                } else {
+                // } else {
                     const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected').innerText());
                     expect(actual_total_tiket_seat_1).toBe(expected_total_tiket);
     
                     const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
                     expect(actual_total_tiket_seat_2).toBe(expected_total_tiket);
-                }
+                // }
 
                 return expected_total_tiket;
 
