@@ -103,7 +103,7 @@ async function main() {
 
   console.log(`
 ┌${divider}┐
-│                   🎭 QC RUNNER v1.2${presetBadge.padEnd(20)}│
+│                   🎭 QC RUNNER v1.3${presetBadge.padEnd(20)}│
 ├${divider}┤
 │ 👥 CLIENT(S):
 ${selectedClients.map(c => `│    • ${c.name}`).join("\n")}

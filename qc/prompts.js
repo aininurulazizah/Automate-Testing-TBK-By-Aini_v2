@@ -18,6 +18,7 @@ export async function askClients(defaultClientIds = []) {
     const choices = [
       { name: "📋 Select / Edit from full list", value: "list" },
       { name: "🔍 Search / Add client by keyword", value: "search" },
+      { name: "📋 Paste / Batch input client list", value: "batch" },
     ];
 
     if (selectedMap.size > 0) {
@@ -100,6 +101,54 @@ export async function askClients(defaultClientIds = []) {
         } else {
           selectedMap.delete(c.id);
         }
+      }
+
+      console.log(`\n✅ Updated client selection (${selectedMap.size}): ${Array.from(selectedMap.values()).map(c => c.name).join(", ")}\n`);
+    }
+
+    if (action === "batch") {
+      const rawInput = await input({
+        message: "Paste client names/tags (comma, space, or newline separated):",
+        validate: (value) => value.trim().length > 0 || "Please paste or enter at least one client name",
+      });
+
+      const tokens = rawInput
+        .split(/[\r\n,;\t]+/)
+        .map(t => t.trim())
+        .filter(t => t.length > 0);
+
+      const matched = [];
+      const unmatched = [];
+
+      for (const token of tokens) {
+        const term = token.toLowerCase();
+        const found = clients.find(c => 
+          c.name.toLowerCase() === term || 
+          c.id.toLowerCase() === term || 
+          (c.tag && c.tag.toLowerCase() === term)
+        ) || clients.find(c => 
+          c.name.toLowerCase().includes(term) || 
+          (c.tag && c.tag.toLowerCase().includes(term))
+        );
+
+        if (found) {
+          if (!matched.some(m => m.id === found.id)) {
+            matched.push(found);
+          }
+        } else {
+          unmatched.push(token);
+        }
+      }
+
+      if (matched.length > 0) {
+        for (const c of matched) {
+          selectedMap.set(c.id, c);
+        }
+        console.log(`\n✅ Matched ${matched.length} client(s): ${matched.map(c => c.name).join(", ")}`);
+      }
+
+      if (unmatched.length > 0) {
+        console.log(`⚠️ Could not match client(s) for: "${unmatched.join('", "')}"`);
       }
 
       console.log(`\n✅ Updated client selection (${selectedMap.size}): ${Array.from(selectedMap.values()).map(c => c.name).join(", ")}\n`);

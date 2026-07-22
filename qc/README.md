@@ -29,6 +29,7 @@ dan secara otomatis akan menghasilkan perintah Playwright yang tepat.
 *   ✅ **Membuka laporan HTML secara otomatis** setelah pengujian selesai
 *   ✅ **Pratinjau perintah (*command preview*)** yang interaktif dan informatif
 *   ✅ **Pencarian klien** (*Client search*)
+*   ✅ **Batch paste / Input masal klien** (*Batch Requests*)
 *   ✅ **Preset konfigurasi** (*Presets*)
 *   ✅ **Menyimpan pilihan sebelumnya & Quick Run** (*Save previous selections*)
 *   ✅ **Menghasilkan perintah Playwright** secara otomatis
@@ -211,6 +212,9 @@ Skenario baru ini akan langsung muncul secara otomatis di menu CLI.
 *   [x] Fitur pencarian nama klien
 *   [x] Fitur *Presets*
 *   [x] Menyimpan pilihan terakhir yang digunakan
+
+### v1.3 ✅
+*   [x] Batch Requests / Quick Paste daftar klien (multiline/koma/spasi)
 
 ### v2.0
 *   [ ] Arsitektur plugin
