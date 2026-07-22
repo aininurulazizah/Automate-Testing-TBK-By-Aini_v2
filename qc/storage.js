@@ -32,9 +32,11 @@ export function saveLastRun(config) {
     const data = {
       clientIds: config.selectedClients.map(c => c.id),
       scenarioIds: config.selectedScenarios.map(s => s.id),
-      browser: config.selectedBrowser,
-      mode: config.selectedMode,
-      autoOpenReport: config.shouldOpenReport,
+      browser: config.selectedBrowser || "chromium",
+      mode: config.selectedMode || "headed",
+      workers: config.workers ?? 1,
+      retries: config.retries ?? 0,
+      autoOpenReport: config.shouldOpenReport ?? true,
       updatedAt: new Date().toISOString(),
     };
     fs.writeFileSync(LAST_RUN_FILE, JSON.stringify(data, null, 2), "utf-8");
@@ -59,16 +61,31 @@ export function savePreset(preset) {
   try {
     ensureDataDir();
     const presets = getPresets();
-    const existingIndex = presets.findIndex(p => p.id === preset.id || p.name.toLowerCase() === preset.name.toLowerCase());
+    const existingIndex = presets.findIndex(
+      p => p.id === preset.id || p.name.toLowerCase() === preset.name.toLowerCase()
+    );
     
+    const formattedPreset = {
+      id: preset.id,
+      name: preset.name,
+      clientIds: preset.clientIds || [],
+      scenarioIds: preset.scenarioIds || [],
+      browser: preset.browser || "chromium",
+      mode: preset.mode || "headed",
+      workers: preset.workers ?? 1,
+      retries: preset.retries ?? 0,
+      autoOpenReport: preset.autoOpenReport ?? true,
+      createdAt: preset.createdAt || new Date().toISOString(),
+    };
+
     if (existingIndex >= 0) {
-      presets[existingIndex] = preset;
+      presets[existingIndex] = formattedPreset;
     } else {
-      presets.push(preset);
+      presets.push(formattedPreset);
     }
     
     fs.writeFileSync(PRESETS_FILE, JSON.stringify(presets, null, 2), "utf-8");
-    return preset;
+    return formattedPreset;
   } catch (error) {
     console.error("Failed to save preset:", error.message);
     return null;
@@ -84,5 +101,59 @@ export function deletePreset(presetId) {
   } catch (error) {
     console.error("Failed to delete preset:", error.message);
     return false;
+  }
+}
+
+export function exportPresetsToFile(targetPath) {
+  try {
+    const presets = getPresets();
+    if (presets.length === 0) {
+      return { success: false, message: "No presets available to export." };
+    }
+
+    const resolvedPath = path.isAbsolute(targetPath) 
+      ? targetPath 
+      : path.resolve(process.cwd(), targetPath);
+
+    const dir = path.dirname(resolvedPath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+
+    fs.writeFileSync(resolvedPath, JSON.stringify(presets, null, 2), "utf-8");
+    return { success: true, count: presets.length, path: resolvedPath };
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+}
+
+export function importPresetsFromFile(sourcePath) {
+  try {
+    const resolvedPath = path.isAbsolute(sourcePath) 
+      ? sourcePath 
+      : path.resolve(process.cwd(), sourcePath);
+
+    if (!fs.existsSync(resolvedPath)) {
+      return { success: false, message: `File not found: ${sourcePath}` };
+    }
+
+    const content = fs.readFileSync(resolvedPath, "utf-8");
+    const imported = JSON.parse(content);
+
+    if (!Array.isArray(imported)) {
+      return { success: false, message: "Invalid presets format: Root element must be an array." };
+    }
+
+    let addedCount = 0;
+    for (const item of imported) {
+      if (item.id && item.name && Array.isArray(item.clientIds) && Array.isArray(item.scenarioIds)) {
+        savePreset(item);
+        addedCount++;
+      }
+    }
+
+    return { success: true, count: addedCount };
+  } catch (error) {
+    return { success: false, message: error.message };
   }
 }

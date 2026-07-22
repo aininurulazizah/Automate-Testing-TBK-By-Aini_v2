@@ -11,6 +11,9 @@
     ],
     "browser": "chromium",
     "mode": "headed",
-    "autoOpenReport": true
+    "workers": 1,
+    "retries": 0,
+    "autoOpenReport": true,
+    "createdAt": "2026-07-22T09:18:00.771Z"
   }
 ]

@@ -5,7 +5,6 @@ import { scenarios } from "./config/scenarios.js";
 export async function askClients(defaultClientIds = []) {
   const selectedMap = new Map();
 
-  // Populate defaults if any
   for (const id of defaultClientIds) {
     const found = clients.find(c => c.id === id);
     if (found) selectedMap.set(found.id, found);
@@ -18,6 +17,7 @@ export async function askClients(defaultClientIds = []) {
     const choices = [
       { name: "📋 Select / Edit from full list", value: "list" },
       { name: "🔍 Search / Add client by keyword", value: "search" },
+      { name: "⚡ Filter & select by capability (RoundTrip / Connecting)", value: "capability" },
       { name: "📋 Paste / Batch input client list", value: "batch" },
     ];
 
@@ -87,6 +87,39 @@ export async function askClients(defaultClientIds = []) {
 
       const picked = await checkbox({
         message: `Matching client(s) for "${keyword}":`,
+        choices: filtered.map(c => ({
+          name: c.name,
+          value: c,
+          checked: selectedMap.has(c.id),
+        })),
+      });
+
+      const pickedIds = new Set(picked.map(c => c.id));
+      for (const c of filtered) {
+        if (pickedIds.has(c.id)) {
+          selectedMap.set(c.id, c);
+        } else {
+          selectedMap.delete(c.id);
+        }
+      }
+
+      console.log(`\n✅ Updated client selection (${selectedMap.size}): ${Array.from(selectedMap.values()).map(c => c.name).join(", ")}\n`);
+    }
+
+    if (action === "capability") {
+      const capability = await select({
+        message: "Select capability to filter clients:",
+        choices: [
+          { name: "🔄 Supporting Round Trip", value: "roundTrip" },
+          { name: "🔗 Supporting Connecting Reservation", value: "connecting" },
+          { name: "➡️ Supporting One Way", value: "oneWay" },
+        ],
+      });
+
+      const filtered = clients.filter(c => Boolean(c[capability]));
+
+      const picked = await checkbox({
+        message: `Clients supporting ${capability} (${filtered.length} available):`,
         choices: filtered.map(c => ({
           name: c.name,
           value: c,
@@ -176,8 +209,9 @@ export async function askBrowser(defaultBrowser = "chromium") {
   return select({
     message: "Select browser",
     choices: [
-      { name: "Chromium", value: "chromium" },
-      { name: "Firefox", value: "firefox" },
+      { name: "Chromium (Desktop Chrome)", value: "chromium" },
+      { name: "Firefox (Desktop Firefox)", value: "firefox" },
+      { name: "WebKit (Desktop Safari)", value: "webkit" },
       { name: "Microsoft Edge", value: "Microsoft Edge" },
     ],
     default: defaultBrowser,
@@ -193,6 +227,33 @@ export async function askExecutionMode(defaultMode = "headed") {
     ],
     default: defaultMode,
   });
+}
+
+export async function askExecutionOptions(defaults = {}) {
+  const workersChoice = await select({
+    message: "Select worker concurrency (--workers)",
+    choices: [
+      { name: "1 Worker (Sequential / Default)", value: 1 },
+      { name: "2 Workers (Parallel)", value: 2 },
+      { name: "4 Workers (Fast Parallel)", value: 4 },
+    ],
+    default: defaults.workers ?? 1,
+  });
+
+  const retriesChoice = await select({
+    message: "Select retry attempts (--retries)",
+    choices: [
+      { name: "0 Retries (Default)", value: 0 },
+      { name: "1 Retry", value: 1 },
+      { name: "2 Retries", value: 2 },
+    ],
+    default: defaults.retries ?? 0,
+  });
+
+  return {
+    workers: workersChoice,
+    retries: retriesChoice,
+  };
 }
 
 export async function askOpenReport(defaultAutoOpen = true) {
@@ -215,9 +276,7 @@ export async function askInitialAction({ hasLastRun, presets }) {
 
   choices.push({ name: "🎯 New Custom Selection", value: "custom" });
 
-  if (presets && presets.length > 0) {
-    choices.push({ name: "⚙️ Manage Saved Presets", value: "manage_presets" });
-  }
+  choices.push({ name: "⚙️ Preset Manager (Export / Import / Delete)", value: "manage_presets" });
 
   return select({
     message: "What would you like to do?",
@@ -235,11 +294,24 @@ export async function askPresetSelection(presets) {
   });
 }
 
+export async function askPresetManagementAction() {
+  return select({
+    message: "Preset Manager - Choose an action:",
+    choices: [
+      { name: "📤 Export Presets to JSON File", value: "export" },
+      { name: "📥 Import Presets from JSON File", value: "import" },
+      { name: "🗑️ Delete a Saved Preset", value: "delete" },
+      { name: "⬅️ Back to Main Menu", value: "back" },
+    ],
+  });
+}
+
 export async function askConfirmationAction() {
   return select({
     message: "Choose an action",
     choices: [
       { name: "🚀 Run Playwright", value: "run" },
+      { name: "📋 Dry Run / Print Command Only", value: "dry_run" },
       { name: "💾 Save as New Preset & Run", value: "save_and_run" },
       { name: "❌ Cancel", value: "cancel" },
     ],
@@ -254,11 +326,20 @@ export async function askPresetName() {
 }
 
 export async function askDeletePreset(presets) {
+  if (!presets || presets.length === 0) return null;
   return select({
     message: "Select preset to delete",
     choices: [
       ...presets.map(p => ({ name: `🗑️ Delete "${p.name}"`, value: p.id })),
       { name: "⬅️ Back", value: null },
     ],
+  });
+}
+
+export async function askFilePath(promptMessage, defaultPath = "presets_export.json") {
+  return input({
+    message: promptMessage,
+    default: defaultPath,
+    validate: (val) => val.trim().length > 0 || "File path cannot be empty",
   });
 }

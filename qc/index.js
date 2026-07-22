@@ -3,40 +3,126 @@ import {
   askScenario, 
   askBrowser,
   askExecutionMode,
+  askExecutionOptions,
   askOpenReport,
   askInitialAction,
   askPresetSelection,
+  askPresetManagementAction,
   askConfirmationAction,
   askPresetName,
   askDeletePreset,
+  askFilePath,
 } from "./prompts.js";
-import { buildCommand, runCommand, openReport } from "./runner.js";
+import { buildCommand, runCommand, openReport, getMatchingTestsBreakdown } from "./runner.js";
 import { clients } from "./config/clients.js";
 import { scenarios } from "./config/scenarios.js";
-import { getLastRun, saveLastRun, getPresets, savePreset, deletePreset } from "./storage.js";
+import { validateConfigs } from "./config/validator.js";
+import { 
+  getLastRun, 
+  saveLastRun, 
+  getPresets, 
+  savePreset, 
+  deletePreset,
+  exportPresetsToFile,
+  importPresetsFromFile,
+} from "./storage.js";
+
+function printBox(title, bodyLines, width = 64) {
+  const horizontal = "─".repeat(width - 2);
+  console.log(`┌${horizontal}┐`);
+  
+  const paddedTitle = ` ${title} `.padEnd(width - 2, " ");
+  console.log(`│${paddedTitle}│`);
+  console.log(`├${horizontal}┤`);
+
+  for (const line of bodyLines) {
+    const rawLine = line || "";
+    const len = rawLine.length;
+    const padding = Math.max(0, width - 4 - len);
+    console.log(`│ ${rawLine}${" ".repeat(padding)} │`);
+  }
+
+  console.log(`└${horizontal}┘`);
+}
+
+async function handlePresetManagement() {
+  while (true) {
+    const presets = getPresets();
+    const action = await askPresetManagementAction();
+
+    if (action === "back") break;
+
+    if (action === "export") {
+      if (presets.length === 0) {
+        console.log("\n⚠️ No presets available to export.\n");
+        continue;
+      }
+      const filePath = await askFilePath("Enter target file path for export:", "qc/data/exported_presets.json");
+      const result = exportPresetsToFile(filePath);
+      if (result.success) {
+        console.log(`\n✅ Exported ${result.count} preset(s) successfully to: ${result.path}\n`);
+      } else {
+        console.log(`\n❌ Export failed: ${result.message}\n`);
+      }
+    }
+
+    if (action === "import") {
+      const filePath = await askFilePath("Enter source JSON file path for import:", "qc/data/exported_presets.json");
+      const result = importPresetsFromFile(filePath);
+      if (result.success) {
+        console.log(`\n✅ Imported ${result.count} preset(s) successfully!\n`);
+      } else {
+        console.log(`\n❌ Import failed: ${result.message}\n`);
+      }
+    }
+
+    if (action === "delete") {
+      if (presets.length === 0) {
+        console.log("\n⚠️ No presets available to delete.\n");
+        continue;
+      }
+      const presetToDelete = await askDeletePreset(presets);
+      if (presetToDelete) {
+        deletePreset(presetToDelete);
+        console.log("\n✅ Preset deleted successfully.\n");
+      }
+    }
+  }
+}
 
 async function main() {
+  const validation = validateConfigs(clients, scenarios);
+  if (!validation.valid) {
+    console.warn("\n⚠️ Configuration warnings detected:");
+    validation.errors.forEach(err => console.warn(`  - ${err}`));
+    console.warn("Proceeding with valid definitions...\n");
+  }
+
   let selectedClients = [];
   let selectedScenarios = [];
   let selectedBrowser = "chromium";
   let selectedMode = "headed";
+  let executionOptions = { workers: 1, retries: 0 };
   let shouldOpenReport = true;
   let activePresetName = null;
 
   let lastRun = getLastRun();
   let presets = getPresets();
 
-  if (lastRun || presets.length > 0) {
-    let action = await askInitialAction({ hasLastRun: Boolean(lastRun), presets });
+  while (true) {
+    const hasLastRun = Boolean(lastRun);
+    presets = getPresets();
+
+    let action = "custom";
+    if (hasLastRun || presets.length > 0) {
+      action = await askInitialAction({ hasLastRun, presets });
+    }
 
     if (action === "manage_presets") {
-      const presetToDelete = await askDeletePreset(presets);
-      if (presetToDelete) {
-        deletePreset(presetToDelete);
-        console.log("\n✅ Preset deleted successfully.\n");
-      }
+      await handlePresetManagement();
+      lastRun = getLastRun();
       presets = getPresets();
-      action = await askInitialAction({ hasLastRun: Boolean(lastRun), presets });
+      continue;
     }
 
     if (action === "last_run" && lastRun) {
@@ -44,11 +130,17 @@ async function main() {
       selectedScenarios = scenarios.filter(s => lastRun.scenarioIds.includes(s.id));
       selectedBrowser = lastRun.browser || "chromium";
       selectedMode = lastRun.mode || "headed";
+      executionOptions = {
+        workers: lastRun.workers ?? 1,
+        retries: lastRun.retries ?? 0,
+      };
       shouldOpenReport = lastRun.autoOpenReport ?? true;
 
       if (selectedClients.length === 0 || selectedScenarios.length === 0) {
-        console.log("\n⚠️ Previous selection references clients/scenarios no longer found. Falling back to custom selection.\n");
+        console.log("\n⚠️ Previous selection references missing clients/scenarios. Falling back to custom selection.\n");
         action = "custom";
+      } else {
+        break;
       }
     }
 
@@ -58,12 +150,18 @@ async function main() {
       selectedScenarios = scenarios.filter(s => chosenPreset.scenarioIds.includes(s.id));
       selectedBrowser = chosenPreset.browser || "chromium";
       selectedMode = chosenPreset.mode || "headed";
+      executionOptions = {
+        workers: chosenPreset.workers ?? 1,
+        retries: chosenPreset.retries ?? 0,
+      };
       shouldOpenReport = chosenPreset.autoOpenReport ?? true;
       activePresetName = chosenPreset.name;
 
       if (selectedClients.length === 0 || selectedScenarios.length === 0) {
-        console.log("\n⚠️ Preset references clients/scenarios no longer found. Falling back to custom selection.\n");
+        console.log("\n⚠️ Preset references missing clients/scenarios. Falling back to custom selection.\n");
         action = "custom";
+      } else {
+        break;
       }
     }
 
@@ -72,85 +170,64 @@ async function main() {
       const defaultScenarioIds = lastRun?.scenarioIds || [];
       const defaultBrowser = lastRun?.browser || "chromium";
       const defaultMode = lastRun?.mode || "headed";
+      const defaultOptions = { workers: lastRun?.workers ?? 1, retries: lastRun?.retries ?? 0 };
       const defaultAutoOpen = lastRun?.autoOpenReport ?? true;
 
       selectedClients = await askClients(defaultClientIds);
       selectedScenarios = await askScenario(selectedClients, defaultScenarioIds);
       selectedBrowser = await askBrowser(defaultBrowser);
       selectedMode = await askExecutionMode(defaultMode);
+      executionOptions = await askExecutionOptions(defaultOptions);
       shouldOpenReport = await askOpenReport(defaultAutoOpen);
+      break;
     }
-  } else {
-    selectedClients = await askClients();
-    selectedScenarios = await askScenario(selectedClients);
-    selectedBrowser = await askBrowser();
-    selectedMode = await askExecutionMode();
-    shouldOpenReport = await askOpenReport();
   }
 
   const command = buildCommand(
     selectedClients,
     selectedScenarios,
     selectedBrowser,
-    selectedMode
+    selectedMode,
+    executionOptions
   );
 
-  let totalMatchingTests = 0;
-  const matchingTestsLines = [];
-
-  for (const client of selectedClients) {
-    const supported = selectedScenarios.filter(s => s.supports(client));
-    if (supported.length > 0) {
-      matchingTestsLines.push(`│ 🔹 ${client.name}`);
-      for (const scenario of supported) {
-        matchingTestsLines.push(`│    ✓ ${scenario.name}`);
-        totalMatchingTests++;
-      }
-      matchingTestsLines.push("│");
-    }
-  }
-
-  if (matchingTestsLines.length > 0 && matchingTestsLines[matchingTestsLines.length - 1] === "│") {
-    matchingTestsLines.pop();
-  }
-
-  const matchingTestsFormatted = matchingTestsLines.length > 0 
-    ? matchingTestsLines.join("\n")
-    : "│    (No matching tests found)";
-
+  const breakdown = getMatchingTestsBreakdown(selectedClients, selectedScenarios);
   const modeLabel = selectedMode === "headed" ? "Headed (UI Visible)" : "Headless (Background)";
-  const reportLabel = shouldOpenReport ? "Yes (Auto-Open after test)" : "No";
-  const presetBadge = activePresetName ? ` [⭐ Preset: ${activePresetName}]` : "";
-  const width = 60;
-  const divider = "─".repeat(width);
+  const reportLabel = shouldOpenReport ? "Yes (Auto-Open)" : "No";
+  const presetBadge = activePresetName ? `[Preset: ${activePresetName}]` : "";
+  const title = `🎭 PLAYWRIGHT QC RUNNER v1.4 ${presetBadge}`.trim();
 
-  console.log(`
-┌${divider}┐
-│                   🎭 QC RUNNER v1.3${presetBadge.padEnd(20)}│
-├${divider}┤
-│ 🎯 MATCHING TESTS:
-${matchingTestsFormatted}
-│
-│ 📊 Total: ${totalMatchingTests} test(s)
-│
-│ 🌐 BROWSER:
-│    • ${selectedBrowser}
-│
-│ ⚡ EXECUTION MODE:
-│    • ${modeLabel}
-│
-│ 📈 AUTO OPEN REPORT:
-│    • ${reportLabel}
-├${divider}┤
-│ 🚀 GENERATED COMMAND:
-│    ${command}
-└${divider}┘
-`);
+  const bodyLines = [
+    "🎯 MATCHING TESTS:",
+    ...breakdown.lines.map(l => l.replace(/^│\s?/, "")),
+    "",
+    `📊 Total: ${breakdown.totalMatchingTests} test(s)`,
+    "",
+    `🌐 BROWSER:        ${selectedBrowser}`,
+    `⚡ EXECUTION MODE: ${modeLabel}`,
+    `⚙️ WORKERS:        ${executionOptions.workers} worker(s)`,
+    `🔄 RETRIES:        ${executionOptions.retries} attempt(s)`,
+    `📈 AUTO REPORT:    ${reportLabel}`,
+    "─".repeat(60),
+    "🚀 GENERATED COMMAND:",
+    `  ${command}`,
+  ];
+
+  console.log("");
+  printBox(title, bodyLines, 64);
+  console.log("");
 
   const confirmAction = await askConfirmationAction();
 
   if (confirmAction === "cancel") {
-    console.log("Cancelled.");
+    console.log("\nCancelled.");
+    process.exit(0);
+  }
+
+  if (confirmAction === "dry_run") {
+    console.log("\n📋 DRY RUN - Generated Playwright Command:\n");
+    console.log(`  ${command}\n`);
+    console.log("Copy and execute the command above whenever you're ready.\n");
     process.exit(0);
   }
 
@@ -164,6 +241,8 @@ ${matchingTestsFormatted}
       scenarioIds: selectedScenarios.map(s => s.id),
       browser: selectedBrowser,
       mode: selectedMode,
+      workers: executionOptions.workers,
+      retries: executionOptions.retries,
       autoOpenReport: shouldOpenReport,
     });
     console.log(`\n⭐ Preset "${presetName}" saved successfully!`);
@@ -174,10 +253,12 @@ ${matchingTestsFormatted}
     selectedScenarios,
     selectedBrowser,
     selectedMode,
+    workers: executionOptions.workers,
+    retries: executionOptions.retries,
     shouldOpenReport,
   });
 
-  runCommand(command);
+  const result = runCommand(command);
 
   if (shouldOpenReport) {
     openReport();
@@ -188,4 +269,3 @@ main().catch(err => {
   console.error("QC Runner Error:", err);
   process.exit(1);
 });
-

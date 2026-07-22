@@ -1,52 +1,45 @@
 # 🎭 Playwright QC Runner
 
-Sebuah *tool* CLI untuk menyederhanakan jalannya otomatisasi reservasi menggunakan Playwright.
+Sebuah *tool* CLI internal yang dirancang khusus untuk Quality Assurance (QA/QC) engineer guna menyederhanakan jalannya otomatisasi pengujian reservasi multi-klien menggunakan Playwright.
 
-Daripada harus mengingat perintah Playwright yang panjang seperti:
+Daripada harus mengingat dan mengetik perintah Playwright yang panjang dan rumit:
 
 ```bash
-npx playwright test ./reservasi_test.spec.js --project=chromium --headed --workers=1 --grep "@kruzz - Test Case 1 - One Way Trip"
+npx playwright test --project=chromium --headed --workers=2 --retries=1 --grep "@jackal.*One Way|@daytrans.*(One Way|Connecting)"
 ```
 
-QC Runner dynamic menyediakan menu interaktif untuk memilih:
-
-*   **Klien** (*Client*)
-*   **Skenario** (*Scenario*)
-*   **Browser**
-
-dan secara otomatis akan menghasilkan perintah Playwright yang tepat.
+**QC Runner** menyediakan menu interaktif CLI untuk memilih klien, menyaring skenario yang sesuai, menentukan opsi eksekusi (*workers*, *retries*, *browser*, mode *headed*/*headless*), serta menghasilkan dan menjalankan perintah Playwright secara otomatis.
 
 ---
 
-## 🚀 Fitur (Features)
+## 🚀 Fitur Utama (Features)
 
-### Fitur Saat Ini
-*   ✅ **Memilih satu atau beberapa klien**
-*   ✅ **Menyaring skenario** yang tidak didukung secara otomatis
-*   ✅ **Memilih satu atau beberapa skenario**
-*   ✅ **Memilih browser**
-*   ✅ **Memilih mode eksekusi** (Headed / Headless)
-*   ✅ **Membuka laporan HTML secara otomatis** setelah pengujian selesai
-*   ✅ **Pratinjau perintah (*command preview*)** yang interaktif dan informatif
-*   ✅ **Pencarian klien** (*Client search*)
-*   ✅ **Batch paste / Input masal klien** (*Batch Requests*)
-*   ✅ **Preset konfigurasi** (*Presets*)
-*   ✅ **Menyimpan pilihan sebelumnya & Quick Run** (*Save previous selections*)
-*   ✅ **Menghasilkan perintah Playwright** secara otomatis
-*   ✅ **Menjalankan Playwright** secara langsung
-
-### Fitur yang Direncanakan
-*   🔌 Arsitektur plugin
-*   📦 Paket skenario kustom (*custom scenario packs*)
-*   👥 Konfigurasi tim
+* ✅ **Pemilihan Klien Interaktif**:
+  * Daftar lengkap (*Full list checkbox*)
+  * Pencarian kata kunci (*Search keyword*)
+  * Filter berdasarkan kapabilitas (*Capability filter*: RoundTrip / Connecting / OneWay)
+  * Input masal / *Batch paste* dari pesan chat (Slack/Teams)
+* ✅ **Penyaringan Skenario Otomatis**: Menyaring skenario yang tidak didukung oleh klien berdasarkan flag kapabilitas (`oneWay`, `roundTrip`, `connecting`).
+* ✅ **Pilihan Browser & Mode Eksekusi**:
+  * Browser: Chromium, Firefox, WebKit (Safari), Microsoft Edge.
+  * Mode: Headed (UI terlihat) atau Headless (Latar belakang).
+  * Opsi Konkurensi Worker (`--workers=1, 2, 4`).
+  * Opsi Percobaan Ulang Test (`--retries=0, 1, 2`).
+* ✅ **Dry-Run / Preview Command Only**: Pilihan untuk menampilkan/menyalin perintah tanpa langsung mengeksekusi test.
+* ✅ **Manajemen Preset & Ekspor/Impor**:
+  * *Quick Run*: Mengingat pilihan terakhir (`last_run.json`) untuk 1-klik re-run.
+  * *Presets*: Menyimpan kombinasi konfigurasi test favorit (`presets.json`).
+  * *Ekspor / Impor*: Bagikan file preset JSON antar anggota tim QA.
+* ✅ **Validasi Konfigurasi Otomatis**: Memeriksa integritas file `clients.js` dan `scenarios.js` saat aplikasi dimulai.
+* ✅ **Penanganan Hasil Test**: Menangkap kode status eksekusi test (*pass/fail*) dengan ringkasan yang rapi tanpa memunculkan error *stack trace* mentah.
 
 ---
 
 ## 📋 Persyaratan (Requirements)
 
-*   Node.js 20+
-*   npm
-*   Playwright sudah terinstal
+* Node.js 20+
+* npm
+* Playwright
 
 ### Instalasi Dependensi
 ```bash
@@ -62,9 +55,9 @@ Menggunakan npm:
 npm run qc
 ```
 
-atau klik dua kali pada file:
+atau klik dua kali pada file launcher (Windows):
 ```
-Playwright QC Runner.bat
+QC Runner.bat
 ```
 
 ---
@@ -74,144 +67,62 @@ Playwright QC Runner.bat
 ```
 qc/
 ├── config/
-│   ├── clients.js
-│   └── scenarios.js
-├── prompts.js
-├── runner.js
-└── index.js
+│   ├── clients.js        # Definisi klien & flag kapabilitas
+│   ├── scenarios.js      # Definisi skenario & aturan pendukung supports()
+│   └── validator.js      # Validasi skema konfigurasi
+├── data/                 # Penyimpanan lokal (gitignored)
+│   ├── last_run.json     # Parameter eksekusi terakhir
+│   └── presets.json      # Preset yang tersimpan
+├── prompts.js            # Modul UI prompt interaktif (@inquirer/prompts)
+├── runner.js             # Engine builder & pembuat perintah Playwright
+├── storage.js            # Perantara penyimpanan data lokal JSON
+├── index.js              # Alur pengatur CLI (Orchestration)
+└── README.md             # Dokumentasi
 ```
 
 ---
 
-## ⚙️ Konfigurasi (Configuration)
+## ⚙️ Konfigurasi & Ekstensibilitas
 
-### `clients.js`
-Digunakan untuk mendefinisikan setiap klien yang didukung.
-
-**Contoh:**
+### Menambahkan Klien Baru
+Buka `qc/config/clients.js` dan tambahkan objek baru:
 ```javascript
 {
-    id: "jackal",
-    name: "Jackal",
-    tag: "@jackal",
-    oneWay: true,
-    roundTrip: true,
-    connecting: false
+  id: "newclient",
+  name: "New Client",
+  tag: "@newclient",
+  oneWay: true,
+  roundTrip: false,
+  connecting: true
 }
 ```
 
-**Penjelasan Kolom:**
-
-| Kolom (*Field*) | Deskripsi |
-| :--- | :--- |
-| **id** | Pengenal internal |
-| **name** | Nama yang ditampilkan pada menu |
-| **tag** | Tag *grep* Playwright |
-| **oneWay** | Mendukung reservasi satu arah (*one way*) |
-| **roundTrip** | Mendukung reservasi pulang-pergi (*round trip*) |
-| **connecting** | Mendukung reservasi transit (*connecting*) |
-
----
-
-### `scenarios.js`
-Digunakan untuk mendefinisikan setiap skenario reservasi.
-
-**Contoh:**
+### Menambahkan Skenario Baru
+Buka `qc/config/scenarios.js` dan tambahkan objek skenario:
 ```javascript
 {
-    id: "roundTrip",
-    name: "Round Trip",
-    grep: "Round Trip",
-    supports: client => client.roundTrip
+  id: "promoTrip",
+  name: "Promo Trip",
+  grep: "Promo Trip",
+  supports: client => client.oneWay
 }
 ```
-
-> 💡 Fungsi `supports()` digunakan untuk menentukan apakah klien yang dipilih mendukung skenario tersebut atau tidak.
-
----
-
-## 🔄 Cara Kerja (How it Works)
-
-```
-Pilih Klien
-        │
-        ▼
-Pilih Skenario
-        │
-        ▼
-Pilih Browser
-        │
-        ▼
-Hasilkan Perintah Playwright
-        │
-        ▼
-Konfirmasi Jalankan
-        │
-        ▼
-Eksekusi Playwright
-```
-
----
-
-## ➕ Menambahkan Klien Baru (Adding a New Client)
-
-1. Buka file:
-   ```
-   qc/config/clients.js
-   ```
-2. Tambahkan kode berikut:
-   ```javascript
-   {
-       id: "newclient",
-       name: "New Client",
-       tag: "@newclient",
-       oneWay: true,
-       roundTrip: false,
-       connecting: true
-   }
-   ```
-
-*Tidak diperlukan perubahan kode lainnya di file lain.*
-
----
-
-## ➕ Menambahkan Skenario Baru (Adding a New Scenario)
-
-1. Buka file:
-   ```
-   qc/config/scenarios.js
-   ```
-2. Tambahkan contoh kode berikut:
-   ```javascript
-   {
-       id: "promo",
-       name: "Promo",
-       grep: "Promo",
-       supports: () => true
-   }
-   ```
-
-Skenario baru ini akan langsung muncul secara otomatis di menu CLI.
 
 ---
 
 ## 🗺️ Rencana Pengembangan (Roadmap)
 
-### v1.0 ✅
-*   [x] Pemilihan Klien
-*   [x] Pemilihan Skenario
-*   [x] Pemilihan Browser
-*   [x] Menjalankan Playwright langsung dari CLI
+### v1.0 - v1.3 ✅
+* [x] Pemilihan Klien, Skenario, Browser, dan Mode Executed
+* [x] Auto-Open HTML Report
+* [x] Client Search & Batch Paste Request
+* [x] State Persistence & Presets
 
-### v1.1 ✅
-*   [x] Mode Headed / Headless
-*   [x] Membuka laporan HTML otomatis setelah *test* selesai
-*   [x] Pratinjau perintah (*command preview*) yang lebih interaktif
-
-### v1.2 ✅
-*   [x] Fitur pencarian nama klien
-*   [x] Fitur *Presets*
-*   [x] Menyimpan pilihan terakhir yang digunakan
-
-### v1.3 ✅
-*   [x] Batch Requests / Quick Paste daftar klien (multiline/koma/spasi)
+### v1.4 ✅
+* [x] Filter Klien Berdasarkan Kapabilitas (*Capability Filter*)
+* [x] Konfigurasi Worker Concurrency (`--workers`) & Retries (`--retries`)
+* [x] Dukungan Browser WebKit (Safari)
+* [x] Mode Dry-Run / Output Command Only
+* [x] Preset Export & Import JSON File Sharing
+* [x] Validasi Otomatis Konfigurasi Startup (`validator.js`)
+* [x] Penanganan Error & Ringkasan Eksekusi Test Terformat
