@@ -1,0 +1,16 @@
+[
+  {
+    "id": "jackal-kruzz",
+    "name": "jackal-kruzz",
+    "clientIds": [
+      "jackal",
+      "kruzz"
+    ],
+    "scenarioIds": [
+      "oneWay"
+    ],
+    "browser": "chromium",
+    "mode": "headed",
+    "autoOpenReport": true
+  }
+]
