@@ -8,3 +8,4 @@ node_modules/
 /playwright/.auth/
 /output/booking_code.csv
 .env
+qc/data/last_run.json
