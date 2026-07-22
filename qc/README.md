@@ -215,8 +215,3 @@ Skenario baru ini akan langsung muncul secara otomatis di menu CLI.
 
 ### v1.3 ✅
 *   [x] Batch Requests / Quick Paste daftar klien (multiline/koma/spasi)
-
-### v2.0
-*   [ ] Arsitektur plugin
-*   [ ] Paket skenario kustom (*custom scenario packs*)
-*   [ ] Konfigurasi tim
