@@ -95,6 +95,29 @@ async function main() {
     selectedMode
   );
 
+  let totalMatchingTests = 0;
+  const matchingTestsLines = [];
+
+  for (const client of selectedClients) {
+    const supported = selectedScenarios.filter(s => s.supports(client));
+    if (supported.length > 0) {
+      matchingTestsLines.push(`│ 🔹 ${client.name}`);
+      for (const scenario of supported) {
+        matchingTestsLines.push(`│    ✓ ${scenario.name}`);
+        totalMatchingTests++;
+      }
+      matchingTestsLines.push("│");
+    }
+  }
+
+  if (matchingTestsLines.length > 0 && matchingTestsLines[matchingTestsLines.length - 1] === "│") {
+    matchingTestsLines.pop();
+  }
+
+  const matchingTestsFormatted = matchingTestsLines.length > 0 
+    ? matchingTestsLines.join("\n")
+    : "│    (No matching tests found)";
+
   const modeLabel = selectedMode === "headed" ? "Headed (UI Visible)" : "Headless (Background)";
   const reportLabel = shouldOpenReport ? "Yes (Auto-Open after test)" : "No";
   const presetBadge = activePresetName ? ` [⭐ Preset: ${activePresetName}]` : "";
@@ -105,11 +128,10 @@ async function main() {
 ┌${divider}┐
 │                   🎭 QC RUNNER v1.3${presetBadge.padEnd(20)}│
 ├${divider}┤
-│ 👥 CLIENT(S):
-${selectedClients.map(c => `│    • ${c.name}`).join("\n")}
+│ 🎯 MATCHING TESTS:
+${matchingTestsFormatted}
 │
-│ 📋 SCENARIO(S):
-${selectedScenarios.map(s => `│    • ${s.name}`).join("\n")}
+│ 📊 Total: ${totalMatchingTests} test(s)
 │
 │ 🌐 BROWSER:
 │    • ${selectedBrowser}
@@ -117,7 +139,7 @@ ${selectedScenarios.map(s => `│    • ${s.name}`).join("\n")}
 │ ⚡ EXECUTION MODE:
 │    • ${modeLabel}
 │
-│ 📊 AUTO OPEN REPORT:
+│ 📈 AUTO OPEN REPORT:
 │    • ${reportLabel}
 ├${divider}┤
 │ 🚀 GENERATED COMMAND:
