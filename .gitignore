@@ -9,3 +9,4 @@ node_modules/
 /output/booking_code.csv
 .env
 qc/data/last_run.json
+qc/data/presets.json
