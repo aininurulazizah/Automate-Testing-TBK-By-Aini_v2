@@ -2,8 +2,20 @@ import { checkbox, select, confirm, input } from "@inquirer/prompts";
 import { clients } from "./config/clients.js";
 import { scenarios } from "./config/scenarios.js";
 
-export async function askClients(defaultClientIds = []) {
+export async function askEnvironment(currentEnv = "staging") {
+  return select({
+    message: "Select target environment:",
+    choices: [
+      { name: "Staging (staging)", value: "staging" },
+      { name: "Production (production)", value: "production" },
+    ],
+    default: currentEnv,
+  });
+}
+
+export async function askClients(defaultClientIds = [], options = {}) {
   const selectedMap = new Map();
+  let selectedEnv = options.initialEnv || "staging";
 
   for (const id of defaultClientIds) {
     const found = clients.find(c => c.id === id);
@@ -15,10 +27,10 @@ export async function askClients(defaultClientIds = []) {
     const summary = selectedNames.length > 0 ? selectedNames.join(", ") : "None";
 
     const choices = [
-      { name: "📋 Select / Edit from full list", value: "list" },
-      { name: "🔍 Search / Add client by keyword", value: "search" },
+      { name: "📋 Select / Edit from client list (Interactive)", value: "list" },
+      { name: "🔍 Search / Paste client list (Batch Input)", value: "batch" },
       { name: "⚡ Filter & select by capability (RoundTrip / Connecting)", value: "capability" },
-      { name: "📋 Paste / Batch input client list", value: "batch" },
+      { name: `🌐 Change target environment [Current: ${selectedEnv}]`, value: "env" },
     ];
 
     if (selectedMap.size > 0) {
@@ -27,12 +39,21 @@ export async function askClients(defaultClientIds = []) {
     }
 
     const action = await select({
-      message: `Client Selection [Current: ${summary}]. Choose an option:`,
+      message: `Client Selection [Current: ${summary} | Env: ${selectedEnv}]. Choose an option:`,
       choices,
     });
 
     if (action === "done") {
-      return Array.from(selectedMap.values());
+      return {
+        selectedClients: Array.from(selectedMap.values()),
+        selectedEnv,
+      };
+    }
+
+    if (action === "env") {
+      selectedEnv = await askEnvironment(selectedEnv);
+      console.log(`\n🌐 Target environment set to: ${selectedEnv}\n`);
+      continue;
     }
 
     if (action === "clear") {
@@ -63,47 +84,11 @@ export async function askClients(defaultClientIds = []) {
       });
 
       if (nextStep) {
-        return Array.from(selectedMap.values());
+        return {
+          selectedClients: Array.from(selectedMap.values()),
+          selectedEnv,
+        };
       }
-    }
-
-    if (action === "search") {
-      const keyword = await input({
-        message: "Enter client search keyword (e.g. Jackal, Kruzz):",
-        validate: (value) => value.trim().length > 0 || "Please enter a keyword",
-      });
-
-      const term = keyword.toLowerCase().trim();
-      const filtered = clients.filter(c => 
-        c.name.toLowerCase().includes(term) || 
-        (c.tag && c.tag.toLowerCase().includes(term)) || 
-        (c.id && c.id.toLowerCase().includes(term))
-      );
-
-      if (filtered.length === 0) {
-        console.log(`\n⚠️ No clients found matching "${keyword}".\n`);
-        continue;
-      }
-
-      const picked = await checkbox({
-        message: `Matching client(s) for "${keyword}":`,
-        choices: filtered.map(c => ({
-          name: c.name,
-          value: c,
-          checked: selectedMap.has(c.id),
-        })),
-      });
-
-      const pickedIds = new Set(picked.map(c => c.id));
-      for (const c of filtered) {
-        if (pickedIds.has(c.id)) {
-          selectedMap.set(c.id, c);
-        } else {
-          selectedMap.delete(c.id);
-        }
-      }
-
-      console.log(`\n✅ Updated client selection (${selectedMap.size}): ${Array.from(selectedMap.values()).map(c => c.name).join(", ")}\n`);
     }
 
     if (action === "capability") {
@@ -141,8 +126,8 @@ export async function askClients(defaultClientIds = []) {
 
     if (action === "batch") {
       const rawInput = await input({
-        message: "Paste client names/tags (comma, space, or newline separated):",
-        validate: (value) => value.trim().length > 0 || "Please paste or enter at least one client name",
+        message: "Search / Paste client names or tags (comma, space, or newline separated):",
+        validate: (value) => value.trim().length > 0 || "Please enter or paste at least one client name",
       });
 
       const tokens = rawInput
@@ -275,8 +260,8 @@ export async function askInitialAction({ hasLastRun, presets }) {
   }
 
   choices.push({ name: "🎯 New Custom Selection", value: "custom" });
-
   choices.push({ name: "⚙️ Preset Manager (Export / Import / Delete)", value: "manage_presets" });
+  choices.push({ name: "🚪 Exit QC Runner", value: "exit" });
 
   return select({
     message: "What would you like to do?",
@@ -288,7 +273,7 @@ export async function askPresetSelection(presets) {
   return select({
     message: "Select a Preset to run",
     choices: presets.map(p => ({
-      name: `⭐ ${p.name} [Clients: ${p.clientIds.join(", ")} | Browser: ${p.browser} | Mode: ${p.mode}]`,
+      name: `⭐ ${p.name} [Clients: ${p.clientIds.join(", ")} | Env: ${p.env || "staging"} | Browser: ${p.browser} | Mode: ${p.mode}]`,
       value: p,
     })),
   });
@@ -341,5 +326,15 @@ export async function askFilePath(promptMessage, defaultPath = "presets_export.j
     message: promptMessage,
     default: defaultPath,
     validate: (val) => val.trim().length > 0 || "File path cannot be empty",
+  });
+}
+
+export async function askPostRunAction() {
+  return select({
+    message: "What would you like to do next?",
+    choices: [
+      { name: "🔄 Return to Main Menu", value: "menu" },
+      { name: "🚪 Exit QC Runner", value: "exit" },
+    ],
   });
 }

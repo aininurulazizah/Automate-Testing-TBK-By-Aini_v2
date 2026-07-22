@@ -32,6 +32,7 @@ export function saveLastRun(config) {
     const data = {
       clientIds: config.selectedClients.map(c => c.id),
       scenarioIds: config.selectedScenarios.map(s => s.id),
+      env: config.env || "staging",
       browser: config.selectedBrowser || "chromium",
       mode: config.selectedMode || "headed",
       workers: config.workers ?? 1,
@@ -70,6 +71,7 @@ export function savePreset(preset) {
       name: preset.name,
       clientIds: preset.clientIds || [],
       scenarioIds: preset.scenarioIds || [],
+      env: preset.env || "staging",
       browser: preset.browser || "chromium",
       mode: preset.mode || "headed",
       workers: preset.workers ?? 1,

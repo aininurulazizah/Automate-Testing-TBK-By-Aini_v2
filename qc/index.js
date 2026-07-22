@@ -12,6 +12,7 @@ import {
   askPresetName,
   askDeletePreset,
   askFilePath,
+  askPostRunAction,
 } from "./prompts.js";
 import { buildCommand, runCommand, openReport, getMatchingTestsBreakdown } from "./runner.js";
 import { clients } from "./config/clients.js";
@@ -98,36 +99,38 @@ async function main() {
     console.warn("Proceeding with valid definitions...\n");
   }
 
-  let selectedClients = [];
-  let selectedScenarios = [];
-  let selectedBrowser = "chromium";
-  let selectedMode = "headed";
-  let executionOptions = { workers: 1, retries: 0 };
-  let shouldOpenReport = true;
-  let activePresetName = null;
-
-  let lastRun = getLastRun();
-  let presets = getPresets();
-
   while (true) {
-    const hasLastRun = Boolean(lastRun);
-    presets = getPresets();
+    let selectedClients = [];
+    let selectedScenarios = [];
+    let selectedEnv = "staging";
+    let selectedBrowser = "chromium";
+    let selectedMode = "headed";
+    let executionOptions = { workers: 1, retries: 0 };
+    let shouldOpenReport = true;
+    let activePresetName = null;
+
+    let lastRun = getLastRun();
+    let presets = getPresets();
 
     let action = "custom";
-    if (hasLastRun || presets.length > 0) {
-      action = await askInitialAction({ hasLastRun, presets });
+    if (hasLastRunMenu(lastRun, presets)) {
+      action = await askInitialAction({ hasLastRun: Boolean(lastRun), presets });
+    }
+
+    if (action === "exit") {
+      console.log("\nGoodbye! 👋\n");
+      break;
     }
 
     if (action === "manage_presets") {
       await handlePresetManagement();
-      lastRun = getLastRun();
-      presets = getPresets();
       continue;
     }
 
     if (action === "last_run" && lastRun) {
       selectedClients = clients.filter(c => lastRun.clientIds.includes(c.id));
       selectedScenarios = scenarios.filter(s => lastRun.scenarioIds.includes(s.id));
+      selectedEnv = lastRun.env || "staging";
       selectedBrowser = lastRun.browser || "chromium";
       selectedMode = lastRun.mode || "headed";
       executionOptions = {
@@ -139,8 +142,6 @@ async function main() {
       if (selectedClients.length === 0 || selectedScenarios.length === 0) {
         console.log("\n⚠️ Previous selection references missing clients/scenarios. Falling back to custom selection.\n");
         action = "custom";
-      } else {
-        break;
       }
     }
 
@@ -148,6 +149,7 @@ async function main() {
       const chosenPreset = await askPresetSelection(presets);
       selectedClients = clients.filter(c => chosenPreset.clientIds.includes(c.id));
       selectedScenarios = scenarios.filter(s => chosenPreset.scenarioIds.includes(s.id));
+      selectedEnv = chosenPreset.env || "staging";
       selectedBrowser = chosenPreset.browser || "chromium";
       selectedMode = chosenPreset.mode || "headed";
       executionOptions = {
@@ -160,109 +162,130 @@ async function main() {
       if (selectedClients.length === 0 || selectedScenarios.length === 0) {
         console.log("\n⚠️ Preset references missing clients/scenarios. Falling back to custom selection.\n");
         action = "custom";
-      } else {
-        break;
       }
     }
 
     if (action === "custom") {
-      const defaultClientIds = lastRun?.clientIds || [];
-      const defaultScenarioIds = lastRun?.scenarioIds || [];
-      const defaultBrowser = lastRun?.browser || "chromium";
-      const defaultMode = lastRun?.mode || "headed";
-      const defaultOptions = { workers: lastRun?.workers ?? 1, retries: lastRun?.retries ?? 0 };
-      const defaultAutoOpen = lastRun?.autoOpenReport ?? true;
+      const defaultClientIds = [];
+      const defaultScenarioIds = [];
+      const defaultEnv = "staging";
+      const defaultBrowser = "chromium";
+      const defaultMode = "headed";
+      const defaultOptions = { workers: 1, retries: 0 };
+      const defaultAutoOpen = true;
 
-      selectedClients = await askClients(defaultClientIds);
+      const clientResult = await askClients(defaultClientIds, { initialEnv: defaultEnv });
+      selectedClients = clientResult.selectedClients;
+      selectedEnv = clientResult.selectedEnv;
+
       selectedScenarios = await askScenario(selectedClients, defaultScenarioIds);
       selectedBrowser = await askBrowser(defaultBrowser);
       selectedMode = await askExecutionMode(defaultMode);
       executionOptions = await askExecutionOptions(defaultOptions);
       shouldOpenReport = await askOpenReport(defaultAutoOpen);
+    }
+
+    const command = buildCommand(
+      selectedClients,
+      selectedScenarios,
+      selectedBrowser,
+      selectedMode,
+      executionOptions
+    );
+
+    const breakdown = getMatchingTestsBreakdown(selectedClients, selectedScenarios);
+    const modeLabel = selectedMode === "headed" ? "Headed (UI Visible)" : "Headless (Background)";
+    const reportLabel = shouldOpenReport ? "Yes (Auto-Open)" : "No";
+    const presetBadge = activePresetName ? `[Preset: ${activePresetName}]` : "";
+    const title = `🎭 PLAYWRIGHT QC RUNNER v1.4 ${presetBadge}`.trim();
+
+    const bodyLines = [
+      "🎯 MATCHING TESTS:",
+      ...breakdown.lines.map(l => l.replace(/^│\s?/, "")),
+      "",
+      `📊 Total: ${breakdown.totalMatchingTests} test(s)`,
+      "",
+      `🏷️ ENVIRONMENT:    ${selectedEnv}`,
+      `🌐 BROWSER:        ${selectedBrowser}`,
+      `⚡ EXECUTION MODE: ${modeLabel}`,
+      `⚙️ WORKERS:        ${executionOptions.workers} worker(s)`,
+      `🔄 RETRIES:        ${executionOptions.retries} attempt(s)`,
+      `📈 AUTO REPORT:    ${reportLabel}`,
+      "─".repeat(60),
+      "🚀 GENERATED COMMAND:",
+      `  ${command}`,
+    ];
+
+    console.log("");
+    printBox(title, bodyLines, 64);
+    console.log("");
+
+    const confirmAction = await askConfirmationAction();
+
+    if (confirmAction === "cancel") {
+      console.log("\nOperation cancelled. Returning to main menu...\n");
+      continue;
+    }
+
+    if (confirmAction === "dry_run") {
+      console.log("\n📋 DRY RUN - Generated Playwright Command:\n");
+      console.log(`  Target Environment: ${selectedEnv}`);
+      console.log(`  ${command}\n`);
+      console.log("Copy and execute the command above whenever you're ready.\n");
+      
+      const postAction = await askPostRunAction();
+      if (postAction === "exit") {
+        console.log("\nGoodbye! 👋\n");
+        break;
+      }
+      continue;
+    }
+
+    if (confirmAction === "save_and_run") {
+      const presetName = await askPresetName();
+      const presetId = presetName.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-");
+      savePreset({
+        id: presetId,
+        name: presetName.trim(),
+        clientIds: selectedClients.map(c => c.id),
+        scenarioIds: selectedScenarios.map(s => s.id),
+        env: selectedEnv,
+        browser: selectedBrowser,
+        mode: selectedMode,
+        workers: executionOptions.workers,
+        retries: executionOptions.retries,
+        autoOpenReport: shouldOpenReport,
+      });
+      console.log(`\n⭐ Preset "${presetName}" saved successfully!`);
+    }
+
+    saveLastRun({
+      selectedClients,
+      selectedScenarios,
+      env: selectedEnv,
+      selectedBrowser,
+      selectedMode,
+      workers: executionOptions.workers,
+      retries: executionOptions.retries,
+      shouldOpenReport,
+    });
+
+    const result = runCommand(command, { env: selectedEnv });
+
+    if (shouldOpenReport) {
+      openReport();
+    }
+
+    const postAction = await askPostRunAction();
+    if (postAction === "exit") {
+      console.log("\nGoodbye! 👋\n");
       break;
     }
   }
+}
 
-  const command = buildCommand(
-    selectedClients,
-    selectedScenarios,
-    selectedBrowser,
-    selectedMode,
-    executionOptions
-  );
-
-  const breakdown = getMatchingTestsBreakdown(selectedClients, selectedScenarios);
-  const modeLabel = selectedMode === "headed" ? "Headed (UI Visible)" : "Headless (Background)";
-  const reportLabel = shouldOpenReport ? "Yes (Auto-Open)" : "No";
-  const presetBadge = activePresetName ? `[Preset: ${activePresetName}]` : "";
-  const title = `🎭 PLAYWRIGHT QC RUNNER v1.4 ${presetBadge}`.trim();
-
-  const bodyLines = [
-    "🎯 MATCHING TESTS:",
-    ...breakdown.lines.map(l => l.replace(/^│\s?/, "")),
-    "",
-    `📊 Total: ${breakdown.totalMatchingTests} test(s)`,
-    "",
-    `🌐 BROWSER:        ${selectedBrowser}`,
-    `⚡ EXECUTION MODE: ${modeLabel}`,
-    `⚙️ WORKERS:        ${executionOptions.workers} worker(s)`,
-    `🔄 RETRIES:        ${executionOptions.retries} attempt(s)`,
-    `📈 AUTO REPORT:    ${reportLabel}`,
-    "─".repeat(60),
-    "🚀 GENERATED COMMAND:",
-    `  ${command}`,
-  ];
-
-  console.log("");
-  printBox(title, bodyLines, 64);
-  console.log("");
-
-  const confirmAction = await askConfirmationAction();
-
-  if (confirmAction === "cancel") {
-    console.log("\nCancelled.");
-    process.exit(0);
-  }
-
-  if (confirmAction === "dry_run") {
-    console.log("\n📋 DRY RUN - Generated Playwright Command:\n");
-    console.log(`  ${command}\n`);
-    console.log("Copy and execute the command above whenever you're ready.\n");
-    process.exit(0);
-  }
-
-  if (confirmAction === "save_and_run") {
-    const presetName = await askPresetName();
-    const presetId = presetName.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-");
-    savePreset({
-      id: presetId,
-      name: presetName.trim(),
-      clientIds: selectedClients.map(c => c.id),
-      scenarioIds: selectedScenarios.map(s => s.id),
-      browser: selectedBrowser,
-      mode: selectedMode,
-      workers: executionOptions.workers,
-      retries: executionOptions.retries,
-      autoOpenReport: shouldOpenReport,
-    });
-    console.log(`\n⭐ Preset "${presetName}" saved successfully!`);
-  }
-
-  saveLastRun({
-    selectedClients,
-    selectedScenarios,
-    selectedBrowser,
-    selectedMode,
-    workers: executionOptions.workers,
-    retries: executionOptions.retries,
-    shouldOpenReport,
-  });
-
-  const result = runCommand(command);
-
-  if (shouldOpenReport) {
-    openReport();
-  }
+function hasLastRunMenu(lastRun, presets) {
+  return Boolean(lastRun) || (presets && presets.length > 0);
 }
 
 main().catch(err => {

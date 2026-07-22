@@ -1,4 +1,3 @@
-
 # Playwright
 node_modules/
 /test-results/
@@ -8,5 +7,6 @@ node_modules/
 /playwright/.auth/
 /output/booking_code.csv
 .env
-qc/data/last_run.json
-qc/data/presets.json
+
+# QC Runner local data
+qc/data/

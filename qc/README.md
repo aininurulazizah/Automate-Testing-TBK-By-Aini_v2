@@ -14,11 +14,14 @@ npx playwright test --project=chromium --headed --workers=2 --retries=1 --grep "
 
 ## 🚀 Fitur Utama (Features)
 
-* ✅ **Pemilihan Klien Interaktif**:
-  * Daftar lengkap (*Full list checkbox*)
-  * Pencarian kata kunci (*Search keyword*)
+* ✅ **Pemilihan Klien Interaktif & Efisien**:
+  * Daftar interaktif (*Interactive client list with real-time search*)
+  * Cari / Tempel masal (*Search / Paste client list - single or batch input*)
   * Filter berdasarkan kapabilitas (*Capability filter*: RoundTrip / Connecting / OneWay)
-  * Input masal / *Batch paste* dari pesan chat (Slack/Teams)
+* ✅ **Pengalih Environment (Environment Switcher)**:
+  * Default selalu `staging`.
+  * Menu pengubah environment `🌐 Change target environment [Current: staging]` untuk beralih antara `staging` dan `production`.
+  * Menginjeksi variabel `ENV=<selected_env>` secara otomatis ke lingkungan proses eksekusi `playwright.config.js`.
 * ✅ **Penyaringan Skenario Otomatis**: Menyaring skenario yang tidak didukung oleh klien berdasarkan flag kapabilitas (`oneWay`, `roundTrip`, `connecting`).
 * ✅ **Pilihan Browser & Mode Eksekusi**:
   * Browser: Chromium, Firefox, WebKit (Safari), Microsoft Edge.
@@ -31,7 +34,7 @@ npx playwright test --project=chromium --headed --workers=2 --retries=1 --grep "
   * *Presets*: Menyimpan kombinasi konfigurasi test favorit (`presets.json`).
   * *Ekspor / Impor*: Bagikan file preset JSON antar anggota tim QA.
 * ✅ **Validasi Konfigurasi Otomatis**: Memeriksa integritas file `clients.js` dan `scenarios.js` saat aplikasi dimulai.
-* ✅ **Penanganan Hasil Test**: Menangkap kode status eksekusi test (*pass/fail*) dengan ringkasan yang rapi tanpa memunculkan error *stack trace* mentah.
+* ✅ **Sesi CLI Berkelanjutan & Penanganan Error**: Menangkap kode status eksekusi test secara rapi dan menyediakan menu opsi paska-test (*Return to Main Menu / Exit*) sehingga CLI tidak tertutup otomatis.
 
 ---
 
@@ -110,19 +113,35 @@ Buka `qc/config/scenarios.js` dan tambahkan objek skenario:
 
 ---
 
-## 🗺️ Rencana Pengembangan (Roadmap)
+## 🗺️ Rencana Pengembangan (Roadmap Update)
 
-### v1.0 - v1.3 ✅
-* [x] Pemilihan Klien, Skenario, Browser, dan Mode Executed
-* [x] Auto-Open HTML Report
-* [x] Client Search & Batch Paste Request
-* [x] State Persistence & Presets
+### v1.0 ✅ (Fitur Dasar CLI)
+* [x] Pemilihan Klien interaktif (Checkbox list)
+* [x] Pemilihan Skenario dengan penyaringan kompatibilitas otomatis
+* [x] Pemilihan Browser (Chromium)
+* [x] Generasi & Eksekusi Perintah Playwright otomatis dari CLI
 
-### v1.4 ✅
-* [x] Filter Klien Berdasarkan Kapabilitas (*Capability Filter*)
-* [x] Konfigurasi Worker Concurrency (`--workers`) & Retries (`--retries`)
-* [x] Dukungan Browser WebKit (Safari)
-* [x] Mode Dry-Run / Output Command Only
-* [x] Preset Export & Import JSON File Sharing
-* [x] Validasi Otomatis Konfigurasi Startup (`validator.js`)
-* [x] Penanganan Error & Ringkasan Eksekusi Test Terformat
+### v1.1 ✅ (Mode Eksekusi & Laporan)
+* [x] Mode Eksekusi Headed (UI Terlihat) / Headless (Latar Belakang)
+* [x] Pembukaan Laporan HTML Playwright (`npx playwright show-report`) secara otomatis setelah test selesai
+* [x] Pratinjau perintah (*command preview*) dan spanduk informasi test sebelum eksekusi
+
+### v1.2 ✅ (Pencarian & State Persistence)
+* [x] Fitur Pencarian Klien berdasarkan kata kunci (nama, ID, tag)
+* [x] Fitur Preset Konfigurasi Test yang dapat disimpan (`presets.json`)
+* [x] Quick Run Pilihan Terakhir (`last_run.json`) untuk 1-klik re-run
+
+### v1.3 ✅ (Pengecekan Masal & Input Ekspres)
+* [x] Batch Requests / Quick Paste daftar klien dari aplikasi chat (Slack/Teams) dengan pembagian koma, spasi, atau baris baru
+
+### v1.4 ✅ (Peningkatan Fitur QC Runner Terkini)
+* [x] **Pengoptimalan Menu Klien**: Menyederhanakan opsi pencarian dan paste menjadi 1 langkah cepat (*Search / Paste client list*)
+* [x] **Environment Switcher**: Pilihan environment target (`staging` vs `production`) bawaan default `staging` yang secara otomatis menginjeksi variabel `ENV` ke `playwright.config.js`
+* [x] **Filter Kapabilitas Klien**: Penyaringan masal klien berdasarkan fitur (`RoundTrip`, `Connecting`, `OneWay`)
+* [x] **Opsi Konkurensi Worker**: Pengaturan jumlah worker Playwright (`--workers=1, 2, 4`)
+* [x] **Opsi Retries**: Pengaturan percobaan ulang test yang gagal (`--retries=0, 1, 2`)
+* [x] **Dukungan Browser WebKit**: Penambahan WebKit (Desktop Safari) bersama Chromium, Firefox, dan Microsoft Edge
+* [x] **Mode Dry-Run**: Pilihan untuk menampilkan dan menyalin perintah Playwright tanpa langsung mengeksekusi test
+* [x] **Ekspor & Impor Preset**: Fitur untuk menyimpan dan berbagi file preset JSON antar tim QA
+* [x] **Validasi Konfigurasi Startup**: Pengecekan otomatis integritas file `clients.js` dan `scenarios.js` (`validator.js`)
+* [x] **Sesi CLI Berkelanjutan**: Opsi paska-test (*Return to Main Menu / Exit*) agar CLI tidak langsung tertutup setelah eksekusi

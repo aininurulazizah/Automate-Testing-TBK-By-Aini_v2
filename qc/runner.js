@@ -49,9 +49,10 @@ export function getMatchingTestsBreakdown(selectedClients, selectedScenarios) {
   };
 }
 
-export function runCommand(command) {
+export function runCommand(command, options = {}) {
   const startTime = Date.now();
-  console.log("\n🚀 Executing Playwright Test Suite...\n");
+  const targetEnv = options.env || "staging";
+  console.log(`\n🚀 Executing Playwright Test Suite [Environment: ${targetEnv}]...\n`);
 
   let exitCode = 0;
   let success = true;
@@ -59,6 +60,10 @@ export function runCommand(command) {
   try {
     execSync(command, {
       stdio: "inherit",
+      env: {
+        ...process.env,
+        ENV: targetEnv,
+      },
     });
   } catch (error) {
     success = false;
@@ -70,9 +75,9 @@ export function runCommand(command) {
 
   console.log("\n" + "─".repeat(60));
   if (success) {
-    console.log(`✅ TEST RUN COMPLETED SUCCESSFULLY | Duration: ${durationSec}s`);
+    console.log(`✅ TEST RUN COMPLETED SUCCESSFULLY | Environment: ${targetEnv} | Duration: ${durationSec}s`);
   } else {
-    console.log(`❌ TEST RUN COMPLETED WITH FAILURES | Exit Code: ${exitCode} | Duration: ${durationSec}s`);
+    console.log(`❌ TEST RUN COMPLETED WITH FAILURES | Environment: ${targetEnv} | Exit Code: ${exitCode} | Duration: ${durationSec}s`);
   }
   console.log("─".repeat(60) + "\n");
 
