@@ -436,7 +436,7 @@ export const testData = {
 
     Putraremaja : {
         Keberangkatan: "Agen pr hotel candra kirana jogja",
-        Tujuan: "4u cafe resto ungaran",
+        Tujuan: "Agen pr lea collection demak",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
             kurang_hari: 7,
@@ -472,7 +472,7 @@ export const testData = {
 
     Ctu : {
         Keberangkatan: "BAROS/ ALFAMART RAYA",
-        Tujuan: "GARUT/ INDOMARET ALADIN",
+        Tujuan: "GARUT INDOMARET ALADIN",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
             kurang_hari: 7,

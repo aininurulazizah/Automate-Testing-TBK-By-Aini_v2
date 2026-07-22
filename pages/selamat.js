@@ -159,7 +159,8 @@ export class Selamat {
     }
 
     async isiDataPenumpang(jml_penumpang, pemesan, penumpang) {
-        await this.waitForLoader('div#modal-load', 'show', false);
+        // await this.waitForLoader('div#modal-load', 'show', false);
+        await this.page.waitForTimeout(2000);
 
         const penumpang_dewasa = penumpang.PenumpangDewasa;
         await this.nama_pemesan.fill(pemesan.NamaPemesan);
