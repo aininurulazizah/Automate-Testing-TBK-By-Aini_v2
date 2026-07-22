@@ -25,6 +25,9 @@ dan secara otomatis akan menghasilkan perintah Playwright yang tepat.
 *   ✅ **Menyaring skenario** yang tidak didukung secara otomatis
 *   ✅ **Memilih satu atau beberapa skenario**
 *   ✅ **Memilih browser**
+*   ✅ **Memilih mode eksekusi** (Headed / Headless)
+*   ✅ **Membuka laporan HTML secara otomatis** setelah pengujian selesai
+*   ✅ **Pratinjau perintah (*command preview*)** yang interaktif dan informatif
 *   ✅ **Menghasilkan perintah Playwright** secara otomatis
 *   ✅ **Menjalankan Playwright** secara langsung
 
@@ -33,7 +36,6 @@ dan secara otomatis akan menghasilkan perintah Playwright yang tepat.
 *   🎛️ Penggunaan *Preset*
 *   💾 Menyimpan pilihan sebelumnya
 *   📝 Penamaan laporan otomatis
-*   🌐 Membuka laporan HTML secara otomatis
 
 ---
 
@@ -198,10 +200,10 @@ Skenario baru ini akan langsung muncul secara otomatis di menu CLI.
 *   [x] Pemilihan Browser
 *   [x] Menjalankan Playwright langsung dari CLI
 
-### v1.1
-*   [ ] Mode Headed / Headless
-*   [ ] Membuka laporan HTML otomatis setelah *test* selesai
-*   [ ] Pratinjau perintah (*command preview*) yang lebih interaktif
+### v1.1 ✅
+*   [x] Mode Headed / Headless
+*   [x] Membuka laporan HTML otomatis setelah *test* selesai
+*   [x] Pratinjau perintah (*command preview*) yang lebih interaktif
 
 ### v1.2
 *   [ ] Fitur pencarian nama klien

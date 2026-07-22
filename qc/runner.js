@@ -1,4 +1,6 @@
-export function buildCommand(clients, scenarios, browser) {
+import { execSync } from "child_process";
+
+export function buildCommand(clients, scenarios, browser, mode = "headed") {
 
     const grepParts = [];
 
@@ -18,13 +20,24 @@ export function buildCommand(clients, scenarios, browser) {
 
     const grep = grepParts.join("|");
 
-    return `npx playwright test --project=${browser} --headed --workers=1 --grep "${grep}"`;
-}
+    const modeFlag = mode === "headed" ? " --headed" : "";
 
-import { execSync } from "child_process";
+    return `npx playwright test --project="${browser}"${modeFlag} --workers=1 --grep "${grep}"`;
+}
 
 export function runCommand(command) {
   execSync(command, {
     stdio: "inherit",
   });
+}
+
+export function openReport() {
+  console.log("\n📊 Opening Playwright HTML report...\n");
+  try {
+    execSync("npx playwright show-report", {
+      stdio: "inherit",
+    });
+  } catch (error) {
+    console.error("Failed to open Playwright HTML report:", error.message);
+  }
 }

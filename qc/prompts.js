@@ -52,6 +52,30 @@ export async function askBrowser() {
 export async function askConfirmation() {
   return confirm({
     message: "Run Playwright?",
-  default: true,
+    default: true,
+  });
+}
+
+export async function askExecutionMode() {
+  return select({
+    message: "Select execution mode",
+    choices: [
+      {
+        name: "Headed (Browser UI visible)",
+        value: "headed",
+      },
+      {
+        name: "Headless (Background execution)",
+        value: "headless",
+      },
+    ],
+    default: "headed",
+  });
+}
+
+export async function askOpenReport() {
+  return confirm({
+    message: "Auto open HTML report after test finishes?",
+    default: true,
   });
 }
