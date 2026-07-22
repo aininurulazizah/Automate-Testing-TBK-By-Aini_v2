@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test"
 import { sites } from "../utils/sites";
 import { saveToCsv } from "../utils/helper";
+import { clearBrowserState } from "../utils/helper";
 import { testData, createPemesan } from "../test-data/reservasi_data";
 
 const ENV = process.env.ENV || 'production';
@@ -14,6 +15,8 @@ for (const site of sites) {
         const web = new site.locator(page);
     
         await page.goto(site.urls[ENV]);
+
+        await clearBrowserState(page);
         
         if(web.close_popup){ // Close popup jika ada
             await web.closePopup(web.close_popup);
@@ -93,6 +96,8 @@ for (const site of sites) {
             const web = new site.locator(page);
     
             await page.goto(site.urls[ENV]);
+
+            await clearBrowserState(page);
     
             if(web.close_popup) {
                 await web.closePopup(web.close_popup);
@@ -175,6 +180,8 @@ for (const site of sites) {
             const web = new site.locator(page);
     
             await page.goto(site.urls[ENV]);
+
+            await clearBrowserState(page);
     
             if(web.close_popup) {
                 await web.closePopup(web.close_popup);

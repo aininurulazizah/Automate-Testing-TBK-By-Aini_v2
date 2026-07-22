@@ -25,3 +25,14 @@ export function saveToCsv(siteTag, bookingCode, resvType) {
     fs.appendFileSync(file, row);
 
 }
+
+export async function clearBrowserState(page) {
+    await page.context().clearCookies();
+
+    await page.evaluate(() => {
+        localStorage.clear();
+        sessionStorage.clear();
+    });
+
+    await page.reload();
+}
