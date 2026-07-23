@@ -80,6 +80,8 @@ Proyek automasi testing untuk proses pemesanan reservasi tiket bus/shuttle pada 
 | Daytrans | Connecting Reservation | @daytrans - Test Case 3 - Connecting Reservation |
 | Baraya | One Way Trip | @baraya - Test Case 1 - One Way Trip |
 | Baraya | Round Trip | @baraya - Test Case 2 - Round Trip |
+| Besttrans | One Way Trip | @besttrans - Test Case 1 - One Way Trip |
+| Besttrans | Round Trip | @besttrans - Test Case 2 - Round Trip |
 | Aragon | One Way Trip | @aragon - Test Case 1 - One Way Trip |
 | Jackal | One Way Trip | @jackal - Test Case 1 - One Way Trip |
 | Jackal | Round Trip | @jackal - Test Case 2 - Round Trip |
