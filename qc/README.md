@@ -73,11 +73,12 @@ QC Runner.bat
 ```
 qc/
 ├── config/
-│   ├── clients.js        # Definisi klien & flag kapabilitas
+│   ├── clients.js        # Definisi klien & flag kapabilitas (auto-generated)
 │   └── scenarios.js      # Definisi skenario & aturan pendukung supports()
 ├── data/                 # Penyimpanan lokal (gitignored)
 │   ├── last_run.json     # Parameter eksekusi terakhir
 │   └── presets.json      # Preset yang tersimpan
+├── sync-clients.js       # Script sinkronisasi klien dari utils/sites.js
 ├── prompts.js            # Modul UI prompt interaktif (@inquirer/prompts)
 ├── runner.js             # Engine builder & pembuat perintah Playwright
 ├── storage.js            # Perantara penyimpanan data lokal JSON
@@ -90,15 +91,25 @@ qc/
 ## ⚙️ Konfigurasi & Ekstensibilitas
 
 ### Menambahkan Klien Baru
-Buka `qc/config/clients.js` dan tambahkan objek baru:
+Tambahkan klien baru di `utils/sites.js` (sumber utama), lalu jalankan sinkronisasi otomatis:
+```bash
+npm run qc:sync
+```
+Script ini akan:
+1. Membaca semua tag & kapabilitas dari `utils/sites.js`
+2. Membandingkan dengan `qc/config/clients.js` yang ada
+3. Melaporkan klien baru / berubah / dihapus
+4. Menulis ulang `qc/config/clients.js` secara otomatis
+
+> **Catatan**: QC Runner juga akan menampilkan **peringatan otomatis** saat startup jika mendeteksi klien baru di `sites.js` yang belum tersinkronisasi.
+
+Jika nama tampilan klien memerlukan format khusus (misal: "AO Shuttle", "Harum BSI"), tambahkan override di `DISPLAY_NAME_OVERRIDES` dalam `qc/sync-clients.js`.
+
 ```javascript
-{
-  id: "newclient",
-  name: "New Client",
-  tag: "@newclient",
-  oneWay: true,
-  roundTrip: false,
-  connecting: true
+const DISPLAY_NAME_OVERRIDES = {
+  "@aoshuttle": "AO Shuttle",
+  "@harumbsi": "Harum BSI",
+  // ... tambahkan sesuai kebutuhan
 }
 ```
 
@@ -151,3 +162,5 @@ Buka `qc/config/scenarios.js` dan tambahkan objek skenario:
 * [x] **Advanced Options Opsional**: Workers, Retries, dan Auto Report digabung menjadi 1 menu opsional `⚙️ Advanced Options` di halaman konfirmasi — default langsung dipakai tanpa pertanyaan tambahan
 * [x] **Jumlah Klien di Filter Kapabilitas**: Menampilkan jumlah klien per kategori kapabilitas (misal: `Round Trip (35 clients)`)
 * [x] **Hapus Preset Langsung dari Menu Utama**: Menghilangkan submenu Preset Manager — hapus preset langsung dari menu utama
+* [x] **Auto-Sync Klien (`npm run qc:sync`)**: Script otomatis untuk sinkronisasi daftar klien dari `utils/sites.js` ke `qc/config/clients.js` — tidak perlu lagi *double input*
+* [x] **Peringatan Sync di Startup**: QC Runner otomatis mendeteksi klien baru di `sites.js` dan menampilkan peringatan `npm run qc:sync`

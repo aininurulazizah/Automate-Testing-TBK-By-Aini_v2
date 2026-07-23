@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "qc": "node qc/index.js"
+    "qc": "node qc/index.js",
+    "qc:sync": "node qc/sync-clients.js"
   },
   "keywords": [],
   "author": "",

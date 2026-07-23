@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 import { 
   askClients,
   askScenario, 
@@ -22,6 +25,9 @@ import {
   deletePreset,
 } from "./storage.js";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 function printBox(title, bodyLines, width = 64) {
   const horizontal = "─".repeat(width - 2);
   console.log(`┌${horizontal}┐`);
@@ -40,7 +46,29 @@ function printBox(title, bodyLines, width = 64) {
   console.log(`└${horizontal}┘`);
 }
 
+
+
+function checkClientSync() {
+  try {
+    const sitesPath = path.join(__dirname, "..", "utils", "sites.js");
+    const sitesContent = fs.readFileSync(sitesPath, "utf-8");
+    const siteTags = [...sitesContent.matchAll(/tag:\s*['"](@\w+)['"]/g)].map(m => m[1]);
+    const clientTags = new Set(clients.map(c => c.tag));
+
+    const missing = siteTags.filter(t => !clientTags.has(t));
+    if (missing.length > 0) {
+      console.log("\n⚠️  SYNC WARNING: Klien baru ditemukan di utils/sites.js yang belum ada di qc/config/clients.js:");
+      missing.forEach(t => console.log(`   + ${t}`));
+      console.log("\n   Jalankan: npm run qc:sync\n");
+    }
+  } catch {
+    // Silent fail — sync check is non-critical
+  }
+}
+
 async function main() {
+  checkClientSync();
+
   while (true) {
     let selectedClients = [];
     let selectedScenarios = [];
