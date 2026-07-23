@@ -230,7 +230,7 @@ export const testData = {
 
     Gracias: {
         Keberangkatan: "BALTOS",
-        Tujuan: "BEKASI (MEGA BEKASI HYPERMALL)",
+        Tujuan: "BEKASI MEGA BEKASI HYPERMALL",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
             kurang_hari: 7,
@@ -508,7 +508,7 @@ export const testData = {
 
     Pelitamas : {
         Keberangkatan: "TANGKEL SURAMADU BANGKALAN",
-        Tujuan: "TERMINAL RONGGOSUKOWATI PAMEKASAN",
+        Tujuan: "TERMINAL BUNGURASIH",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
             kurang_hari: 7,
