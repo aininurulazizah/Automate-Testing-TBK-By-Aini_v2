@@ -6,6 +6,7 @@ export const clients = [
   { id: "ats", name: "ATS", tag: "@ats", oneWay: true, roundTrip: true, connecting: false },
   { id: "banyumili", name: "Banyumili", tag: "@banyumili", oneWay: true, roundTrip: true, connecting: false },
   { id: "baraya", name: "Baraya", tag: "@baraya", oneWay: true, roundTrip: true, connecting: false },
+  { id: "besttrans", name: "Best Trans", tag: "@besttrans", oneWay: true, roundTrip: true, connecting: false },
   { id: "binasarana", name: "Binasarana", tag: "@binasarana", oneWay: true, roundTrip: false, connecting: false },
   { id: "btm", name: "BTM", tag: "@btm", oneWay: true, roundTrip: false, connecting: true },
   { id: "cgtrans", name: "CG Trans", tag: "@cgtrans", oneWay: true, roundTrip: true, connecting: false },

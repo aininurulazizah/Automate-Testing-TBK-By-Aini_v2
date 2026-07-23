@@ -2,10 +2,21 @@ import { checkbox, select, confirm, input } from "@inquirer/prompts";
 import { clients } from "./config/clients.js";
 import { scenarios } from "./config/scenarios.js";
 
-export async function askClients(defaultClientIds = []) {
-  const selectedMap = new Map();
+export async function askEnvironment(currentEnv = "staging") {
+  return select({
+    message: "Select target environment:",
+    choices: [
+      { name: "Staging (staging)", value: "staging" },
+      { name: "Production (production)", value: "production" },
+    ],
+    default: currentEnv,
+  });
+}
 
-  // Populate defaults if any
+export async function askClients(defaultClientIds = [], options = {}) {
+  const selectedMap = new Map();
+  let selectedEnv = options.initialEnv || "staging";
+
   for (const id of defaultClientIds) {
     const found = clients.find(c => c.id === id);
     if (found) selectedMap.set(found.id, found);
@@ -16,9 +27,10 @@ export async function askClients(defaultClientIds = []) {
     const summary = selectedNames.length > 0 ? selectedNames.join(", ") : "None";
 
     const choices = [
-      { name: "📋 Select / Edit from full list", value: "list" },
-      { name: "🔍 Search / Add client by keyword", value: "search" },
-      { name: "📋 Paste / Batch input client list", value: "batch" },
+      { name: "📋 Select / Edit from client list (Interactive)", value: "list" },
+      { name: "🔍 Search / Paste client list (Batch Input)", value: "batch" },
+      { name: "⚡ Filter & select by capability (RoundTrip / Connecting)", value: "capability" },
+      { name: `🌐 Change target environment [Current: ${selectedEnv}]`, value: "env" },
     ];
 
     if (selectedMap.size > 0) {
@@ -27,12 +39,21 @@ export async function askClients(defaultClientIds = []) {
     }
 
     const action = await select({
-      message: `Client Selection [Current: ${summary}]. Choose an option:`,
+      message: `Client Selection [Current: ${summary} | Env: ${selectedEnv}]. Choose an option:`,
       choices,
     });
 
     if (action === "done") {
-      return Array.from(selectedMap.values());
+      return {
+        selectedClients: Array.from(selectedMap.values()),
+        selectedEnv,
+      };
+    }
+
+    if (action === "env") {
+      selectedEnv = await askEnvironment(selectedEnv);
+      console.log(`\n🌐 Target environment set to: ${selectedEnv}\n`);
+      continue;
     }
 
     if (action === "clear") {
@@ -63,30 +84,27 @@ export async function askClients(defaultClientIds = []) {
       });
 
       if (nextStep) {
-        return Array.from(selectedMap.values());
+        return {
+          selectedClients: Array.from(selectedMap.values()),
+          selectedEnv,
+        };
       }
     }
 
-    if (action === "search") {
-      const keyword = await input({
-        message: "Enter client search keyword (e.g. Jackal, Kruzz):",
-        validate: (value) => value.trim().length > 0 || "Please enter a keyword",
+    if (action === "capability") {
+      const capability = await select({
+        message: "Select capability to filter clients:",
+        choices: [
+          { name: "🔄 Supporting Round Trip", value: "roundTrip" },
+          { name: "🔗 Supporting Connecting Reservation", value: "connecting" },
+          { name: "➡️ Supporting One Way", value: "oneWay" },
+        ],
       });
 
-      const term = keyword.toLowerCase().trim();
-      const filtered = clients.filter(c => 
-        c.name.toLowerCase().includes(term) || 
-        (c.tag && c.tag.toLowerCase().includes(term)) || 
-        (c.id && c.id.toLowerCase().includes(term))
-      );
-
-      if (filtered.length === 0) {
-        console.log(`\n⚠️ No clients found matching "${keyword}".\n`);
-        continue;
-      }
+      const filtered = clients.filter(c => Boolean(c[capability]));
 
       const picked = await checkbox({
-        message: `Matching client(s) for "${keyword}":`,
+        message: `Clients supporting ${capability} (${filtered.length} available):`,
         choices: filtered.map(c => ({
           name: c.name,
           value: c,
@@ -108,8 +126,8 @@ export async function askClients(defaultClientIds = []) {
 
     if (action === "batch") {
       const rawInput = await input({
-        message: "Paste client names/tags (comma, space, or newline separated):",
-        validate: (value) => value.trim().length > 0 || "Please paste or enter at least one client name",
+        message: "Search / Paste client names or tags (comma, space, or newline separated):",
+        validate: (value) => value.trim().length > 0 || "Please enter or paste at least one client name",
       });
 
       const tokens = rawInput
@@ -176,8 +194,9 @@ export async function askBrowser(defaultBrowser = "chromium") {
   return select({
     message: "Select browser",
     choices: [
-      { name: "Chromium", value: "chromium" },
-      { name: "Firefox", value: "firefox" },
+      { name: "Chromium (Desktop Chrome)", value: "chromium" },
+      { name: "Firefox (Desktop Firefox)", value: "firefox" },
+      { name: "WebKit (Desktop Safari)", value: "webkit" },
       { name: "Microsoft Edge", value: "Microsoft Edge" },
     ],
     default: defaultBrowser,
@@ -193,6 +212,33 @@ export async function askExecutionMode(defaultMode = "headed") {
     ],
     default: defaultMode,
   });
+}
+
+export async function askExecutionOptions(defaults = {}) {
+  const workersChoice = await select({
+    message: "Select worker concurrency (--workers)",
+    choices: [
+      { name: "1 Worker (Sequential / Default)", value: 1 },
+      { name: "2 Workers (Parallel)", value: 2 },
+      { name: "4 Workers (Fast Parallel)", value: 4 },
+    ],
+    default: defaults.workers ?? 1,
+  });
+
+  const retriesChoice = await select({
+    message: "Select retry attempts (--retries)",
+    choices: [
+      { name: "0 Retries (Default)", value: 0 },
+      { name: "1 Retry", value: 1 },
+      { name: "2 Retries", value: 2 },
+    ],
+    default: defaults.retries ?? 0,
+  });
+
+  return {
+    workers: workersChoice,
+    retries: retriesChoice,
+  };
 }
 
 export async function askOpenReport(defaultAutoOpen = true) {
@@ -214,10 +260,8 @@ export async function askInitialAction({ hasLastRun, presets }) {
   }
 
   choices.push({ name: "🎯 New Custom Selection", value: "custom" });
-
-  if (presets && presets.length > 0) {
-    choices.push({ name: "⚙️ Manage Saved Presets", value: "manage_presets" });
-  }
+  choices.push({ name: "⚙️ Preset Manager (Export / Import / Delete)", value: "manage_presets" });
+  choices.push({ name: "🚪 Exit QC Runner", value: "exit" });
 
   return select({
     message: "What would you like to do?",
@@ -229,9 +273,21 @@ export async function askPresetSelection(presets) {
   return select({
     message: "Select a Preset to run",
     choices: presets.map(p => ({
-      name: `⭐ ${p.name} [Clients: ${p.clientIds.join(", ")} | Browser: ${p.browser} | Mode: ${p.mode}]`,
+      name: `⭐ ${p.name} [Clients: ${p.clientIds.join(", ")} | Env: ${p.env || "staging"} | Browser: ${p.browser} | Mode: ${p.mode}]`,
       value: p,
     })),
+  });
+}
+
+export async function askPresetManagementAction() {
+  return select({
+    message: "Preset Manager - Choose an action:",
+    choices: [
+      { name: "📤 Export Presets to JSON File", value: "export" },
+      { name: "📥 Import Presets from JSON File", value: "import" },
+      { name: "🗑️ Delete a Saved Preset", value: "delete" },
+      { name: "⬅️ Back to Main Menu", value: "back" },
+    ],
   });
 }
 
@@ -240,6 +296,7 @@ export async function askConfirmationAction() {
     message: "Choose an action",
     choices: [
       { name: "🚀 Run Playwright", value: "run" },
+      { name: "📋 Dry Run / Print Command Only", value: "dry_run" },
       { name: "💾 Save as New Preset & Run", value: "save_and_run" },
       { name: "❌ Cancel", value: "cancel" },
     ],
@@ -254,11 +311,30 @@ export async function askPresetName() {
 }
 
 export async function askDeletePreset(presets) {
+  if (!presets || presets.length === 0) return null;
   return select({
     message: "Select preset to delete",
     choices: [
       ...presets.map(p => ({ name: `🗑️ Delete "${p.name}"`, value: p.id })),
       { name: "⬅️ Back", value: null },
+    ],
+  });
+}
+
+export async function askFilePath(promptMessage, defaultPath = "presets_export.json") {
+  return input({
+    message: promptMessage,
+    default: defaultPath,
+    validate: (val) => val.trim().length > 0 || "File path cannot be empty",
+  });
+}
+
+export async function askPostRunAction() {
+  return select({
+    message: "What would you like to do next?",
+    choices: [
+      { name: "🔄 Return to Main Menu", value: "menu" },
+      { name: "🚪 Exit QC Runner", value: "exit" },
     ],
   });
 }
