@@ -26,10 +26,14 @@ export async function askClients(defaultClientIds = [], options = {}) {
     const selectedNames = Array.from(selectedMap.values()).map(c => c.name);
     const summary = selectedNames.length > 0 ? selectedNames.join(", ") : "None";
 
+    const roundTripCount = clients.filter(c => c.roundTrip).length;
+    const connectingCount = clients.filter(c => c.connecting).length;
+    const oneWayCount = clients.filter(c => c.oneWay).length;
+
     const choices = [
       { name: "📋 Select / Edit from client list (Interactive)", value: "list" },
       { name: "🔍 Search / Paste client list (Batch Input)", value: "batch" },
-      { name: "⚡ Filter & select by capability (RoundTrip / Connecting)", value: "capability" },
+      { name: `⚡ Filter by capability: Round Trip (${roundTripCount}) / Connecting (${connectingCount}) / One Way (${oneWayCount})`, value: "capability" },
       { name: `🌐 Change target environment [Current: ${selectedEnv}]`, value: "env" },
     ];
 
@@ -78,12 +82,8 @@ export async function askClients(defaultClientIds = [], options = {}) {
         selectedMap.set(c.id, c);
       }
 
-      const nextStep = await confirm({
-        message: `Confirm selection of ${selectedMap.size} client(s) (${Array.from(selectedMap.values()).map(c => c.name).join(", ")})?`,
-        default: true,
-      });
-
-      if (nextStep) {
+      if (selectedMap.size > 0) {
+        console.log(`\n✅ Selected ${selectedMap.size} client(s): ${Array.from(selectedMap.values()).map(c => c.name).join(", ")}\n`);
         return {
           selectedClients: Array.from(selectedMap.values()),
           selectedEnv,
@@ -95,9 +95,9 @@ export async function askClients(defaultClientIds = [], options = {}) {
       const capability = await select({
         message: "Select capability to filter clients:",
         choices: [
-          { name: "🔄 Supporting Round Trip", value: "roundTrip" },
-          { name: "🔗 Supporting Connecting Reservation", value: "connecting" },
-          { name: "➡️ Supporting One Way", value: "oneWay" },
+          { name: `🔄 Supporting Round Trip (${roundTripCount} clients)`, value: "roundTrip" },
+          { name: `🔗 Supporting Connecting Reservation (${connectingCount} clients)`, value: "connecting" },
+          { name: `➡️ Supporting One Way (${oneWayCount} clients)`, value: "oneWay" },
         ],
       });
 
@@ -196,7 +196,6 @@ export async function askBrowser(defaultBrowser = "chromium") {
     choices: [
       { name: "Chromium (Desktop Chrome)", value: "chromium" },
       { name: "Firefox (Desktop Firefox)", value: "firefox" },
-      { name: "WebKit (Desktop Safari)", value: "webkit" },
       { name: "Microsoft Edge", value: "Microsoft Edge" },
     ],
     default: defaultBrowser,
@@ -214,7 +213,7 @@ export async function askExecutionMode(defaultMode = "headed") {
   });
 }
 
-export async function askExecutionOptions(defaults = {}) {
+export async function askAdvancedOptions(defaults = {}) {
   const workersChoice = await select({
     message: "Select worker concurrency (--workers)",
     choices: [
@@ -235,17 +234,16 @@ export async function askExecutionOptions(defaults = {}) {
     default: defaults.retries ?? 0,
   });
 
+  const autoOpenReport = await confirm({
+    message: "Auto open HTML report after test finishes?",
+    default: defaults.autoOpenReport ?? true,
+  });
+
   return {
     workers: workersChoice,
     retries: retriesChoice,
+    autoOpenReport,
   };
-}
-
-export async function askOpenReport(defaultAutoOpen = true) {
-  return confirm({
-    message: "Auto open HTML report after test finishes?",
-    default: defaultAutoOpen,
-  });
 }
 
 export async function askInitialAction({ hasLastRun, presets }) {
@@ -260,7 +258,11 @@ export async function askInitialAction({ hasLastRun, presets }) {
   }
 
   choices.push({ name: "🎯 New Custom Selection", value: "custom" });
-  choices.push({ name: "⚙️ Preset Manager (Export / Import / Delete)", value: "manage_presets" });
+
+  if (presets && presets.length > 0) {
+    choices.push({ name: "🗑️ Delete a Saved Preset", value: "delete_preset" });
+  }
+
   choices.push({ name: "🚪 Exit QC Runner", value: "exit" });
 
   return select({
@@ -279,18 +281,6 @@ export async function askPresetSelection(presets) {
   });
 }
 
-export async function askPresetManagementAction() {
-  return select({
-    message: "Preset Manager - Choose an action:",
-    choices: [
-      { name: "📤 Export Presets to JSON File", value: "export" },
-      { name: "📥 Import Presets from JSON File", value: "import" },
-      { name: "🗑️ Delete a Saved Preset", value: "delete" },
-      { name: "⬅️ Back to Main Menu", value: "back" },
-    ],
-  });
-}
-
 export async function askConfirmationAction() {
   return select({
     message: "Choose an action",
@@ -298,6 +288,7 @@ export async function askConfirmationAction() {
       { name: "🚀 Run Playwright", value: "run" },
       { name: "📋 Dry Run / Print Command Only", value: "dry_run" },
       { name: "💾 Save as New Preset & Run", value: "save_and_run" },
+      { name: "⚙️ Advanced Options (Workers / Retries / Report)", value: "advanced" },
       { name: "❌ Cancel", value: "cancel" },
     ],
   });
@@ -318,14 +309,6 @@ export async function askDeletePreset(presets) {
       ...presets.map(p => ({ name: `🗑️ Delete "${p.name}"`, value: p.id })),
       { name: "⬅️ Back", value: null },
     ],
-  });
-}
-
-export async function askFilePath(promptMessage, defaultPath = "presets_export.json") {
-  return input({
-    message: promptMessage,
-    default: defaultPath,
-    validate: (val) => val.trim().length > 0 || "File path cannot be empty",
   });
 }
 

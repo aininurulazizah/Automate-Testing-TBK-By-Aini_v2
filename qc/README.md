@@ -8,7 +8,7 @@ Daripada harus mengingat dan mengetik perintah Playwright yang panjang dan rumit
 npx playwright test --project=chromium --headed --workers=2 --retries=1 --grep "@jackal.*One Way|@daytrans.*(One Way|Connecting)"
 ```
 
-**QC Runner** menyediakan menu interaktif CLI untuk memilih klien, menyaring skenario yang sesuai, menentukan opsi eksekusi (*workers*, *retries*, *browser*, mode *headed*/*headless*), serta menghasilkan dan menjalankan perintah Playwright secara otomatis.
+**QC Runner** menyediakan menu interaktif CLI untuk memilih klien, menyaring skenario yang sesuai, menentukan opsi eksekusi, serta menghasilkan dan menjalankan perintah Playwright secara otomatis.
 
 ---
 
@@ -17,23 +17,26 @@ npx playwright test --project=chromium --headed --workers=2 --retries=1 --grep "
 * ✅ **Pemilihan Klien Interaktif & Efisien**:
   * Daftar interaktif (*Interactive client list with real-time search*)
   * Cari / Tempel masal (*Search / Paste client list - single or batch input*)
-  * Filter berdasarkan kapabilitas (*Capability filter*: RoundTrip / Connecting / OneWay)
+  * Filter berdasarkan kapabilitas (*Capability filter*: RoundTrip / Connecting / OneWay) dengan jumlah klien per kategori
 * ✅ **Pengalih Environment (Environment Switcher)**:
   * Default selalu `staging`.
   * Menu pengubah environment `🌐 Change target environment [Current: staging]` untuk beralih antara `staging` dan `production`.
   * Menginjeksi variabel `ENV=<selected_env>` secara otomatis ke lingkungan proses eksekusi `playwright.config.js`.
 * ✅ **Penyaringan Skenario Otomatis**: Menyaring skenario yang tidak didukung oleh klien berdasarkan flag kapabilitas (`oneWay`, `roundTrip`, `connecting`).
 * ✅ **Pilihan Browser & Mode Eksekusi**:
-  * Browser: Chromium, Firefox, WebKit (Safari), Microsoft Edge.
+  * Browser: Chromium, Firefox, Microsoft Edge.
   * Mode: Headed (UI terlihat) atau Headless (Latar belakang).
+* ✅ **Advanced Options (Opsional)**:
+  * Diakses melalui menu konfirmasi saat akan menjalankan test.
   * Opsi Konkurensi Worker (`--workers=1, 2, 4`).
   * Opsi Percobaan Ulang Test (`--retries=0, 1, 2`).
+  * Opsi Auto-Buka Laporan HTML (`yes/no`).
+  * Default: `workers=1`, `retries=0`, `autoOpenReport=true` — tanpa perlu menjawab pertanyaan tambahan jika tidak diubah.
 * ✅ **Dry-Run / Preview Command Only**: Pilihan untuk menampilkan/menyalin perintah tanpa langsung mengeksekusi test.
-* ✅ **Manajemen Preset & Ekspor/Impor**:
+* ✅ **Manajemen Preset**:
   * *Quick Run*: Mengingat pilihan terakhir (`last_run.json`) untuk 1-klik re-run.
   * *Presets*: Menyimpan kombinasi konfigurasi test favorit (`presets.json`).
-  * *Ekspor / Impor*: Bagikan file preset JSON antar anggota tim QA.
-* ✅ **Validasi Konfigurasi Otomatis**: Memeriksa integritas file `clients.js` dan `scenarios.js` saat aplikasi dimulai.
+  * *Hapus Preset*: Menghapus preset yang tidak digunakan lagi langsung dari menu utama.
 * ✅ **Sesi CLI Berkelanjutan & Penanganan Error**: Menangkap kode status eksekusi test secara rapi dan menyediakan menu opsi paska-test (*Return to Main Menu / Exit*) sehingga CLI tidak tertutup otomatis.
 
 ---
@@ -71,8 +74,7 @@ QC Runner.bat
 qc/
 ├── config/
 │   ├── clients.js        # Definisi klien & flag kapabilitas
-│   ├── scenarios.js      # Definisi skenario & aturan pendukung supports()
-│   └── validator.js      # Validasi skema konfigurasi
+│   └── scenarios.js      # Definisi skenario & aturan pendukung supports()
 ├── data/                 # Penyimpanan lokal (gitignored)
 │   ├── last_run.json     # Parameter eksekusi terakhir
 │   └── presets.json      # Preset yang tersimpan
@@ -134,14 +136,18 @@ Buka `qc/config/scenarios.js` dan tambahkan objek skenario:
 ### v1.3 ✅ (Pengecekan Masal & Input Ekspres)
 * [x] Batch Requests / Quick Paste daftar klien dari aplikasi chat (Slack/Teams) dengan pembagian koma, spasi, atau baris baru
 
-### v1.4 ✅ (Peningkatan Fitur QC Runner Terkini)
+### v1.4 ✅ (Peningkatan Fitur)
 * [x] **Pengoptimalan Menu Klien**: Menyederhanakan opsi pencarian dan paste menjadi 1 langkah cepat (*Search / Paste client list*)
-* [x] **Environment Switcher**: Pilihan environment target (`staging` vs `production`) bawaan default `staging` yang secara otomatis menginjeksi variabel `ENV` ke `playwright.config.js`
+* [x] **Environment Switcher**: Pilihan environment target (`staging` vs `production`) bawaan default `staging`
 * [x] **Filter Kapabilitas Klien**: Penyaringan masal klien berdasarkan fitur (`RoundTrip`, `Connecting`, `OneWay`)
-* [x] **Opsi Konkurensi Worker**: Pengaturan jumlah worker Playwright (`--workers=1, 2, 4`)
-* [x] **Opsi Retries**: Pengaturan percobaan ulang test yang gagal (`--retries=0, 1, 2`)
-* [x] **Dukungan Browser WebKit**: Penambahan WebKit (Desktop Safari) bersama Chromium, Firefox, dan Microsoft Edge
 * [x] **Mode Dry-Run**: Pilihan untuk menampilkan dan menyalin perintah Playwright tanpa langsung mengeksekusi test
-* [x] **Ekspor & Impor Preset**: Fitur untuk menyimpan dan berbagi file preset JSON antar tim QA
-* [x] **Validasi Konfigurasi Startup**: Pengecekan otomatis integritas file `clients.js` dan `scenarios.js` (`validator.js`)
 * [x] **Sesi CLI Berkelanjutan**: Opsi paska-test (*Return to Main Menu / Exit*) agar CLI tidak langsung tertutup setelah eksekusi
+
+### v1.5 ✅ (Penyederhanaan & Pembersihan)
+* [x] **Hapus WebKit Browser**: WebKit bukan target browser nyata pada Windows — hanya emulasi Playwright
+* [x] **Hapus Konfirmasi Setelah Pilih Klien**: Menghilangkan klik ekstra yang tidak perlu setelah memilih dari daftar interaktif
+* [x] **Hapus Config Validator**: Validasi startup dihilangkan — Playwright sendiri akan gagal jika konfigurasi salah
+* [x] **Hapus Ekspor/Impor Preset**: Fitur ini terlalu kompleks untuk *tool* internal — preset cukup dibuat ulang
+* [x] **Advanced Options Opsional**: Workers, Retries, dan Auto Report digabung menjadi 1 menu opsional `⚙️ Advanced Options` di halaman konfirmasi — default langsung dipakai tanpa pertanyaan tambahan
+* [x] **Jumlah Klien di Filter Kapabilitas**: Menampilkan jumlah klien per kategori kapabilitas (misal: `Round Trip (35 clients)`)
+* [x] **Hapus Preset Langsung dari Menu Utama**: Menghilangkan submenu Preset Manager — hapus preset langsung dari menu utama
