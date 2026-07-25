@@ -5,8 +5,8 @@ function getTanggalBasedBulan(bulan) {
     today.setDate(1); //Set tanggal jadi 1 agar tidak overflow
     today.setMonth(today.getMonth() + bulan); //Set bulan ke bulan setelah berapa 'bulan'
     const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate(); //Set tanggal terakhir di bulan tujuan
-    today.setDate(Math.min(day,lastDay)); //Membandingkan tanggal hari ini (yang akan dipilih) dengan tanggal terakhir di bulan tujuan (misal tgl sekarang 31, tanggal terakhir di bulan target 28, maka yang dipilih 28)
-    return today.toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'}); //Mengembalikan nilai tanggal tujuan
+    today.setDate(Math.min(day, lastDay)); //Membandingkan tanggal hari ini (yang akan dipilih) dengan tanggal terakhir di bulan tujuan (misal tgl sekarang 31, tanggal terakhir di bulan target 28, maka yang dipilih 28)
+    return today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }); //Mengembalikan nilai tanggal tujuan
 }
 
 function getTanggalCustom({
@@ -23,7 +23,7 @@ function getTanggalCustom({
         return `${namaBulan} ${d.getDate()}, ${d.getFullYear()}`;
 
     } else {
-        return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric'});
+        return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     }
 }
 
@@ -61,7 +61,7 @@ function generateRandomEmail() {
 
 export function createPemesan() {
     return {
-        NamaPemesan: "Pemesan",
+        NamaPemesan: "Quality Control Tiketux",
         Email: generateRandomEmail(),
         NoHP: generateRandomPhoneNumber(),
         Alamat: "Bandung",
@@ -97,7 +97,7 @@ export const testData = {
                 'biaya_asuransi',
                 'biaya_cancellation',
                 'biaya_missconnecting'
-            ]  
+            ]
         }
     },
 
@@ -130,7 +130,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: false
         }),
-        JumlahPenumpang : 2,
+        JumlahPenumpang: 2,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "qrissp"
     },
@@ -349,7 +349,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Sunjaya : {
+    Sunjaya: {
         Keberangkatan: "BALIKPAPAN",
         Tujuan: "SANGATTA",
         TanggalPergi: getTanggalCustom({
@@ -367,7 +367,7 @@ export const testData = {
         PlatformBayar: "GOPAY"
     },
 
-    Binasarana : {
+    Binasarana: {
         Keberangkatan: "BINA SARANA PASTEUR KUNAFE",
         Tujuan: "BINASARANA X BURGERKING SAWANGAN",
         TanggalPergi: getTanggalCustom({
@@ -380,7 +380,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Transkita : {
+    Transkita: {
         Keberangkatan: "PASTEUR - KUNAFE SUPERMARKET OLEH-OLEH",
         Tujuan: "BALARAJA BARAT",
         TanggalPergi: getTanggalCustom({
@@ -398,7 +398,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Cgtrans : {
+    Cgtrans: {
         Keberangkatan: "CILACAP",
         Tujuan: "SEMARANG",
         TanggalPergi: getTanggalCustom({
@@ -416,7 +416,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Ztrans : {
+    Ztrans: {
         Keberangkatan: "Tamansari",
         Tujuan: "Alfamart perumnas",
         TanggalPergi: getTanggalCustom({
@@ -434,7 +434,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Putraremaja : {
+    Putraremaja: {
         Keberangkatan: "Agen pr hotel candra kirana jogja",
         Tujuan: "Agen pr lea collection demak",
         TanggalPergi: getTanggalCustom({
@@ -452,7 +452,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Banyumili : {
+    Banyumili: {
         Keberangkatan: "BALIKPAPAN BANDARA",
         Tujuan: "BONTANG (SIMPANG 3 BONTANG)",
         TanggalPergi: getTanggalCustom({
@@ -470,7 +470,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Ctu : {
+    Ctu: {
         Keberangkatan: "BAROS/ ALFAMART RAYA",
         Tujuan: "GARUT INDOMARET ALADIN",
         TanggalPergi: getTanggalCustom({
@@ -488,7 +488,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Krakaline : {
+    Krakaline: {
         Keberangkatan: "BAROS",
         Tujuan: "AREA FATMAWATI",
         TanggalPergi: getTanggalCustom({
@@ -506,7 +506,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Pelitamas : {
+    Pelitamas: {
         Keberangkatan: "TANGKEL SURAMADU BANGKALAN",
         Tujuan: "TERMINAL BUNGURASIH",
         TanggalPergi: getTanggalCustom({
@@ -524,7 +524,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Aoshuttle : {
+    Aoshuttle: {
         Keberangkatan: "AEON MALL DELTAMAS",
         Tujuan: "HALTE CITY TOUR MONAS",
         TanggalPergi: getTanggalCustom({
@@ -542,7 +542,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Adibuzz : {
+    Adibuzz: {
         Keberangkatan: "BEKASI TIMUR",
         Tujuan: "EXIT TOL BOYOLALI",
         TanggalPergi: getTanggalCustom({
@@ -560,7 +560,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Marita : {
+    Marita: {
         Keberangkatan: "PINTU TOL BAROS CIMAHI",
         Tujuan: "INDOMARET MUWARDI 50 CIANJUR",
         TanggalPergi: getTanggalCustom({
@@ -578,7 +578,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Trikusuma : {
+    Trikusuma: {
         Keberangkatan: "BANJARNEGARA",
         Tujuan: "PURWOKERTO",
         TanggalPergi: getTanggalCustom({
@@ -598,13 +598,13 @@ export const testData = {
             Tambahan: [
                 {
                     biaya_antar: 0,
-                    biaya_jemput: 0 
+                    biaya_jemput: 0
                 }
-            ]  
+            ]
         }
     },
 
-    Wisatakomodo : {
+    Wisatakomodo: {
         Keberangkatan: "KANTOR UBUNG",
         Tujuan: "T TIRTONADI",
         TanggalPergi: getTanggalCustom({
@@ -622,7 +622,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Sariharum : {
+    Sariharum: {
         Keberangkatan: "SARI HARUM BANDUNG",
         Tujuan: "BAKAUHENI",
         TanggalPergi: getTanggalCustom({
@@ -640,7 +640,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Ats : {
+    Ats: {
         Keberangkatan: "PONTIANAK",
         Tujuan: "SEKADAU",
         TanggalPergi: getTanggalCustom({
@@ -658,7 +658,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Ans : {
+    Ans: {
         Keberangkatan: "LUBUK BASUNG",
         Tujuan: "KOPO",
         TanggalPergi: getLastDay({
@@ -672,7 +672,7 @@ export const testData = {
         PlatformBayar: "Shopeepay"
     },
 
-    Riyan : {
+    Riyan: {
         Keberangkatan: "TERMINAL KLATEN",
         Tujuan: "BUNTU",
         TanggalPergi: getTanggalCustom({
@@ -690,7 +690,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Minanga : {
+    Minanga: {
         Keberangkatan: "Pool Minanga Express",
         Tujuan: "Bulak Kapal",
         TanggalPergi: getTanggalCustom({
@@ -708,7 +708,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Harumbsi : {
+    Harumbsi: {
         Keberangkatan: "KOTA BARU ITERA",
         Tujuan: "BORMA RANCAEKEK",
         TanggalPergi: getTanggalCustom({
@@ -726,7 +726,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Yantigroup : {
+    Yantigroup: {
         Keberangkatan: "BUNDARAN DUMAI",
         Tujuan: "HALTE PASAR DUPA",
         TanggalPergi: getTanggalCustom({
@@ -744,7 +744,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Selamat : {
+    Selamat: {
         Keberangkatan: "BANDUNG - PASTEUR",
         Tujuan: "CIKAMPEK",
         TanggalPergi: getTanggalCustom({
@@ -757,7 +757,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Namaste : {
+    Namaste: {
         Keberangkatan: "MENGWI",
         Tujuan: "ALFAMART DENCARIK",
         TanggalPergi: getTanggalCustom({
@@ -775,7 +775,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Royalkencana : {
+    Royalkencana: {
         Keberangkatan: "BEKASI TIMUR",
         Tujuan: "GT BOYOLALI",
         TanggalPergi: getLastDay({
@@ -789,7 +789,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Sabila : {
+    Sabila: {
         Keberangkatan: "4U RESTO N CAFE UNGARAN",
         Tujuan: "TAPE KETAN MUNTILAN 187",
         TanggalPergi: getTanggalCustom({
@@ -802,7 +802,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Kupuayu : {
+    Kupuayu: {
         Keberangkatan: "BANJARNEGARA (DI DALAM TERMINAL KIOS NO. 24A)",
         Tujuan: "BARANANGSIANG (DI DALAM TERMINAL LOKET NO. 2)",
         TanggalPergi: getTanggalCustom({
@@ -820,7 +820,7 @@ export const testData = {
         PlatformBayar: "QRIS"
     },
 
-    Besttrans : {
+    Besttrans: {
         Keberangkatan: "DIPATIUKUR",
         Tujuan: "FATMAWATI",
         TanggalPergi: getTanggalCustom({
@@ -841,35 +841,35 @@ export const testData = {
     Penumpang: {
         PenumpangDewasa: {
             Penumpang_1: {
-                NamaPenumpang: "Penumpang Satu",
+                NamaPenumpang: "Quality Control Satu",
                 JenisKelamin: "Laki-laki"
             },
             Penumpang_2: {
-                NamaPenumpang: "Penumpang Dua",
+                NamaPenumpang: "Quality Control Dua",
                 JenisKelamin: "Perempuan"
             },
             Penumpang_3: {
-                NamaPenumpang: "Penumpang Tiga",
+                NamaPenumpang: "Quality Control Tiga",
                 JenisKelamin: "Perempuan"
             },
             Penumpang_4: {
-                NamaPenumpang: "Penumpang Empat",
+                NamaPenumpang: "Quality Control Empat",
                 JenisKelamin: "Laki-laki"
             },
             Penumpang_5: {
-                NamaPenumpang: "Penumpang Lima",
+                NamaPenumpang: "Quality Control Lima",
                 JenisKelamin: "Laki-laki"
             }
         },
         PenumpangBayi: {
             PenumpangBayi_1: {
-                NamaPenumpang: "Penumpang Bayi Satu"
+                NamaPenumpang: "Quality Control Bayi Satu"
             },
             PenumpangBayi_2: {
-                NamaPenumpang: "Penumpang Bayi Dua"
+                NamaPenumpang: "Quality Control Bayi Dua"
             },
             PenumpangBayi_3: {
-                NamaPenumpang: "Penumpang Bayi Tiga"
+                NamaPenumpang: "Quality Control Bayi Tiga"
             }
         }
     }
