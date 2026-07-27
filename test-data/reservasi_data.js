@@ -567,7 +567,7 @@ export const testData = {
         Tujuan: "INDOMARET MUWARDI 50 CIANJUR",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
-            kurang_hari: 7,
+            kurang_hari: 2,
             customMonthToIndo: true
         }),
         TanggalPulang: getTanggalCustom({

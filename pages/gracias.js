@@ -97,6 +97,8 @@ export class Gracias {
     }
 
     async closePopup(value) {
+        await this.page.waitForTimeout(1000);
+
         while (await value.isVisible()) {
             await value.click(); 
             await this.page.waitForTimeout(1000);
