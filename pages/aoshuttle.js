@@ -173,7 +173,12 @@ export class Aoshuttle {
     }
 
     async cariKursi() {
-        await this.selanjutnya_btn.click();
+        let path = new URL(this.page.url()).pathname;
+
+        while(path === "/book/pemesan") {
+            await this.selanjutnya_btn.click();
+            path = new URL(this.page.url()).pathname;
+        }
     }
 
     async pilihKursi(jml_penumpang) {
