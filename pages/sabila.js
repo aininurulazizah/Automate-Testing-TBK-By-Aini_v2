@@ -176,7 +176,13 @@ export class Sabila {
     }
 
     async cariKursi() {
-        await this.carikursi_btn.click();
+        let path = new URL(this.page.url()).pathname;
+
+        while(path === "/book/pemesan") {
+            await this.carikursi_btn.click();
+            path = new URL(this.page.url()).pathname;
+        }
+
     }
 
     async pilihKursi(jml_penumpang) {
