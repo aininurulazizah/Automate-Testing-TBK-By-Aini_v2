@@ -71,6 +71,8 @@ export function createPemesan() {
     };
 }
 
+const DEFAULT_PASSANGER = process.env.CI ? 1 : 2;  // Ubah "2" jika mau mengubah jumlah penumpang, namun ini hanya berlaku di lokal 
+
 export const testData = {
 
     Daytrans: {
@@ -81,7 +83,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: false
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS",
         ConnectingReservation: {
@@ -115,7 +117,7 @@ export const testData = {
             customMonthToIndo: false
         }),
         JumlahPenumpang: {
-            Dewasa: 2,
+            Dewasa: DEFAULT_PASSANGER,
             Bayi: 0
         },
         MetodeBayar: "Pembayaran Instan",
@@ -130,7 +132,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: false
         }),
-        JumlahPenumpang : 2,
+        JumlahPenumpang : DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "qrissp"
     },
@@ -148,7 +150,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: false
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -161,7 +163,7 @@ export const testData = {
             kurang_hari: 7,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS",
         ConnectingReservation: {
@@ -178,7 +180,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: false
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -196,7 +198,7 @@ export const testData = {
             kurang_hari: 7,
             customMonthToIndo: false
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS",
         BiayaLainnya: {
@@ -223,7 +225,7 @@ export const testData = {
             Keberangkatan: 'KRUZZ PANCORAN',
             Tujuan: 'KRUZZ JATINANGOR'
         },
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -241,7 +243,7 @@ export const testData = {
             kurang_hari: 1,
             customMonthToIndo: false
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -259,7 +261,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -277,7 +279,7 @@ export const testData = {
             kurang_hari: 1,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -295,7 +297,7 @@ export const testData = {
             kurang_hari: 1,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -313,7 +315,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -331,7 +333,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: false
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -344,7 +346,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -362,7 +364,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "GOPAY"
     },
@@ -375,7 +377,7 @@ export const testData = {
             kurang_hari: 1,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -393,7 +395,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -411,7 +413,7 @@ export const testData = {
             kurang_hari: 1,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -429,7 +431,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: false
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -447,7 +449,7 @@ export const testData = {
             kurang_hari: 1,
             customMonthToIndo: false
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -465,7 +467,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -483,7 +485,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -501,7 +503,7 @@ export const testData = {
             kurang_hari: 1,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -519,7 +521,7 @@ export const testData = {
             kurang_hari: 1,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -537,7 +539,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: false
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -555,7 +557,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -573,7 +575,7 @@ export const testData = {
             kurang_hari: 1,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -591,7 +593,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS",
         BiayaLainnya: {
@@ -617,7 +619,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -635,7 +637,7 @@ export const testData = {
             kurang_hari: 1,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -653,7 +655,7 @@ export const testData = {
             kurang_hari: 24,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -667,7 +669,7 @@ export const testData = {
         TanggalPulang: getLastDay({
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "Shopeepay"
     },
@@ -685,7 +687,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: false
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -703,7 +705,7 @@ export const testData = {
             kurang_hari: 1,
             customMonthToIndo: false
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -721,7 +723,7 @@ export const testData = {
             kurang_hari: 7,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -739,7 +741,7 @@ export const testData = {
             kurang_hari: 1,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -752,7 +754,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: false
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -770,7 +772,7 @@ export const testData = {
             kurang_hari: 7,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -784,7 +786,7 @@ export const testData = {
         TanggalPulang: getLastDay({
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -797,7 +799,7 @@ export const testData = {
             kurang_hari: 0,
             customMonthToIndo: false
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -815,7 +817,7 @@ export const testData = {
             kurang_hari: 1,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
@@ -833,7 +835,7 @@ export const testData = {
             kurang_hari: 1,
             customMonthToIndo: true
         }),
-        JumlahPenumpang: 2,
+        JumlahPenumpang: DEFAULT_PASSANGER,
         MetodeBayar: "Pembayaran Instan",
         PlatformBayar: "QRIS"
     },
