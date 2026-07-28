@@ -8,10 +8,12 @@ export class Joglosemar {
         this.close_popup = page.locator('.close-pop-info');
         
         // Reservation Form
-        this.keberangkatan_field = page.locator('select#asal + div');
-        this.tujuan_field = page.locator('select#tujuan + div');
-        this.dropdown_keberangkatan = this.keberangkatan_field.locator('div.ss-list');
-        this.dropdown_tujuan = this.tujuan_field.locator('div.ss-list');
+        this.keberangkatan_field = page.locator('select#asal + div, input#berangkat');
+        this.tujuan_field = page.locator('select#tujuan + div, input#tujuan');
+        this.dropdown_keberangkatan = this.keberangkatan_field.locator('div.ss-list')
+                                      .or(page.locator('div#dropdown-outlet'));
+        this.dropdown_tujuan = this.tujuan_field.locator('div.ss-list')
+                               .or(page.locator('div#dropdown-outlet2'));
         this.tanggal_pergi = page.locator('#tanggal_pergi');
         this.pp_checkbox =  page.locator('#is_pp');
         this.tanggal_pulang = page.locator('#tanggal_pulang');
@@ -124,13 +126,17 @@ export class Joglosemar {
     async isiKeberangkatan(value) {
         await this.keberangkatan_field.click();
         await this.page.waitForTimeout(1000);
-        await this.dropdown_keberangkatan.locator(`div:text-is("${value}")`).click();
+        await this.dropdown_keberangkatan.locator('.ss-option').filter({ hasText: `${value}`})
+          .or(this.dropdown_keberangkatan.locator('span').filter({ hasText: `${value}`}))
+          .click();
     }
 
     async isiTujuan(value) {
         await this.tujuan_field.click();
         await this.page.waitForTimeout(1000);
-        await this.dropdown_tujuan.locator(`div:text-is("${value}")`).click();
+        await this.dropdown_tujuan.locator('.ss-option').filter({ hasText: `${value}`})
+          .or(this.dropdown_tujuan.locator('span').filter({ hasText: `${value}`}))
+          .click();
     }
 
     async isiTanggalPergi(value) {
