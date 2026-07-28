@@ -66,6 +66,61 @@ atau klik dua kali pada file launcher (Windows):
 QC Runner.bat
 ```
 
+`QC Runner.bat` menyediakan menu interaktif dengan 3 pilihan:
+| Tombol | Aksi | Perintah |
+|--------|------|----------|
+| `1` | Run QC Tests | `npm run qc` |
+| `2` | Sync Clients | `npm run qc:sync` |
+| `3` | Git Pull (Update Repo) | `git pull` |
+| `0` | Exit | — |
+
+Setelah setiap aksi selesai, menu akan ditampilkan kembali.
+
+---
+
+## 🔄 Sinkronisasi Klien (Sync Clients)
+
+Script `sync-clients.js` mengotomatisasi sinkronisasi daftar klien dari sumber utama (`utils/sites.js`) ke konfigurasi QC Runner (`qc/config/clients.js`).
+
+### Menjalankan Sync
+```bash
+npm run qc:sync
+```
+atau pilih opsi **[2] Sync Clients** dari menu `QC Runner.bat`.
+
+### Cara Kerja
+1. Membaca semua tag & kapabilitas (`roundTrip`, `connectingRes`) dari `utils/sites.js`
+2. Membandingkan dengan `qc/config/clients.js` yang sudah ada
+3. Melaporkan perubahan:
+   - ➕ Klien **baru** yang belum ada di QC config
+   - 🔀 Klien yang **kapabilitasnya berubah** (roundTrip / connecting)
+   - ➖ Klien yang **dihapus** dari `sites.js`
+4. Menulis ulang `qc/config/clients.js` secara otomatis
+
+### Contoh Output
+```
+🔄 Syncing clients from utils/sites.js → qc/config/clients.js
+
+➕ Klien BARU (2):
+   + Nama Klien (@tag) | RT:true | CN:false
+
+✅ qc/config/clients.js berhasil diperbarui!
+   Total klien: 50
+   Ditambah: 2 | Diubah: 0 | Dihapus: 0
+```
+
+### Display Name Override
+Jika nama tampilan klien memerlukan format khusus, tambahkan di `DISPLAY_NAME_OVERRIDES` dalam `qc/sync-clients.js`:
+```javascript
+const DISPLAY_NAME_OVERRIDES = {
+  "@aoshuttle": "AO Shuttle",
+  "@harumbsi": "Harum BSI",
+  // ... tambahkan sesuai kebutuhan
+}
+```
+
+> **Catatan**: QC Runner juga menampilkan **peringatan otomatis** saat startup jika mendeteksi klien baru di `sites.js` yang belum tersinkronisasi.
+
 ---
 
 ## 📂 Struktur Proyek (Project Structure)
@@ -91,27 +146,7 @@ qc/
 ## ⚙️ Konfigurasi & Ekstensibilitas
 
 ### Menambahkan Klien Baru
-Tambahkan klien baru di `utils/sites.js` (sumber utama), lalu jalankan sinkronisasi otomatis:
-```bash
-npm run qc:sync
-```
-Script ini akan:
-1. Membaca semua tag & kapabilitas dari `utils/sites.js`
-2. Membandingkan dengan `qc/config/clients.js` yang ada
-3. Melaporkan klien baru / berubah / dihapus
-4. Menulis ulang `qc/config/clients.js` secara otomatis
-
-> **Catatan**: QC Runner juga akan menampilkan **peringatan otomatis** saat startup jika mendeteksi klien baru di `sites.js` yang belum tersinkronisasi.
-
-Jika nama tampilan klien memerlukan format khusus (misal: "AO Shuttle", "Harum BSI"), tambahkan override di `DISPLAY_NAME_OVERRIDES` dalam `qc/sync-clients.js`.
-
-```javascript
-const DISPLAY_NAME_OVERRIDES = {
-  "@aoshuttle": "AO Shuttle",
-  "@harumbsi": "Harum BSI",
-  // ... tambahkan sesuai kebutuhan
-}
-```
+Tambahkan klien baru di `utils/sites.js` (sumber utama), lalu jalankan sinkronisasi (lihat bagian **🔄 Sinkronisasi Klien** di atas).
 
 ### Menambahkan Skenario Baru
 Buka `qc/config/scenarios.js` dan tambahkan objek skenario:
