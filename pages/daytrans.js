@@ -196,6 +196,7 @@ export class Daytrans{
 
     async pilihKursi(jml_penumpang) { // n = 0 (tidak ada perpindahan armada)
         await this.waitForLoader('div[id^="load-layout-kursi"]', 'd-none', true);
+        await this.page.waitForTimeout(1000);
 
         for(let i = 0; i < jml_penumpang; i++){
             await this.getPenumpangTerdaftar(i+1, 0).click();
@@ -205,6 +206,7 @@ export class Daytrans{
 
     async pilihKursiConnRes(jml_penumpang, n) {
         await this.waitForLoader('div[id^="load-layout-kursi"]', 'd-none', true);
+        await this.page.waitForTimeout(1000);
 
         for (let i = 0; i < jml_penumpang; i++) {
           await this.getPenumpangTerdaftar(i+1, n).click(); // Dapatkan/klik penumpang terdaftar untuk pilih kursi

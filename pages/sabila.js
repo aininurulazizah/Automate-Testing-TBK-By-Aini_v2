@@ -189,6 +189,7 @@ export class Sabila {
 
     async pilihKursi(jml_penumpang) {
         await this.waitForLoader('div#modal-load', 'show', false);
+        await this.page.waitForTimeout(1000);
 
         for(let i = 0; i < jml_penumpang; i++) {
             await this.getNamaPenumpang(i+1).click();

@@ -185,6 +185,7 @@ export class Aoshuttle {
 
     async pilihKursi(jml_penumpang) {
         await this.waitForLoader('div#modal-load', 'show', false);
+        await this.page.waitForTimeout(1000);
 
         for(let i = 0; i < jml_penumpang; i++) {
             await this.kursi_tersedia.nth(i).click();
@@ -195,6 +196,8 @@ export class Aoshuttle {
         await this.waitForLoader('div#modal-load', 'show', false);
 
         await this.tab_plg.click();
+        await this.page.waitForTimeout(1000);
+        
         for(let i = 0; i < jml_penumpang; i++) {
             await this.kursi_plg_tersedia.nth(i).click();
         }

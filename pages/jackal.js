@@ -175,6 +175,8 @@ export class Jackal{
     }
 
     async pilihKursi(jml_penumpang) {
+        await this.page.waitForTimeout(1000);
+
         for(let i = 0; i < jml_penumpang; i++){
             await this.kursi_tersedia.nth(i).click();
         }
@@ -182,6 +184,8 @@ export class Jackal{
 
     async pilihKursiPulang(jml_penumpang) {
         await this.tab_plg.click();
+        await this.page.waitForTimeout(1000);
+        
         for(let i = 0; i < jml_penumpang; i++){
             await this.kursi_plg_tersedia.nth(i).click();
         }

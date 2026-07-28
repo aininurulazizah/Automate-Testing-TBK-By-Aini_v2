@@ -118,6 +118,8 @@ export class Semeru {
     }
 
     async pilihKursi(jml_penumpang) {
+        await this.page.waitForTimeout(1000);
+
         for(let i = 0; i < jml_penumpang; i++) {
             await this.kursi_tersedia.nth(i).click();
         }

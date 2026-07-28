@@ -780,10 +780,14 @@ export const testData = {
     Royalkencana: {
         Keberangkatan: "BEKASI TIMUR",
         Tujuan: "GT BOYOLALI",
-        TanggalPergi: getLastDay({
+        TanggalPergi: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
             customMonthToIndo: true
         }),
-        TanggalPulang: getLastDay({
+        TanggalPulang: getTanggalCustom({
+            selang_bulan: 1,
+            kurang_hari: 0,
             customMonthToIndo: true
         }),
         JumlahPenumpang: DEFAULT_PASSENGER,
@@ -805,8 +809,8 @@ export const testData = {
     },
 
     Kupuayu: {
-        Keberangkatan: "BANJARNEGARA (DI DALAM TERMINAL KIOS NO. 24A)",
-        Tujuan: "BARANANGSIANG (DI DALAM TERMINAL LOKET NO. 2)",
+        Keberangkatan: "BANJARNEGARA DI DALAM TERMINAL KIOS NO. 24A",
+        Tujuan: "BARANANGSIANG DI DALAM TERMINAL LOKET NO. 2",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
             kurang_hari: 7,
