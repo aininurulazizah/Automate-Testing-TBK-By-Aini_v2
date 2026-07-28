@@ -456,7 +456,7 @@ export const testData = {
 
     Banyumili: {
         Keberangkatan: "BALIKPAPAN BANDARA",
-        Tujuan: "BONTANG (SIMPANG 3 BONTANG)",
+        Tujuan: "BONTANG SIMPANG 3 BONTANG",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
             kurang_hari: 0,

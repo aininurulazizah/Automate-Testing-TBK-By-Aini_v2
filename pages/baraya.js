@@ -209,11 +209,17 @@ export class Baraya {
     }
 
     async cariKursi() {
-        await this.carikursi_btn.click();
+        let path = new URL(this.page.url()).pathname;
+
+        while(path === "/book/pemesan") {
+            await this.carikursi_btn.click();
+            path = new URL(this.page.url()).pathname;
+        }
     }
 
     async pilihKursi(jml_penumpang) {
         await this.waitForLoader('div#modal-load', 'show', false);
+        await this.page.waitForTimeout(1000);
 
         const jml_dewasa = jml_penumpang.Dewasa;
         for(let i = 0; i < jml_dewasa; i++) {
@@ -223,6 +229,7 @@ export class Baraya {
 
     async pilihKursiPulang(jml_penumpang) {
         await this.waitForLoader('div#modal-load', 'show', false);
+        await this.page.waitForTimeout(1000);
 
         const jml_dewasa = jml_penumpang.Dewasa;
         await this.tab_plg.click();
