@@ -204,7 +204,7 @@ export class Daytrans{
         }
     }
 
-    async pilihKursiConnRes(jml_penumpang, n) {
+    async pilihKursiConnRes(jml_penumpang, pemesan, penumpang, n) {
         await this.waitForLoader('div[id^="load-layout-kursi"]', 'd-none', true);
         await this.page.waitForTimeout(1000);
 

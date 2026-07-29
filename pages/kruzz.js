@@ -196,7 +196,7 @@ export class Kruzz {
             try {
                 await this.page.goBack();
             } catch (e) {
-                console.log("Ignore ERR_CACHE_MISS");
+                // Ignore ERR_CACHE_MISS dikarenakan browser back
             }
             
             await this.page.reload();
