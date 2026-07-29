@@ -176,15 +176,28 @@ export class Btm{
       }
       
 
-    async pilihKursi(jml_penumpang) {
+    async pilihKursi(jml_penumpang, pemesan, penumpang) {
+
+        if (await this.page.locator('div.title:has-text("Whoops, looks like something went wrong")').count() > 0) {
+            try {
+                await this.page.goBack();
+            } catch (e) {
+                console.log("Ignore ERR_CACHE_MISS");
+            }
+            
+            await this.page.reload();
+            await this.isiDataPenumpang(jml_penumpang, pemesan, penumpang);
+            await this.cariKursi();
+        }
+
         for(let i = 0; i < jml_penumpang; i++){
             await this.getPenumpangTerdaftar(i+1).click();
             await this.kursi_tersedia.nth(i).click();
         }
     }
 
-    async pilihKursiConnRes(jml_penumpang, n) {
-        await this.pilihKursi(jml_penumpang);
+    async pilihKursiConnRes(jml_penumpang, pemesan, penumpang, n) {
+        await this.pilihKursi(jml_penumpang, pemesan, penumpang);
     }
 
     async pilihKursiNextArmada() {

@@ -46,7 +46,7 @@ for (const site of sites) {
         if(path === "/book/pemesan") {
             await web.isiDataPenumpang(jml_penumpang, pemesan, testData.Penumpang, site.data.BiayaLainnya);
             await web.cariKursi();
-            await web.pilihKursi(jml_penumpang);
+            await web.pilihKursi(jml_penumpang, pemesan, testData.Penumpang);
             expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya);
         } 
         
@@ -132,7 +132,7 @@ for (const site of sites) {
 
             await web.cariKursi();
                 
-            await web.pilihKursi(jml_penumpang);
+            await web.pilihKursi(jml_penumpang, pemesan, testData.Penumpang);
             expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya);
                 
             await web.pilihKursiPulang(site.data.JumlahPenumpang);
@@ -213,7 +213,7 @@ for (const site of sites) {
             let n = 0; // armada ke berapa
             while(true) {
 
-                await web.pilihKursiConnRes(jml_penumpang, n); // Pilih kursi
+                await web.pilihKursiConnRes(jml_penumpang, pemesan, testData.Penumpang, n); // Pilih kursi
                 expected_total_tiket = await web.validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, "seat-page", site.data.BiayaLainnya, "connecting", n);
 
                 if(await web.pilih_next_kursi_btn.isVisible()) {
