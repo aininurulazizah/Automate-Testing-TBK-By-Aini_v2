@@ -186,8 +186,8 @@ export const testData = {
     },
 
     Joglosemar: {
-        Keberangkatan: "BANJARNEGARA ALFAMART PRIGI [VIRTUAL POINT]",
-        Tujuan: "KLAMPOK NEX KOPI [VIRTUAL POINT]",
+        Keberangkatan: "Banjarnegara alfamart prigi (virtual point)",
+        Tujuan: "Klampok nex kopi (virtual point)",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
             kurang_hari: 0,
@@ -810,7 +810,7 @@ export const testData = {
 
     Kupuayu: {
         Keberangkatan: "BANJARNEGARA DI DALAM TERMINAL KIOS NO. 24A",
-        Tujuan: "BARANANGSIANG DI DALAM TERMINAL LOKET NO. 2",
+        Tujuan: "BARANANGSIANG LOKET DI DALAM TERMINAL LANTAI 2",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
             kurang_hari: 7,
