@@ -30,21 +30,33 @@ function getTanggalCustom({
 function getLastDay({
     customMonthToIndo = false
 }) {
-    const d = new Date();
+    const today = new Date();
+    const d = new Date(today);
 
-    // Hari terakhir bulan saat ini
+    // Hari terakhir bulan ini
     d.setMonth(d.getMonth() + 1, 0);
+
+    // Kalau hari ini adalah hari terakhir bulan ini,
+    // ambil hari terakhir bulan berikutnya
+    if (
+        today.getDate() === d.getDate() &&
+        today.getMonth() === d.getMonth() &&
+        today.getFullYear() === d.getFullYear()
+    ) {
+        d.setDate(1);                // 1 bulan berikutnya
+        d.setMonth(d.getMonth() + 2, 0); // hari terakhir bulan berikutnya
+    }
 
     if (customMonthToIndo) {
         const namaBulan = d.toLocaleDateString('id-ID', { month: 'long' });
         return `${namaBulan} ${d.getDate()}, ${d.getFullYear()}`;
-    } else {
-        return d.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
     }
+
+    return d.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 }
 
 function generateRandomPhoneNumber() {
@@ -809,8 +821,8 @@ export const testData = {
     },
 
     Kupuayu: {
-        Keberangkatan: "BANJARNEGARA DI DALAM TERMINAL KIOS NO. 24A",
-        Tujuan: "BARANANGSIANG LOKET DI DALAM TERMINAL LANTAI 2",
+        Keberangkatan: "BANJARNEGARA (TERMINAL KIOS NO. 24 A)",
+        Tujuan: "BARANANGSIANG (TERMINAL LOKET DI LANTAI 2)",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
             kurang_hari: 7,
