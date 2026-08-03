@@ -129,8 +129,10 @@ export class Baraya {
     }
 
     async isiTanggalPergi(value) {
-        const tanggal_target = this.page.locator(`[aria-label="${value}"]`).first();
         await this.tanggal_pergi.click();
+        const calendar = await this.page.locator(`div.flatpickr-calendar.open`);
+        const tanggal_target = await calendar.locator(`[aria-label="${value}"]`);
+        
         while(!(await tanggal_target.isVisible())){
             await this.next_month_btn.click();
         }
@@ -142,9 +144,10 @@ export class Baraya {
     }
 
     async isiTanggalPulang(value) {
-        const elemen_tgl = await this.page.locator(`[aria-label="${value}"]`).nth(1).count();
-        const tanggal_target = elemen_tgl !== 0 ? this.page.locator(`[aria-label="${value}"]`).nth(1) : this.page.locator(`[aria-label="${value}"]`);
         await this.tanggal_pulang.click();
+        const calendar = await this.page.locator(`div.flatpickr-calendar.open`);
+        const tanggal_target = await calendar.locator(`[aria-label="${value}"]`);
+        
         while(!(await tanggal_target.isVisible())){
             await this.next_month_btn2.click();
         }

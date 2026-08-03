@@ -172,7 +172,7 @@ export const testData = {
         Tujuan: "BTM PANDEGLANG",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
-            kurang_hari: 7,
+            kurang_hari: 1,
             customMonthToIndo: true
         }),
         JumlahPenumpang: DEFAULT_PASSENGER,
@@ -772,7 +772,7 @@ export const testData = {
     },
 
     Namaste: {
-        Keberangkatan: "MENGWI",
+        Keberangkatan: "SATLANTAS POLRES MENGWI",
         Tujuan: "ALFAMART DENCARIK",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
@@ -823,14 +823,10 @@ export const testData = {
     Kupuayu: {
         Keberangkatan: "BANJARNEGARA (TERMINAL KIOS NO. 24 A)",
         Tujuan: "BARANANGSIANG (TERMINAL LOKET DI LANTAI 2)",
-        TanggalPergi: getTanggalCustom({
-            selang_bulan: 1,
-            kurang_hari: 7,
+        TanggalPergi: getLastDay({
             customMonthToIndo: true
         }),
-        TanggalPulang: getTanggalCustom({
-            selang_bulan: 1,
-            kurang_hari: 1,
+        TanggalPulang: getLastDay({
             customMonthToIndo: true
         }),
         JumlahPenumpang: DEFAULT_PASSENGER,

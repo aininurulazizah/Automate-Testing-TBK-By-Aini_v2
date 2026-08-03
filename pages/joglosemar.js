@@ -192,7 +192,7 @@ export class Joglosemar {
         await this.waitForLoader('div#modal-load', 'show', false);
 
         const first_jadwal = await this.jadwal_plg_card.first();
-        const harga_container = await first_jadwal.locator('div.d-table-cell.w-100.text-right');
+        const harga_container = await first_jadwal.locator('div.harga');
         let harga_tiket;
 
         if (await harga_container.locator('del').count() > 0) { // kalau ada promo
