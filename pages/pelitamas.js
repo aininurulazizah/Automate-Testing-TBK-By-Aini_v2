@@ -82,7 +82,11 @@ export class Pelitamas {
     }
 
     getPlatformBayar(platform) { // Untuk mendapatkan platform pembayaran setelah pilih metode bayar
-        return this.page.locator(`img[alt=${platform}]`);
+        if (this.page.locator(`img[alt=${platform}]`).count() > 0) {
+            return this.page.locator(`img[alt=${platform}]`);
+        } else {
+            return this.page.locator(`img[alt="QRIS SPY"]`); //Handle sementara untuk staging
+        }
     }
 
     normalizeRupiah(value) {
