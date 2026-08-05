@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "qc": "node qc/index.js",
-    "qc:sync": "node qc/sync-clients.js"
+    "qc:sync": "node qc/sync-clients.js",
+    "parse-report": "node scripts/parse-result.js",
+    "copy-dashboard": "node scripts/copy-to-dashboard.js"
   },
   "keywords": [],
   "author": "",
