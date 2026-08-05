@@ -18,6 +18,9 @@ export class Sabila {
         this.next_month_btn = page.locator('.flatpickr-next-month');
         this.next_month_btn2 = page.locator('.flatpickr-next-month').nth(1);
         this.jumlah_penumpang = page.locator('select#jmlpenumpang + div');
+        this.jml_penumpang_stepper = page.locator('#penumpang-value');
+        this.jml_penumpang_plus = page.locator('#penumpang-plus');
+        this.jml_penumpang_min = page.locator('#penumpang-min');
         this.dropdown_jml_penumpang = this.jumlah_penumpang.locator('div.ss-list');
         this.cari_btn = page.locator('button[onclick="return cek()"]'); 
         this.jadwal_card = page.locator('div#users li');
@@ -146,9 +149,20 @@ export class Sabila {
     }
 
     async isiJumlahPenumpang(value) {
-        await this.jumlah_penumpang.click();
-        await this.dropdown_jml_penumpang.locator(`div:text-is("${value} Orang")`).click();
-        await this.keberangkatan_field.click(); // Untuk menghilangkan dropdown
+        
+        if (await this.jumlah_penumpang.count > 0) {
+            await this.jumlah_penumpang.click();
+            await this.dropdown_jml_penumpang.locator(`div:text-is("${value} Orang")`).click();
+            await this.keberangkatan_field.click(); // Untuk menghilangkan dropdown
+
+        } else {
+            let current_jml = this.normalizeRupiah(await this.jml_penumpang_stepper.innerText());
+
+            while(current_jml !== value) {
+                await this.jml_penumpang_plus.click();
+                current_jml = this.normalizeRupiah(await this.jml_penumpang_stepper.innerText());
+            }
+        }
     }
 
     async cariTiket() {
@@ -277,6 +291,8 @@ export class Sabila {
                     expect(actual_total_tiket_seat_2).toBe(expected_temp);
 
                 } else {
+                    await this.page.waitForTimeout(1000);
+
                     const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected:not(#hargatot)').innerText());
                     expect(actual_total_tiket_seat_1).toBe(expected_total_tiket);
     

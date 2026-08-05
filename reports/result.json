@@ -118,10 +118,10 @@
       "line": 0,
       "specs": [
         {
-          "title": "@btm - Test Case 3 - Connecting Reservation",
-          "ok": false,
+          "title": "@binasarana - Test Case 1 - One Way Trip",
+          "ok": true,
           "tags": [
-            "btm"
+            "binasarana"
           ],
           "tests": [
             {
@@ -134,80 +134,51 @@
                 {
                   "workerIndex": 0,
                   "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 23335,
-                  "error": {
-                    "message": "Error: locator.click: Error: strict mode violation: locator('[data-passenger-index=\"1\"]') resolved to 2 elements:\n    1) <div id=\"passenger-896-1\" data-id_produk=\"896\" data-passenger-index=\"1\" data-passenger-name=\"Quality Control Satu\" class=\"col-lg-12 border rounded-10 mb-2 passenger pointer passenger-item  selectedpassenger \">…</div> aka locator('#passenger-896-1')\n    2) <div id=\"passenger-324-1\" data-id_produk=\"324\" data-passenger-index=\"1\" data-passenger-name=\"Quality Control Satu\" class=\"col-lg-12 border rounded-10 mb-2 passenger pointer passenger-item \">…</div> aka locator('#passenger-324-1')\n\nCall log:\n\u001b[2m  - waiting for locator('[data-passenger-index=\"1\"]')\u001b[22m\n",
-                    "stack": "Error: locator.click: Error: strict mode violation: locator('[data-passenger-index=\"1\"]') resolved to 2 elements:\n    1) <div id=\"passenger-896-1\" data-id_produk=\"896\" data-passenger-index=\"1\" data-passenger-name=\"Quality Control Satu\" class=\"col-lg-12 border rounded-10 mb-2 passenger pointer passenger-item  selectedpassenger \">…</div> aka locator('#passenger-896-1')\n    2) <div id=\"passenger-324-1\" data-id_produk=\"324\" data-passenger-index=\"1\" data-passenger-name=\"Quality Control Satu\" class=\"col-lg-12 border rounded-10 mb-2 passenger pointer passenger-item \">…</div> aka locator('#passenger-324-1')\n\nCall log:\n\u001b[2m  - waiting for locator('[data-passenger-index=\"1\"]')\u001b[22m\n\n    at Btm.pilihKursi (E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\pages\\btm.js:194:51)\n    at Btm.pilihKursiConnRes (E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\pages\\btm.js:200:9)\n    at E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\tests\\reservasi_test.spec.js:216:17",
-                    "location": {
-                      "file": "E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\pages\\btm.js",
-                      "column": 51,
-                      "line": 194
-                    },
-                    "snippet": "\u001b[90m   at \u001b[39m..\\pages\\btm.js:194\n\n\u001b[0m \u001b[90m 192 |\u001b[39m\n \u001b[90m 193 |\u001b[39m         \u001b[36mfor\u001b[39m(\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m i \u001b[33m<\u001b[39m jml_penumpang\u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m){\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 194 |\u001b[39m             \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mgetPenumpangTerdaftar(i\u001b[33m+\u001b[39m\u001b[35m1\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 195 |\u001b[39m             \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mkursi_tersedia\u001b[33m.\u001b[39mnth(i)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 196 |\u001b[39m         }\n \u001b[90m 197 |\u001b[39m     }\u001b[0m"
-                  },
-                  "errors": [
-                    {
-                      "location": {
-                        "file": "E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\pages\\btm.js",
-                        "column": 51,
-                        "line": 194
-                      },
-                      "message": "Error: locator.click: Error: strict mode violation: locator('[data-passenger-index=\"1\"]') resolved to 2 elements:\n    1) <div id=\"passenger-896-1\" data-id_produk=\"896\" data-passenger-index=\"1\" data-passenger-name=\"Quality Control Satu\" class=\"col-lg-12 border rounded-10 mb-2 passenger pointer passenger-item  selectedpassenger \">…</div> aka locator('#passenger-896-1')\n    2) <div id=\"passenger-324-1\" data-id_produk=\"324\" data-passenger-index=\"1\" data-passenger-name=\"Quality Control Satu\" class=\"col-lg-12 border rounded-10 mb-2 passenger pointer passenger-item \">…</div> aka locator('#passenger-324-1')\n\nCall log:\n\u001b[2m  - waiting for locator('[data-passenger-index=\"1\"]')\u001b[22m\n\n\n\u001b[90m   at \u001b[39m..\\pages\\btm.js:194\n\n\u001b[0m \u001b[90m 192 |\u001b[39m\n \u001b[90m 193 |\u001b[39m         \u001b[36mfor\u001b[39m(\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m i \u001b[33m<\u001b[39m jml_penumpang\u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m){\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 194 |\u001b[39m             \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mgetPenumpangTerdaftar(i\u001b[33m+\u001b[39m\u001b[35m1\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 195 |\u001b[39m             \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mkursi_tersedia\u001b[33m.\u001b[39mnth(i)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 196 |\u001b[39m         }\n \u001b[90m 197 |\u001b[39m     }\u001b[0m\n\u001b[2m    at Btm.pilihKursi (E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\pages\\btm.js:194:51)\u001b[22m\n\u001b[2m    at Btm.pilihKursiConnRes (E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\pages\\btm.js:200:9)\u001b[22m\n\u001b[2m    at E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\tests\\reservasi_test.spec.js:216:17\u001b[22m"
-                    }
-                  ],
+                  "status": "passed",
+                  "duration": 25566,
+                  "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-08-05T04:04:11.279Z",
+                  "startTime": "2026-08-05T07:51:41.977Z",
                   "annotations": [],
                   "attachments": [
                     {
                       "name": "screenshot",
                       "contentType": "image/png",
-                      "path": "E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\test-results\\reservasi_test--btm---Test-Case-3---Connecting-Reservation-chromium\\test-failed-1.png"
+                      "path": "E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\test-results\\reservasi_test--binasarana---Test-Case-1---One-Way-Trip-chromium\\test-finished-1.png"
                     },
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\test-results\\reservasi_test--btm---Test-Case-3---Connecting-Reservation-chromium\\video.webm"
-                    },
-                    {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\test-results\\reservasi_test--btm---Test-Case-3---Connecting-Reservation-chromium\\error-context.md"
+                      "path": "E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\test-results\\reservasi_test--binasarana---Test-Case-1---One-Way-Trip-chromium\\video.webm"
                     },
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\test-results\\reservasi_test--btm---Test-Case-3---Connecting-Reservation-chromium\\trace.zip"
+                      "path": "E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\test-results\\reservasi_test--binasarana---Test-Case-1---One-Way-Trip-chromium\\trace.zip"
                     }
-                  ],
-                  "errorLocation": {
-                    "file": "E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\pages\\btm.js",
-                    "column": 51,
-                    "line": 194
-                  }
+                  ]
                 }
               ],
-              "status": "unexpected"
+              "status": "expected"
             }
           ],
-          "id": "8fdffd24a790214a8548-7c1a45e6917ddb7b4f32",
+          "id": "8fdffd24a790214a8548-35b0d788307c22be9b5c",
           "file": "reservasi_test.spec.js",
-          "line": 178,
-          "column": 13
+          "line": 13,
+          "column": 9
         }
       ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-08-05T04:04:08.144Z",
-    "duration": 30604.108999999997,
-    "expected": 0,
+    "startTime": "2026-08-05T07:51:39.442Z",
+    "duration": 31548.994,
+    "expected": 1,
     "skipped": 0,
-    "unexpected": 1,
+    "unexpected": 0,
     "flaky": 0
   }
 }

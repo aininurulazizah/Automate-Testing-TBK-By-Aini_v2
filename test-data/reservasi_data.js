@@ -172,7 +172,7 @@ export const testData = {
         Tujuan: "BTM PANDEGLANG",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
-            kurang_hari: 2,
+            kurang_hari: 1,
             customMonthToIndo: true
         }),
         JumlahPenumpang: DEFAULT_PASSENGER,

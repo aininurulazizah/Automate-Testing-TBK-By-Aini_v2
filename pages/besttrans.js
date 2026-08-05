@@ -8,8 +8,8 @@ export class Besttrans {
         this.close_popup = page.locator('.close-pop-info');
         
         // Reservation Form
-        this.keberangkatan_field = page.locator('p:has-text("Keberangkatan") + div.vselect');
-        this.tujuan_field = page.locator('p:has-text("Tujuan") + div.vselect');
+        this.keberangkatan_field = page.locator('label:has-text("Keberangkatan") + div.vselect');
+        this.tujuan_field = page.locator('label:has-text("Tujuan") + div.vselect');
         this.dropdown_keberangkatan = this.keberangkatan_field.locator('div.vselect-list');
         this.dropdown_tujuan = this.tujuan_field.locator('div.vselect-list');
         this.tanggal_pergi = page.locator('input#tanggal_pergi + input');
@@ -17,7 +17,7 @@ export class Besttrans {
         this.tanggal_pulang = page.locator('input#tanggal_pulang + input');
         this.next_month_btn = page.locator('.flatpickr-next-month');
         this.next_month_btn2 = page.locator('.flatpickr-next-month').nth(1);
-        this.jumlah_penumpang = page.locator('p:has-text("Penumpang") + div.vselect-penumpang');
+        this.jumlah_penumpang = page.locator('label:has-text("Penumpang") + div.vselect-penumpang');
         this.dropdown_jml_penumpang = this.jumlah_penumpang.locator('div.vselect-list');
         this.cari_btn = page.locator('button[onclick="return cek()"]'); 
         this.jadwal_cards = page.locator('div#users li');
