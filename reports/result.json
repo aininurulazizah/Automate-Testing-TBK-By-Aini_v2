@@ -107,7 +107,7 @@
     "updateSnapshots": "missing",
     "updateSourceMethod": "patch",
     "version": "1.56.1",
-    "workers": 1,
+    "workers": 2,
     "webServer": null
   },
   "suites": [
@@ -118,10 +118,10 @@
       "line": 0,
       "specs": [
         {
-          "title": "@binasarana - Test Case 1 - One Way Trip",
+          "title": "@baraya - Test Case 2 - Round Trip",
           "ok": true,
           "tags": [
-            "binasarana"
+            "baraya"
           ],
           "tests": [
             {
@@ -135,28 +135,28 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 25566,
+                  "duration": 80424,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-08-05T07:51:41.977Z",
+                  "startTime": "2026-08-06T07:17:02.343Z",
                   "annotations": [],
                   "attachments": [
                     {
                       "name": "screenshot",
                       "contentType": "image/png",
-                      "path": "E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\test-results\\reservasi_test--binasarana---Test-Case-1---One-Way-Trip-chromium\\test-finished-1.png"
+                      "path": "E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\test-results\\reservasi_test--baraya---Test-Case-2---Round-Trip-chromium\\test-finished-1.png"
                     },
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\test-results\\reservasi_test--binasarana---Test-Case-1---One-Way-Trip-chromium\\video.webm"
+                      "path": "E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\test-results\\reservasi_test--baraya---Test-Case-2---Round-Trip-chromium\\video.webm"
                     },
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\test-results\\reservasi_test--binasarana---Test-Case-1---One-Way-Trip-chromium\\trace.zip"
+                      "path": "E:\\Maganghub 2025\\TBK\\Automate-Testing-WL-TBK\\test-results\\reservasi_test--baraya---Test-Case-2---Round-Trip-chromium\\trace.zip"
                     }
                   ]
                 }
@@ -164,18 +164,18 @@
               "status": "expected"
             }
           ],
-          "id": "8fdffd24a790214a8548-35b0d788307c22be9b5c",
+          "id": "8fdffd24a790214a8548-7b5e2c46d9eea0a5f539",
           "file": "reservasi_test.spec.js",
-          "line": 13,
-          "column": 9
+          "line": 96,
+          "column": 13
         }
       ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-08-05T07:51:39.442Z",
-    "duration": 31548.994,
+    "startTime": "2026-08-06T07:16:59.529Z",
+    "duration": 91696.663,
     "expected": 1,
     "skipped": 0,
     "unexpected": 0,

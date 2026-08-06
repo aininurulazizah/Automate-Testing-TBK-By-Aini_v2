@@ -185,6 +185,7 @@ export class Btm{
                 // Ignore ERR_CACHE_MISS dikarenakan browser back
             }
             
+            await this.page.waitForTimeout(1000);
             await this.page.reload();
             await this.isiDataPenumpang(jml_penumpang, pemesan, penumpang);
             await this.cariKursi();

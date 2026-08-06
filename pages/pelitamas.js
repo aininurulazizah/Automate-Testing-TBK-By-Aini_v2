@@ -81,13 +81,8 @@ export class Pelitamas {
         return this.page.locator(`[data-passenger-index="${i}"]`).nth(n);
     }
 
-    async getPlatformBayar(platform) { // Untuk mendapatkan platform pembayaran setelah pilih metode bayar
-        await this.page.waitForTimeout(1000);
-        if (await this.page.locator(`img[alt=${platform}]`).count() > 0) {
-            return this.page.locator(`img[alt=${platform}]`);
-        } else {
-            return this.page.locator(`img[alt="QRIS SPY"]`); //Handle sementara untuk staging
-        }
+    getPlatformBayar(platform) { // Untuk mendapatkan platform pembayaran setelah pilih metode bayar
+        return this.page.locator(`img[alt="${platform}"]`);
     }
 
     normalizeRupiah(value) {
@@ -317,7 +312,7 @@ export class Pelitamas {
         await this.waitForLoader('div#modal-load', 'show', false);
         await this.waitForLoader('div#load-container-payment', 'd-none', true);
 
-        await (await this.getPlatformBayar(platform_bayar)).click();
+        await this.getPlatformBayar(platform_bayar).click();
     }
 
     async checklistKetentuan() {

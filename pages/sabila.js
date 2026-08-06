@@ -150,7 +150,7 @@ export class Sabila {
 
     async isiJumlahPenumpang(value) {
         
-        if (await this.jumlah_penumpang.count > 0) {
+        if (await this.jumlah_penumpang.count() > 0) {
             await this.jumlah_penumpang.click();
             await this.dropdown_jml_penumpang.locator(`div:text-is("${value} Orang")`).click();
             await this.keberangkatan_field.click(); // Untuk menghilangkan dropdown
