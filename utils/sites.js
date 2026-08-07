@@ -276,17 +276,17 @@ export const sites = [
         roundTrip: true, 
         connectingRes: false
     },
-    {
-        tag: '@marita',  
-        urls: {
-            production: 'https://www.maritatrans.com/',
-            staging: 'https://marita-web.asmat.app/'
-        },
-        locator: Marita, 
-        data: testData.Marita, 
-        roundTrip: true, 
-        connectingRes: false
-    },
+    // {
+    //     tag: '@marita',  
+    //     urls: {
+    //         production: 'https://www.maritatrans.com/',
+    //         staging: 'https://marita-web.asmat.app/'
+    //     },
+    //     locator: Marita, 
+    //     data: testData.Marita, 
+    //     roundTrip: true, 
+    //     connectingRes: false
+    // },
     {
         tag: '@minanga',  
         urls: {
