@@ -137,7 +137,8 @@ export class Transkita {
     }
 
     async isiTanggalPulang(value) {
-        const tanggal_target = this.page.locator(`[aria-label="${value}"]`).nth(1);
+        const elemen_tgl = await this.page.locator(`[aria-label="${value}"]`).nth(1).count();
+        const tanggal_target = elemen_tgl !== 0 ? this.page.locator(`[aria-label="${value}"]`).nth(1) : this.page.locator(`[aria-label="${value}"]`);
         await this.tanggal_pulang.click();
         while(!(await tanggal_target.isVisible())){
             await this.next_month_btn2.click();
@@ -229,7 +230,14 @@ export class Transkita {
         
         if (harga_type === "fixed") {
             for (let i = 0; i < jml_penumpang; i++) {
-                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                let harga_kursi;
+
+                if (await kursi_tersedia.nth(i).locator('p').filter({ hasText : "Sale" }).count() > 0) {
+                    harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(2).innerText());
+                } else {
+                    harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                }
+
                 expect(harga_kursi).toBe(this.normalizeRupiah(harga_tiket));
             }
         }
@@ -249,7 +257,14 @@ export class Transkita {
                 if (await this.validasiHargaTiketKursi(harga_tiket, jml_penumpang, list_kursi_tersedia)) {
 
                     for (let i = 0; i < jml_penumpang; i++) {
-                        const current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                        let current_harga_tiket;
+
+                        if (await list_kursi_tersedia.nth(i).locator('p').filter({ hasText : "Sale" }).count() > 0) {
+                            current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(2).innerText());
+                        } else {
+                            current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                        }
+                        
                         expected_total_tiket += current_harga_tiket;
                         // expected_temp += current_harga_tiket;
                     }
