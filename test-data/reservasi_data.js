@@ -378,7 +378,7 @@ export const testData = {
         }),
         JumlahPenumpang: DEFAULT_PASSENGER,
         MetodeBayar: "Pembayaran Instan",
-        PlatformBayar: "GOPAY"
+        PlatformBayar: "OVO"
     },
 
     Binasarana: {
@@ -535,7 +535,7 @@ export const testData = {
         }),
         JumlahPenumpang: DEFAULT_PASSENGER,
         MetodeBayar: "Pembayaran Instan",
-        PlatformBayar: "WeChat Pay"
+        PlatformBayar: "QRIS"
     },
 
     Aoshuttle: {

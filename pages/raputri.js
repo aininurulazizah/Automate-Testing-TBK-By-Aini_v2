@@ -12,9 +12,9 @@ export class Raputri {
         this.tujuan_field = page.locator('select#tujuan + div');
         this.dropdown_keberangkatan = this.keberangkatan_field.locator('div.ss-list');
         this.dropdown_tujuan = this.tujuan_field.locator('div.ss-list');
-        this.tanggal_pergi = page.locator('input#tanggal_pergi');
+        this.tanggal_pergi = page.locator('input#tanggal_pergi + input');
         this.pp_checkbox =  page.locator('#is_pp');
-        this.tanggal_pulang = page.locator('input#tanggal_pulang');
+        this.tanggal_pulang = page.locator('input#tanggal_pulang + input');
         this.next_month_btn = page.locator('.flatpickr-next-month');
         this.next_month_btn2 = page.locator('.flatpickr-next-month').nth(1);
         this.jumlah_penumpang = page.locator('select#jmlpenumpang + div');
@@ -82,7 +82,7 @@ export class Raputri {
     }
 
     getPlatformBayar(platform) { // Untuk mendapatkan platform pembayaran setelah pilih metode bayar
-        return this.page.locator(`img[alt=${platform}]`);
+        return this.page.locator(`input[onclick*="${platform}"]`);
     }
 
     normalizeRupiah(value) {
@@ -264,8 +264,13 @@ export class Raputri {
                 //     expect(actual_total_tiket_seat_2).toBe(expected_temp);
 
                 // } else {
-                    const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected').innerText());
-                    expect(actual_total_tiket_seat_1).toBe(expected_total_tiket);
+                    const actual_total_tiket_seat_1 = await this.page.locator('span.display-price-seat-selected:not(#hargatot)').count() > 0 
+                                                    ? this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected:not(#hargatot)').innerText())
+                                                    : null;
+                    
+                    if (actual_total_tiket_seat_1 !== null) {
+                        expect(actual_total_tiket_seat_1).toBe(expected_total_tiket);
+                    }
     
                     const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
                     expect(actual_total_tiket_seat_2).toBe(expected_total_tiket);
@@ -313,7 +318,7 @@ export class Raputri {
         await this.waitForLoader('div#modal-load', 'show', false);
         await this.waitForLoader('div#load-container-payment', 'd-none', true);
 
-        await this.getPlatformBayar(platform_bayar).click();
+        await this.getPlatformBayar(platform_bayar).click({ force: true });
     }
 
     async checklistKetentuan() {

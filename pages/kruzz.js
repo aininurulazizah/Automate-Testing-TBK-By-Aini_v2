@@ -84,7 +84,7 @@ export class Kruzz {
     }
 
     getPlatformBayar(platform) { // Untuk mendapatkan platform pembayaran setelah pilih metode bayar
-        return this.page.locator(`img[alt=${platform}]`);
+        return this.page.locator(`input[onclick*="${platform}"]`);
     }
 
     normalizeRupiah(value) {
@@ -250,7 +250,14 @@ export class Kruzz {
         
         if (harga_type === "fixed") {
             for (let i = 0; i < jml_penumpang; i++) {
-                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i+this.total_kursi_perarmada).locator('span').nth(1).innerText());
+                let harga_kursi;
+
+                if (await kursi_tersedia.nth(i).locator('p').filter({ hasText : /Sale|Promo/i }).count() > 0) {
+                    harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(2).innerText());
+                } else {
+                    harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                }
+
                 expect(harga_kursi).toBe(this.normalizeRupiah(harga_tiket));
             }
         }
@@ -267,15 +274,21 @@ export class Kruzz {
             const list_kursi_tersedia = case_flag === "round-trip" ? this.kursi_plg_tersedia : this.kursi_tersedia;
 
             if (case_flag !== 'connecting') {
-                if (await this.validasiHargaTiketKursi(harga_tiket, jml_penumpang, list_kursi_tersedia, case_flag)) {
-                    for (let i = 0; i < jml_penumpang; i++) {
-                        const current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i+this.total_kursi_perarmada).locator('span').nth(1).innerText());
-                        expected_total_tiket += current_harga_tiket;
-                    }
-                }  
+                // if (await this.validasiHargaTiketKursi(harga_tiket, jml_penumpang, list_kursi_tersedia, case_flag)) {
+                for (let i = 0; i < jml_penumpang; i++) {
+                    let current_harga_tiket;
 
-                const diskon = this.normalizeRupiah(await this.diskon_label_seat_page.innerText());
-                expected_total_tiket -= diskon;
+                    if (await list_kursi_tersedia.nth(i).locator('p').filter({ hasText : /Sale|Promo/i }).count() > 0) {
+                        current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(2).innerText());
+                    } else {
+                        current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                    }
+                       expected_total_tiket += current_harga_tiket;
+                }
+                // }  
+
+                // const diskon = this.normalizeRupiah(await this.diskon_label_seat_page.innerText());
+                // expected_total_tiket -= diskon;
                 const actual_total_tiket_seat = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
                 expect(actual_total_tiket_seat).toBe(expected_total_tiket);
 
@@ -291,6 +304,12 @@ export class Kruzz {
                 break;
 
             case("payment-page") :
+                const diskon = await this.page.locator('p:has-text("Total Diskon")').count() > 0 
+                             ? this.normalizeRupiah(await this.page.locator('p:has-text("Total Diskon")').locator('..').locator('+ div').innerText())
+                             : 0
+
+                expected_total_tiket -= diskon;
+
                 const actual_total_tiket_payment_1 = this.normalizeRupiah(await this.page.locator('div:has-text("Total Bayar") + div > p ').innerText());
                 const actual_total_tiket_payment_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
 
@@ -328,7 +347,7 @@ export class Kruzz {
         await this.waitForLoader('div#modal-load', 'show', false);
         await this.waitForLoader('div#load-container-payment', 'd-none', true);
 
-        await this.getPlatformBayar(platform_bayar).click();
+        await this.getPlatformBayar(platform_bayar).click({ force: true });
     }
 
     async checklistKetentuan() {

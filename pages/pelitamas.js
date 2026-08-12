@@ -82,7 +82,7 @@ export class Pelitamas {
     }
 
     getPlatformBayar(platform) { // Untuk mendapatkan platform pembayaran setelah pilih metode bayar
-        return this.page.locator(`img[alt="${platform}"]`);
+        return this.page.locator(`input[onclick*="${platform}"]`);
     }
 
     normalizeRupiah(value) {
@@ -312,7 +312,7 @@ export class Pelitamas {
         await this.waitForLoader('div#modal-load', 'show', false);
         await this.waitForLoader('div#load-container-payment', 'd-none', true);
 
-        await this.getPlatformBayar(platform_bayar).click();
+        await this.getPlatformBayar(platform_bayar).click( {force: true} );
     }
 
     async checklistKetentuan() {

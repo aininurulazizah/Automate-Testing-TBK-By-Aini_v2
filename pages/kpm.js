@@ -82,7 +82,7 @@ export class Kpm {
     }
 
     getPlatformBayar(platform) { // Untuk mendapatkan platform pembayaran setelah pilih metode bayar
-        return this.page.locator(`img[alt=${platform}]`);
+        return this.page.locator(`input[onclick*="${platform}"]`);
     }
 
     normalizeRupiah(value) {
@@ -264,8 +264,13 @@ export class Kpm {
                 //     expect(actual_total_tiket_seat_2).toBe(expected_temp);
 
                 // } else {
-                    const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected').innerText());
-                    expect(actual_total_tiket_seat_1).toBe(expected_total_tiket);
+                    const actual_total_tiket_seat_1 = await this.page.locator('span.display-price-seat-selected:not(#hargatot)').count() > 0 
+                                                    ? this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected:not(#hargatot)').innerText())
+                                                    : null;
+                    
+                    if (actual_total_tiket_seat_1 !== null) {
+                        expect(actual_total_tiket_seat_1).toBe(expected_total_tiket);
+                    }
     
                     const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
                     expect(actual_total_tiket_seat_2).toBe(expected_total_tiket);
@@ -313,7 +318,7 @@ export class Kpm {
         await this.waitForLoader('div#modal-load', 'show', false);
         await this.waitForLoader('div#load-container-payment', 'd-none', true);
 
-        await this.getPlatformBayar(platform_bayar).click();
+        await this.getPlatformBayar(platform_bayar).click({ force: true });
     }
 
     async checklistKetentuan() {

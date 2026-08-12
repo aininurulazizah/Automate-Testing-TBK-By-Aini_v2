@@ -86,7 +86,7 @@ export class Besttrans {
     }
 
     getPlatformBayar(platform) { // Untuk mendapatkan platform pembayaran setelah pilih metode bayar
-        return this.page.locator(`img[alt=${platform}]`);
+        return this.page.locator(`input[onclick*="${platform}"]`);
     }
 
     normalizeRupiah(value) {
@@ -336,7 +336,7 @@ export class Besttrans {
         await this.waitForLoader('div#load-container-payment', 'd-none', true);
 
         await this.getMetodeBayar(metode_bayar).click();
-        await this.getPlatformBayar(platform_bayar).click();
+        await this.getPlatformBayar(platform_bayar).click({ force: true });
     }
 
     async checklistKetentuan() {
