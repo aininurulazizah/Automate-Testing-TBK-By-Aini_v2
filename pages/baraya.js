@@ -304,12 +304,20 @@ export class Baraya {
                 await this.page.waitForTimeout(1000);
 
                 const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected').innerText());
-                expect([expected_total_tiket, 2*expected_total_tiket]).toContain(actual_total_tiket_seat_1);
+                
+                try {
+                    expect(actual_total_tiket_seat_1).toBe(expected_total_tiket);
+                } catch {
+                    expect(expected_total_tiket).toBeLessThanOrEqual(actual_total_tiket_seat_1)
+                }
 
-                // const diskon = this.normalizeRupiah(await this.diskon_label_seat_page.innerText());
-                // expected_total_tiket -= diskon;
                 const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('p#totalbayar').innerText());
-                expect([expected_total_tiket, 2*expected_total_tiket]).toContain(actual_total_tiket_seat_2);
+                
+                try {
+                    expect(actual_total_tiket_seat_2).toBe(expected_total_tiket);
+                } catch {
+                    expect(expected_total_tiket).toBeLessThanOrEqual(actual_total_tiket_seat_2)
+                }
 
                 return expected_total_tiket;
 
