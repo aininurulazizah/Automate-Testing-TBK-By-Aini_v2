@@ -144,7 +144,8 @@ export class Besttrans {
     }
 
     async isiTanggalPulang(value) {
-        const tanggal_target = this.page.locator(`[aria-label="${value}"]`).nth(1);
+        const elemen_tgl = await this.page.locator(`[aria-label="${value}"]`).nth(1).count();
+        const tanggal_target = elemen_tgl !== 0 ? this.page.locator(`[aria-label="${value}"]`).nth(1) : this.page.locator(`[aria-label="${value}"]`);
         await this.tanggal_pulang.click();
         while(!(await tanggal_target.isVisible())){
             await this.next_month_btn2.click();
@@ -227,7 +228,14 @@ export class Besttrans {
             harga_max = this.normalizeRupiah(harga_max);
 
             for (let i = 0; i < jml_penumpang; i++) {
-                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                let harga_kursi;
+
+                if (await kursi_tersedia.nth(i).locator('p').filter({ hasText : /Sale|Promo/i }).count() > 0) {
+                    harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(2).innerText());
+                } else {
+                    harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                }
+
                 expect(harga_kursi).toBeGreaterThanOrEqual(harga_min);
                 expect(harga_kursi).toBeLessThanOrEqual(harga_max);
             }
@@ -239,7 +247,7 @@ export class Besttrans {
                 
                 let harga_kursi;
 
-                if (await kursi_tersedia.nth(i).locator('p').filter({ hasText : "Sale" }).count() > 0) {
+                if (await kursi_tersedia.nth(i).locator('p').filter({ hasText : /Sale|Promo/i }).count() > 0) {
                     harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(2).innerText());
                 } else {
                     harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
@@ -267,7 +275,7 @@ export class Besttrans {
 
                         let current_harga_tiket;
 
-                        if (await list_kursi_tersedia.nth(i).locator('p').filter({ hasText : "Sale" }).count() > 0) {
+                        if (await list_kursi_tersedia.nth(i).locator('p').filter({ hasText : /Sale|Promo/i }).count() > 0) {
                             current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(2).innerText());
                         } else {
                             current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(1).innerText());
@@ -279,14 +287,14 @@ export class Besttrans {
                 }   
 
                 if (case_flag === "round-trip") {
-                    const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected:not(#hargatot)').innerText());
+                    const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('.display-price-seat-selected:not(#hargatot)').innerText());
                     expect(actual_total_tiket_seat_1).toBe(expected_temp);
     
                     const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
                     expect(actual_total_tiket_seat_2).toBe(expected_temp);
 
                 } else {
-                    const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected:not(#hargatot)').innerText());
+                    const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('.display-price-seat-selected:not(#hargatot)').innerText());
                     expect(actual_total_tiket_seat_1).toBe(expected_total_tiket);
     
                     const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());

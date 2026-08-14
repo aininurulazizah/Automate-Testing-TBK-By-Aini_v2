@@ -49,7 +49,7 @@ export class Semeru {
     }
 
     getPlatformBayar(platform) {
-        return this.page.locator(`img[alt=${platform}]`);
+        return this.page.locator(`input[onclick*="${platform}"]`);
     }
 
     normalizeRupiah(value) {
@@ -166,7 +166,7 @@ export class Semeru {
                     }
                 }   
 
-                const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected').innerText());
+                const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('.display-price-seat-selected:not(#hargatot)').innerText());
                 const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.total_bayar_label_general.innerText());
                 expect(actual_total_tiket_seat_1).toBe(expected_total_tiket);
                 expect(actual_total_tiket_seat_2).toBe(expected_total_tiket);
@@ -205,7 +205,7 @@ export class Semeru {
     }
 
     async pilihMetodePembayaran(metode_bayar, platform_bayar){
-        await this.getPlatformBayar(platform_bayar).click()
+        await this.getPlatformBayar(platform_bayar).click({ force: true })
 
     }
 

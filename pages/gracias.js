@@ -74,7 +74,7 @@ export class Gracias {
     }
 
     getPlatformBayar(platform) { // Untuk mendapatkan platform pembayaran setelah pilih metode bayar
-        return this.page.locator(`img[alt=${platform}]`);
+        return this.page.locator(`input[onclick*="${platform}"]`);
     }
 
     normalizeRupiah(value) {
@@ -216,11 +216,12 @@ export class Gracias {
                 let harga_kursi;
                 const seat_text_content = await kursi_tersedia.nth(i).locator('p').innerText();
 
-                if (seat_text_content.includes('Sale')) {
+                if (/Sale|Promo/i.test(seat_text_content)) {
                     harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(2).innerText());
                 } else {
                     harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
                 }
+
                 expect(harga_kursi).toBeGreaterThanOrEqual(harga_min);
                 expect(harga_kursi).toBeLessThanOrEqual(harga_max);
             }
@@ -232,7 +233,7 @@ export class Gracias {
                 let harga_kursi;
                 const seat_text_content = await kursi_tersedia.nth(i).locator('p').innerText();
 
-                if (seat_text_content.includes('Sale')) {
+                if (/Sale|Promo/i.test(seat_text_content)) {
                     harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(2).innerText());
                 } else {
                     harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
@@ -259,7 +260,7 @@ export class Gracias {
                         let current_harga_tiket;
                         const seat_text_content = await list_kursi_tersedia.nth(i).locator('p').innerText();
         
-                        if (seat_text_content.includes('Sale')) {
+                        if (/Sale|Promo/i.test(seat_text_content)) {
                             current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(2).innerText());
                         } else {
                             current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(1).innerText());
@@ -277,7 +278,7 @@ export class Gracias {
                 //     expect(actual_total_tiket_seat_2).toBe(expected_temp);
 
                 // } else {
-                    const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected').innerText());
+                    const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('.display-price-seat-selected:not(#hargatot)').innerText());
                     expect(actual_total_tiket_seat_1).toBe(expected_total_tiket);
     
                     const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
@@ -315,7 +316,7 @@ export class Gracias {
         await this.waitForLoader('div#modal-load', 'show', false);
         await this.waitForLoader('div#load-container-payment', 'd-none', true);
 
-        await this.getPlatformBayar(platform_bayar).click();
+        await this.getPlatformBayar(platform_bayar).click({ force: true });
     }
 
     async checklistKetentuan() {

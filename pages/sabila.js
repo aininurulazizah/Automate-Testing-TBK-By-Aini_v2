@@ -85,7 +85,7 @@ export class Sabila {
     }
 
     getPlatformBayar(platform) { // Untuk mendapatkan platform pembayaran setelah pilih metode bayar
-        return this.page.locator(`img[alt=${platform}]`);
+        return this.page.locator(`input[onclick*="${platform}"]`);
     }
 
     normalizeRupiah(value) {
@@ -140,7 +140,8 @@ export class Sabila {
     }
 
     async isiTanggalPulang(value) {
-        const tanggal_target = this.page.locator(`[aria-label="${value}"]`).nth(1);
+        const elemen_tgl = await this.page.locator(`[aria-label="${value}"]`).nth(1).count();
+        const tanggal_target = elemen_tgl !== 0 ? this.page.locator(`[aria-label="${value}"]`).nth(1) : this.page.locator(`[aria-label="${value}"]`);
         await this.tanggal_pulang.click();
         while(!(await tanggal_target.isVisible())){
             await this.next_month_btn2.click();
@@ -232,7 +233,14 @@ export class Sabila {
             harga_max = this.normalizeRupiah(harga_max);
 
             for (let i = 0; i < jml_penumpang; i++) {
-                const harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                let harga_kursi;
+
+                if (await kursi_tersedia.nth(i).locator('p').filter({ hasText : /Sale|Promo/i }).count() > 0) {
+                    harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
+                } else {
+                    harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').first().innerText());
+                }
+
                 expect(harga_kursi).toBeGreaterThanOrEqual(harga_min);
                 expect(harga_kursi).toBeLessThanOrEqual(harga_max);
             }
@@ -244,7 +252,7 @@ export class Sabila {
                 
                 let harga_kursi;
 
-                if (await kursi_tersedia.nth(i).locator('p').filter({ hasText : "Sale" }).count() > 0) {
+                if (await kursi_tersedia.nth(i).locator('p').filter({ hasText : /Sale|Promo/i }).count() > 0) {
                     harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
                 } else {
                     harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').first().innerText());
@@ -272,7 +280,7 @@ export class Sabila {
 
                         let current_harga_tiket;
 
-                        if (await list_kursi_tersedia.nth(i).locator('p').filter({ hasText : "Sale" }).count() > 0) {
+                        if (await list_kursi_tersedia.nth(i).locator('p').filter({ hasText : /Sale|Promo/i }).count() > 0) {
                             current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(1).innerText());
                         } else {
                             current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').first().innerText());
@@ -284,7 +292,7 @@ export class Sabila {
                 }   
 
                 if (case_flag === "round-trip") {
-                    const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected:not(#hargatot)').innerText());
+                    const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('.display-price-seat-selected:not(#hargatot)').innerText());
                     expect(actual_total_tiket_seat_1).toBe(expected_temp);
     
                     const actual_total_tiket_seat_2 = this.normalizeRupiah(await this.page.locator('span#hargatot').innerText());
@@ -343,7 +351,7 @@ export class Sabila {
         await this.waitForLoader('div#load-container-payment', 'd-none', true);
 
         await this.getMetodeBayar(metode_bayar).click();
-        await this.getPlatformBayar(platform_bayar).click();
+        await this.getPlatformBayar(platform_bayar).click({ force: true });
     }
 
     async checklistKetentuan() {

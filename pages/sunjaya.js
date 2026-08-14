@@ -235,7 +235,7 @@ export class Sunjaya {
             for (let i = 0; i < jml_penumpang; i++) {
                 let harga_kursi;
 
-                if (await kursi_tersedia.nth(i).locator('p').filter({ hasText : "Sale" }).count() > 0) {
+                if (await kursi_tersedia.nth(i).locator('p').filter({ hasText : /Sale|Promo/i }).count() > 0) {
                     harga_kursi = this.normalizeRupiah1(await kursi_tersedia.nth(i).locator('span').nth(2).innerText());
                 } else {
                     harga_kursi = this.normalizeRupiah1(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
@@ -250,7 +250,7 @@ export class Sunjaya {
             for (let i = 0; i < jml_penumpang; i++) {
                 let harga_kursi;
 
-                if (await kursi_tersedia.nth(i).locator('p').filter({ hasText : "Sale" }).count() > 0) {
+                if (await kursi_tersedia.nth(i).locator('p').filter({ hasText : /Sale|Promo/i }).count() > 0) {
                     harga_kursi = this.normalizeRupiah1(await kursi_tersedia.nth(i).locator('span').nth(2).innerText());
                 } else {
                     harga_kursi = this.normalizeRupiah1(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
@@ -277,11 +277,12 @@ export class Sunjaya {
 
                         let current_harga_tiket;
 
-                        if (await list_kursi_tersedia.nth(i).locator('p').filter({ hasText : "Sale" }).count() > 0) {
+                        if (await list_kursi_tersedia.nth(i).locator('p').filter({ hasText : /Sale|Promo/i }).count() > 0) {
                             current_harga_tiket = this.normalizeRupiah1(await list_kursi_tersedia.nth(i).locator('span').nth(2).innerText());
                         } else {
                             current_harga_tiket = this.normalizeRupiah1(await list_kursi_tersedia.nth(i).locator('span').nth(1).innerText());
                         }
+                        
                         expected_total_tiket += current_harga_tiket;
                         // expected_temp += current_harga_tiket;
                     }
@@ -295,7 +296,7 @@ export class Sunjaya {
                 //     expect(actual_total_tiket_seat_2).toBe(expected_temp);
 
                 // } else {
-                    const actual_total_tiket_seat_1 = this.normalizeRupiah1(await this.page.locator('span.display-price-seat-selected').innerText());
+                    const actual_total_tiket_seat_1 = this.normalizeRupiah1(await this.page.locator('.display-price-seat-selected:not(#hargatot)').innerText());
                     expect(actual_total_tiket_seat_1).toBe(expected_total_tiket);
     
                     const actual_total_tiket_seat_2 = this.normalizeRupiah1(await this.page.locator('span#hargatot').innerText());

@@ -81,7 +81,7 @@ export class Baraya {
     }
 
     getPlatformBayar(platform) { // Untuk mendapatkan platform pembayaran setelah pilih metode bayar
-        return this.page.locator(`img[alt=${platform}]`);
+        return this.page.locator(`input[onclick*="${platform}"]`);
     }
 
     normalizeRupiah(value) {
@@ -265,7 +265,7 @@ export class Baraya {
             for (let i = 0; i < jml_penumpang_d; i++) {
                 let harga_kursi;
 
-                if (await kursi_tersedia.nth(i).locator('p').filter({ hasText : "Promo" }).count() > 0) {
+                if (await kursi_tersedia.nth(i).locator('p').filter({ hasText : /Sale|Promo/i }).count() > 0) {
                     harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(1).innerText());
                 } else {
                     harga_kursi = this.normalizeRupiah(await kursi_tersedia.nth(i).locator('span').nth(0).innerText());
@@ -292,7 +292,7 @@ export class Baraya {
                     for (let i = 0; i < jml_penumpang_d; i++) {
                         let current_harga_tiket;
 
-                        if (await list_kursi_tersedia.nth(i).locator('p').filter({ hasText : "Promo" }).count() > 0) {
+                        if (await list_kursi_tersedia.nth(i).locator('p').filter({ hasText : /Sale|Promo/i }).count() > 0) {
                             current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(1).innerText());
                         } else {
                             current_harga_tiket = this.normalizeRupiah(await list_kursi_tersedia.nth(i).locator('span').nth(0).innerText());
@@ -360,7 +360,7 @@ export class Baraya {
         await this.waitForLoader('div#modal-load', 'show', false);
         await this.waitForLoader('div#load-container-payment', 'd-none', true);
 
-        await this.getPlatformBayar(platform_bayar).click();
+        await this.getPlatformBayar(platform_bayar).click({ force: true });
     }
 
     async checklistKetentuan() {
