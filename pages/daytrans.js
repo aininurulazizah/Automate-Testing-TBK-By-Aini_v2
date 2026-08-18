@@ -41,7 +41,7 @@ export class Daytrans{
         this.total_on_detail_keberangkatan_card = page.locator('span#hargatot');
 
         // Booked Pgae
-        this.pesanan_dibuat_label = page.locator('p:has-text("Pesanan Dibuat !")');
+        this.pesanan_dibuat_label = page.locator('p:has-text("Pesanan Dibuat")');
         this.kode_booking_label = page.locator('p:has-text("Kode Booking") + div > p');
         this.kode_pembayaran_label = page.locator('p:has-text("Kode Pembayaran") + div > div > div').first();
         this.detail_pembayaran_card = page.locator('p:has-text("Detail Pembayaran") + div > div');

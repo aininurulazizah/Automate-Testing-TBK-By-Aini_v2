@@ -40,7 +40,7 @@ export class Selamat {
         this.konfirmasi_pembayaran_btn_modal = page.locator('.modal-content button:has-text("Lanjutkan")');
 
         //Booked Page
-        this.pesanan_dibuat_label = page.locator('h4:has-text("Transaksi Berhasil !")');
+        this.pesanan_dibuat_label = page.locator('h4:has-text("Transaksi Berhasil")');
         this.kode_booking_label = page.locator('p:has-text("kode booking") + h4');
         this.kode_pembayaran_label = page.locator('p:has-text("kode bayar") + h4');
         this.total_bayar_label_success_page = page.locator('p:has-text("Total Bayar") + h2');

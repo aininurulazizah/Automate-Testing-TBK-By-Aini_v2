@@ -41,7 +41,7 @@ export class Jackal{
         this.konfirmasi_pembayaran_btn_modal = page.locator('.modal-footer button:has-text("Yes, Continue")');
 
         // Booked Page
-        this.pesanan_dibuat_label = page.locator('h5:has-text("Transaction Successful!")');
+        this.pesanan_dibuat_label = page.locator('h5:has-text("Transaction Successful")');
         this.kode_booking_label = page.locator('p:has-text("Booking Code") + h4');
         this.kode_pembayaran_label = page.locator('p:has-text("Payment Code") + h4');
         this.total_bayar_label_success_page = page.locator('p:has-text("Total Payment") + h2');
@@ -292,7 +292,9 @@ export class Jackal{
     }
 
     async konfirmasiPembayaran() {
-        await this.konfirmasi_pembayaran_btn.click()
+        await this.page.waitForTimeout(1000);
+        await this.konfirmasi_pembayaran_btn.click();
+        await this.page.waitForTimeout(1000);
         await this.konfirmasi_pembayaran_btn_modal.click();
     }
 

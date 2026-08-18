@@ -38,7 +38,7 @@ export class Btm{
         this.konfirmasi_pembayaran_btn_modal = page.locator('button:has-text("Konfirmasi ")').nth(1);
 
         // Booked Page
-        this.pesanan_dibuat_label = page.locator('p:has-text("Pesanan Dibuat !")');
+        this.pesanan_dibuat_label = page.locator('p:has-text("Pesanan Dibuat")');
         this.kode_booking_label = page.locator('p:has-text("Kode Booking") + h3');
         this.kode_pembayaran_label = page.locator('p:has-text("Kode Pembayaran") + h3');
         this.total_bayar_label_success_page = page.locator('p:has-text("Total Bayar") + h3');

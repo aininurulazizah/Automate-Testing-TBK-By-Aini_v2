@@ -47,7 +47,7 @@ export class Aoshuttle {
         this.konfirmasi_pembayaran_btn_modal = page.locator('.modal-footer button:has-text("Ya, Lanjutkan")');
 
         //Booked Page
-        this.pesanan_dibuat_label = page.locator('h5:has-text("Transaksi Sukses !")');
+        this.pesanan_dibuat_label = page.locator('h5:has-text("Transaksi Sukses")');
         this.kode_booking_label = page.locator('p:has-text("Kode Booking") + h3');
         this.kode_pembayaran_label = page.locator('p:has-text("Kode Pembayaran") + h3');
         this.total_bayar_label_success_page = page.locator('p:has-text("Total Bayar") + h3');

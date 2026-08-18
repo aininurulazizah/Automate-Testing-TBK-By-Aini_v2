@@ -36,7 +36,7 @@ export class Aragon {
         this.konfirmasi_pembayaran_btn = page.locator('button#submit:has-text("Konfirmasi")');
 
         // Booked Page
-        this.pesanan_dibuat_label = page.locator('p:has-text("Pesanan Dibuat !")')
+        this.pesanan_dibuat_label = page.locator('p:has-text("Pesanan Dibuat")')
         this.kode_booking_label = page.locator('p:has-text("Kode Booking") + div > p');
         this.kode_pembayaran_label = page.locator('p:has-text("Kode Pembayaran") + div > div > div').first();
         this.total_bayar_label_success_page = page.locator('div:has-text("Total Bayar") + div:has-text("Rp")');

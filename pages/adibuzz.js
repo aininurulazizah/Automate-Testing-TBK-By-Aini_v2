@@ -44,7 +44,7 @@ export class Adibuzz{
         this.konfirmasi_pembayaran_btn_modal = page.locator('.modal-body button:has-text("Konfirmasi")');
 
         //Booked Page
-        this.pesanan_dibuat_label = page.locator('p:has-text("Pesanan Dibuat !")');
+        this.pesanan_dibuat_label = page.locator('p:has-text("Pesanan Dibuat")');
         this.kode_booking_label = page.locator('p:has-text("Kode Booking") + h3');
         this.kode_pembayaran_label = page.locator('p:has-text("Kode Pembayaran") + h3');
         this.total_bayar_label_success_page = page.locator('p:has-text("Total Bayar") + h3');

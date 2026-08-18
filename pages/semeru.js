@@ -33,7 +33,7 @@ export class Semeru {
         this.konfirmasi_pembayaran_btn = page.locator('button#submit[onclick="return check()"]');
 
         // Booked Pake
-        this.pesanan_dibuat_label = page.locator('p:has-text("Transaksi Sukses !")');
+        this.pesanan_dibuat_label = page.locator('p:has-text("Transaksi Sukses")');
         this.kode_booking_label = page.locator('p:has-text("Kode Booking") + h4');
         this.kode_pembayaran_label = page.locator('p:has-text("Kode Pembayaran") + h4');
         this.total_bayar_label_success_page = page.locator('p:has-text("Total Bayar") + h4');

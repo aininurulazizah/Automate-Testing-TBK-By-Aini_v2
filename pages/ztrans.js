@@ -5,7 +5,7 @@ export class Ztrans {
 
         // General
         this.page = page;
-        this.close_popup = page.locator('.close-pop-info');
+        this.close_popup = page.locator('.close-regist-member, .close-pop-info');
         
         // Reservation Form
         this.keberangkatan_field = page.locator('input#berangkat');
@@ -43,7 +43,7 @@ export class Ztrans {
         this.konfirmasi_pembayaran_btn_modal = page.locator('.modal-body button:has-text("Konfirmasi")');
 
         //Booked Page v1
-        this.pesanan_dibuat_label = page.locator('p:has-text("Pesanan Dibuat !")');
+        this.pesanan_dibuat_label = page.locator('p:has-text("Pesanan Dibuat")');
         this.kode_booking_label = page.locator('p:has-text("Kode Booking") + h3');
         this.kode_pembayaran_label = page.locator('p:has-text("Kode Pembayaran") + h3');
         this.total_bayar_label = page.locator('p:has-text("Total Bayar") + h3');
@@ -107,9 +107,20 @@ export class Ztrans {
     async closePopup(value) {
         await this.page.waitForTimeout(1000);
 
-        while (await value.isVisible()) {
-            await value.click(); 
-            await this.page.waitForTimeout(1000);
+        const count = await value.count();
+
+        for (let i = 0; i < count; i++) {
+
+            try {
+                await value.nth(i).click({ trial: true, timeout: 1000 });
+                await value.nth(i).click();
+                i = -1;
+                
+                await this.page.waitForTimeout(1000);
+
+            } catch {
+
+            }
         }
     }
 
