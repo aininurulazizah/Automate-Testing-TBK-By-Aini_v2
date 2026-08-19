@@ -30,10 +30,10 @@ jobs:
           node-version: 18
 
       - name: Install dependecies
-        run: npm install
+        run: npm ci
 
       - name: Install Playwright Browser
-        run: npx playwright install chromium
+        run: npx playwright install --with-deps chromium
 
       - name: Set Timezone to WIB
         run: sudo timedatectl set-timezone Asia/Jakarta
