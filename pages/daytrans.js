@@ -372,6 +372,7 @@ export class Daytrans{
     }
 
     async checklistKetentuan() {
+        await this.page.waitForTimeout(1000);
         await this.check_ketentuan_btn.click();
     }
 
