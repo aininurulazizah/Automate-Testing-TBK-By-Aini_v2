@@ -367,12 +367,13 @@ export class Daytrans{
     async pilihMetodePembayaran(metode_bayar, platform_bayar){
         await this.waitForLoader('div[id^="load-container-payment"]', 'd-none', true);
 
+        await this.page.waitForTimeout(1000);
         await this.getMetodeBayar(metode_bayar).click();
+        await this.page.waitForTimeout(1000);
         await this.getPlatformBayar(platform_bayar).click({ force: true });
     }
 
     async checklistKetentuan() {
-        await this.page.waitForTimeout(1000);
         await this.check_ketentuan_btn.click();
     }
 

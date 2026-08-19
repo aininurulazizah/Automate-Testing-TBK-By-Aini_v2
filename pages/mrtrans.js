@@ -282,12 +282,13 @@ export class Mrtrans {
         await this.waitForLoader('div#modal-load', 'show', false);
         await this.waitForLoader('div#load-container-payment', 'd-none', true);
 
+        await this.page.waitForTimeout(1000);
         await this.getMetodeBayar(metode_bayar).click();
+        await this.page.waitForTimeout(1000);
         await this.getPlatformBayar(platform_bayar).click({ force: true });
     }
 
     async checklistKetentuan() {
-        await this.page.waitForTimeout(1000);
         await this.check_ketentuan_btn.click();
     }
 
