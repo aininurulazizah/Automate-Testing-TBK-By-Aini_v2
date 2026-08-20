@@ -14,7 +14,7 @@ on:
         default: ""
         
   schedule:
-    - cron: "4 8 * * *"
+    - cron: "0 0 * * *"
 
 jobs:
   run-test:
