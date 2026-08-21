@@ -47,6 +47,7 @@ import { testData } from "../test-data/reservasi_data";
 export const sites = [
     {
         tag: '@adibuzz',  
+        enabled: true,
         urls: {
             production: 'https://www.adi-buzz.com/',
             staging: 'https://adibuzz-web.asmat.app/'
@@ -58,6 +59,7 @@ export const sites = [
     },
     {
         tag: '@ans',  
+        enabled: true,
         urls: {
             production: 'https://www.bus-ans.com/',
             staging: 'https://ans-web.asmat.app/'
@@ -69,6 +71,7 @@ export const sites = [
     },
     {
         tag: '@aoshuttle',  
+        enabled: true,
         urls: {
             production: 'https://web.aotransportbus.com/',
             staging: 'https://aoshuttle-web.asmat.app/'
@@ -80,6 +83,7 @@ export const sites = [
     },
     {
         tag: '@aragon',  
+        enabled: true,
         urls: {
             production: 'https://www.aragontrans.com/',
             staging: 'https://aragon-web.asmat.app/'
@@ -91,6 +95,7 @@ export const sites = [
     },
     {
         tag: '@ats',  
+        enabled: true,
         urls: {
             production: 'https://www.bus-ats.id/',
             staging: 'https://ats-web.asmat.app/'
@@ -102,6 +107,7 @@ export const sites = [
     },
     {
         tag: '@banyumili',  
+        enabled: true,
         urls: {
             production: 'https://www.banyumilitravel.id/',
             staging: 'https://banyumili-web.asmat.app/'
@@ -113,6 +119,7 @@ export const sites = [
     },
     {
         tag: '@baraya',  
+        enabled: true,
         urls: {
             production: 'https://www.baraya-travel.com/',
             staging: 'https://baraya-web.asmat.app/'
@@ -124,6 +131,7 @@ export const sites = [
     },
     {
         tag: '@besttrans',  
+        enabled: true,
         urls: {
             production: 'https://www.besttrans.co.id/',
             staging: 'https://besttrans-web.asmat.app/'
@@ -134,7 +142,8 @@ export const sites = [
         connectingRes: false
     },
     {
-        tag: '@binasarana', 
+        tag: '@binasarana',
+        enabled: true, 
         urls: {
             production: 'https://www.booking.binasarana.co.id/',
             staging: 'https://binasarana-web.asmat.app/'
@@ -146,6 +155,7 @@ export const sites = [
     },
     {  
         tag: '@btm',  
+        enabled: true,
         urls: {
             production: 'https://www.btmshuttle.id/',
             staging: 'https://btm-web.asmat.app/'
@@ -157,6 +167,7 @@ export const sites = [
     },
     {
         tag: '@cgtrans', 
+        enabled: true,
         urls: {
             production: 'https://www.cgtrans.co.id/',
             staging: 'https://cgtrans-web.asmat.app/'
@@ -168,6 +179,7 @@ export const sites = [
     },
     {
         tag: '@ctu',  
+        enabled: true,
         urls: {
             production: 'https://www.ctu-shuttle.com/',
             staging: 'https://ctu-web.asmat.app/'
@@ -179,6 +191,7 @@ export const sites = [
     },
     {
         tag: '@daytrans', 
+        enabled: true,
         urls: {
             production: 'https://www.daytrans.co.id/',
             staging: 'https://daytrans-web.asmat.app/'
@@ -190,6 +203,7 @@ export const sites = [
     },
     {
         tag: '@gracias', 
+        enabled: true,
         urls: {
             production: 'https://www.graciasshuttle.co.id/',
             staging: 'https://gracias-web.asmat.app/'
@@ -200,7 +214,8 @@ export const sites = [
         connectingRes: false
     },
     {
-        tag: '@harumbsi',  
+        tag: '@harumbsi', 
+        enabled: true, 
         urls: {
             production: 'https://www.harumbsi.com/',
             staging: 'https://harumbsi-web.asmat.app/'
@@ -212,6 +227,7 @@ export const sites = [
     },
     {
         tag: '@jackal',  
+        enabled: true,
         urls: {
             production: 'https://www.jackalholidays.com/',
             staging: 'https://jackal-web.asmat.app/'
@@ -223,6 +239,7 @@ export const sites = [
     },
     {
         tag: '@joglosemar', 
+        enabled: true,
         urls: {
             production: 'https://www.joglosemarbus.com/',
             staging: 'https://joglosemar-web.asmat.app/'
@@ -234,6 +251,7 @@ export const sites = [
     },
     {
         tag: '@kpm', 
+        enabled: true,
         urls: {
             production: 'https://www.kpmtrans.id/',
             staging: 'https://kpm-web.asmat.app/'
@@ -245,6 +263,7 @@ export const sites = [
     },
     {
         tag: '@krakaline',  
+        enabled: true,
         urls: {
             production: 'https://www.krakaline.com/',
             staging: 'https://krakaline-web.asmat.app/'
@@ -256,6 +275,7 @@ export const sites = [
     },
     {
         tag: '@kruzz',  
+        enabled: true,
         urls: {
             production: 'https://www.kruzz.id/',
             staging: 'https://kruzz-web.asmat.app/'
@@ -266,7 +286,8 @@ export const sites = [
         connectingRes: true
     },
     {
-        tag: '@kupuayu',  
+        tag: '@kupuayu',
+        enabled: true,  
         urls: {
             production: 'https://www.kupuayutrans.com/',
             staging: 'https://kka-web.asmat.app/'
@@ -276,19 +297,21 @@ export const sites = [
         roundTrip: true, 
         connectingRes: false
     },
-    // {
-    //     tag: '@marita',  
-    //     urls: {
-    //         production: 'https://www.maritatrans.com/',
-    //         staging: 'https://marita-web.asmat.app/'
-    //     },
-    //     locator: Marita, 
-    //     data: testData.Marita, 
-    //     roundTrip: true, 
-    //     connectingRes: false
-    // },
+    {
+        tag: '@marita',  
+        enabled: false,
+        urls: {
+            production: 'https://www.maritatrans.com/',
+            staging: 'https://marita-web.asmat.app/'
+        },
+        locator: Marita, 
+        data: testData.Marita, 
+        roundTrip: true, 
+        connectingRes: false
+    },
     {
         tag: '@minanga',  
+        enabled: true,
         urls: {
             production: 'https://www.minangaexpress.id/',
             staging: 'https://minanga-web.asmat.app/'
@@ -300,6 +323,7 @@ export const sites = [
     },
     {
         tag: '@mrtrans', 
+        enabled: true,
         urls: {
             production: 'https://www.mrtrans.co.id/',
             staging: 'https://mrtrans-web.asmat.app/'
@@ -311,6 +335,7 @@ export const sites = [
     },
     {
         tag: '@mstrans',  
+        enabled: true,
         urls: {
             production: 'https://www.mstrans.id/',
             staging: 'https://mstrans-web.asmat.app/'
@@ -322,6 +347,7 @@ export const sites = [
     },
     {
         tag: '@namaste',  
+        enabled: true,
         urls: {
             production: 'https://www.namasteshuttle.com/',
             staging: 'https://namaste-web.asmat.app/'
@@ -333,6 +359,7 @@ export const sites = [
     },
     {
         tag: '@pelitamas',  
+        enabled: true,
         urls: {
             production: 'https://www.pelitamas.id/',
             staging: 'https://pelitamas-web.asmat.app/'
@@ -343,7 +370,8 @@ export const sites = [
         connectingRes: false
     },
     {
-        tag: '@putraremaja', 
+        tag: '@putraremaja',
+        enabled: true, 
         urls: {
             production: 'https://shuttle.putraremaja.co.id/',
             staging: 'https://putraremaja-web.asmat.app/'
@@ -355,6 +383,7 @@ export const sites = [
     },
     {
         tag: '@raputri', 
+        enabled: true,
         urls: {
             production: 'https://www.raputri.com/',
             staging: 'https://raputri-web.asmat.app/'
@@ -366,6 +395,7 @@ export const sites = [
     },
     {
         tag: '@riyan',  
+        enabled: true,
         urls: {
             production: 'https://www.riyantransport.com/',
             staging: 'https://riyantrans-web.asmat.app/'
@@ -376,7 +406,8 @@ export const sites = [
         connectingRes: false //Round-trip true tapi belum ditemukan rute-nya
     }, 
     {
-        tag: '@royalkencana',  
+        tag: '@royalkencana',
+        enabled: true,  
         urls: {
             production: 'https://www.royalkencanabus.id/',
             staging: 'https://royalkencana-web.asmat.app/'
@@ -388,6 +419,7 @@ export const sites = [
     },
     {
         tag: '@sabila',  
+        enabled: true,
         urls: {
             production: 'https://booking.sabilashuttle.co.id/',
             staging: 'https://sabila-web.asmat.app/'
@@ -399,6 +431,7 @@ export const sites = [
     }, 
     {
         tag: '@sadya', 
+        enabled: true,
         urls: {
             production: 'https://booking.sadyatrans.com/',
             staging: 'https://sadyatrans-web.asmat.app/'
@@ -410,6 +443,7 @@ export const sites = [
     },
     {
         tag: '@sariharum', 
+        enabled: true,
         urls: {
             production: 'https://www.sariharum.com/',
             staging: 'https://sariharum-web.asmat.app/'
@@ -421,6 +455,7 @@ export const sites = [
     },
     {
         tag: '@selamat',  
+        enabled: true,
         urls: {
             production: 'https://www.selamattrans.co.id/reservasi',
             staging: 'https://selamat-web.asmat.app/reservasi'
@@ -432,6 +467,7 @@ export const sites = [
     },
     {
         tag: '@semeru',  
+        enabled: true,
         urls: {
             production: 'https://www.semerutrans.com/',
             staging: 'https://semeru-web.asmat.app/'
@@ -443,6 +479,7 @@ export const sites = [
     },
     {
         tag: '@sunjaya',  
+        enabled: true,
         urls: {
             production: 'https://www.sunjayaabadi.com/',
             staging: 'https://sunjaya-web.asmat.app/'
@@ -454,6 +491,7 @@ export const sites = [
     },
     {
         tag: '@transkita', 
+        enabled: true,
         urls: {
             production: 'https://www.transkitashuttle.co.id/',
             staging: 'https://transkita-web.asmat.app/'
@@ -464,7 +502,8 @@ export const sites = [
         connectingRes: false
     },
     {
-        tag: '@trikusuma',  
+        tag: '@trikusuma', 
+        enabled: true, 
         urls: {
             production: 'https://www.trikusuma.com/',
             staging: 'https://trikusuma-web.asmat.app/'
@@ -476,6 +515,7 @@ export const sites = [
     },
     {
         tag: '@wbtrans',  
+        enabled: true,
         urls: {
             production: 'https://www.wbtrans.id/',
             staging: 'https://wbtrans-web.asmat.app/'
@@ -486,7 +526,8 @@ export const sites = [
         connectingRes: false
     },
     {
-        tag: '@wisatakomodo',  
+        tag: '@wisatakomodo', 
+        enabled: true, 
         urls: {
             production: 'https://www.buswisatakomodo.com/',
             staging: 'https://wiskom-web.asmat.app/'
@@ -497,7 +538,8 @@ export const sites = [
         connectingRes: false
     },
     {
-        tag: '@yantigroup',  
+        tag: '@yantigroup',
+        enabled: true,  
         urls: {
             production: 'https://www.yantigroup.com/',
             staging: 'https://yantigroup-web.asmat.app/'
@@ -509,6 +551,7 @@ export const sites = [
     },
     {
         tag: '@ztrans', 
+        enabled: true,
         urls: {
             production: 'https://www.ztrans.id/',
             staging: 'https://ztrans-web.asmat.app/'

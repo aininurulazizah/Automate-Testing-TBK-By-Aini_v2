@@ -8,7 +8,7 @@ const ENV = process.env.ENV || 'production';
 
 test.setTimeout(90000);
 
-for (const site of sites) {
+for (const site of sites.filter(site => site.enabled)) {
 
     test(`${site.tag} - Test Case 1 - One Way Trip`, async({page}) => {
 
