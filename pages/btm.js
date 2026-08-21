@@ -69,8 +69,8 @@ export class Btm{
         return this.page.locator(`#penumpang${i}`);
     }
 
-    getPenumpangTerdaftar(i) { // Untuk mendapatkan data penumpang setelah isi data untuk memilih kursi
-        return this.page.locator(`[data-passenger-index="${i}"]`);
+    getPenumpangTerdaftar(i, n) { // Untuk mendapatkan data penumpang setelah isi data untuk memilih kursi
+        return this.page.locator(`[data-passenger-index="${i}"]`).nth(n);
     }
 
     getJumlahPindahArmada() {
@@ -176,7 +176,7 @@ export class Btm{
       }
       
 
-    async pilihKursi(jml_penumpang, pemesan, penumpang) {
+    async pilihKursi(jml_penumpang, pemesan, penumpang, n=0) {
 
         if (await this.page.locator('div.title:has-text("Whoops, looks like something went wrong")').count() > 0) {
             try {
@@ -192,17 +192,17 @@ export class Btm{
         }
 
         for(let i = 0; i < jml_penumpang; i++){
-            await this.getPenumpangTerdaftar(i+1).click();
-            await this.kursi_tersedia.nth(i).click();
+            await this.getPenumpangTerdaftar(i+1, n).click();
+            await this.kursi_tersedia.nth(i+this.total_kursi_perarmada).click();
         }
     }
 
     async pilihKursiConnRes(jml_penumpang, pemesan, penumpang, n) {
-        await this.pilihKursi(jml_penumpang, pemesan, penumpang);
+        await this.pilihKursi(jml_penumpang, pemesan, penumpang, n);
     }
 
     async pilihKursiNextArmada() {
-        // this.total_kursi_perarmada += await this.page.locator('.seat-blank').count();
+        this.total_kursi_perarmada += await this.page.locator('.seat-blank').count();
         await this.pilih_next_kursi_btn.click();
         await this.page.waitForTimeout(3000);
     }
