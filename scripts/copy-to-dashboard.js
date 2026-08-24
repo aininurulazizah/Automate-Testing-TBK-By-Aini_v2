@@ -4,7 +4,7 @@ const path = require('path');
 const source = path.resolve(__dirname, '../reports/dashboard-data.json');
 const destination = path.resolve(
   __dirname,
-  '../../dabang-automate test-v1.0.0/public/reports/dashboard-data.json'
+  '../../dabang-automate-test-v1.0.0/public/reports/dashboard-data.json'
 );
 
 try {
