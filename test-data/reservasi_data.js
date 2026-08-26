@@ -395,7 +395,7 @@ export const testData = {
     },
 
     Transkita: {
-        Keberangkatan: "PASTEUR - KUNAFE SUPERMARKET OLEH-OLEH",
+        Keberangkatan: "PASTEUR  KUNAFE SUPERMARKET OLEHOLEH",
         Tujuan: "BALARAJA BARAT",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
