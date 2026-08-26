@@ -284,6 +284,7 @@ export class Jackal{
     }
 
     async pilihMetodePembayaran(metode_bayar, platform_bayar){
+        await this.page.waitForTimeout(1000);
         await this.getPlatformBayar(platform_bayar).click();
     }
 
@@ -292,9 +293,9 @@ export class Jackal{
     }
 
     async konfirmasiPembayaran() {
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(500);
         await this.konfirmasi_pembayaran_btn.click();
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(500);
         await this.konfirmasi_pembayaran_btn_modal.click();
     }
 
