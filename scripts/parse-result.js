@@ -81,6 +81,9 @@ function walkSuites(suites) {
           duration: lastResult.duration ?? 0,
           browser: test.projectName,
           startTime: lastResult.startTime,
+          bookingCode: status === 'passed'
+          ? getBookingCode(lastResult.attachments)
+          : null,
           error: status === 'passed'
           ? null
           : {
@@ -136,4 +139,14 @@ function cleanAnsi(text) {
     if (!text) return null;
   
     return text.replace(/\u001b\[[0-9;]*m/g, '');
-  }
+}
+
+function getBookingCode(attachments) {
+  const attachment = attachments?.find(
+    attachment => attachment.name === 'booking_code'
+  );
+
+  if (!attachment?.body) return null;
+
+  return Buffer.from(attachment.body, 'base64').toString('utf8');
+}

@@ -83,6 +83,11 @@ for (const site of sites.filter(site => site.enabled)) {
         //Save booking code
         const booking_code = await bookedPageElements.label_kode_booking.innerText();
 
+        await test.info().attach('booking_code', {
+            body: booking_code,
+            contentType: 'text/plain',
+        });
+
         saveToCsv(site.tag, booking_code, 'One Way Trip');
 
         // await page.pause();
@@ -163,6 +168,11 @@ for (const site of sites.filter(site => site.enabled)) {
 
             // Save booking code
             const booking_code = await bookedPageElements.label_kode_booking.innerText();
+
+            await test.info().attach('booking_code', {
+                body: booking_code,
+                contentType: 'text/plain',
+            });
 
             saveToCsv(site.tag, booking_code, 'Round Trip');
 
@@ -251,6 +261,11 @@ for (const site of sites.filter(site => site.enabled)) {
 
             //Save booking code
             const booking_code = await bookedPageElements.label_kode_booking.innerText();
+
+            await test.info().attach('booking_code', {
+                body: booking_code,
+                contentType: 'text/plain',
+            });
 
             saveToCsv(site.tag, booking_code, 'Connecting Reservation');
 
