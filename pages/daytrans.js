@@ -17,7 +17,7 @@ export class Daytrans{
         this.jumlah_penumpang = page.locator('.ss-main .ss-single-selected'); // tidak pakai id karena display none
         this.cari_tiket_btn = page.locator('.btn-search');
         this.jadwal_btn = page.locator('.btn-list-jadwal');
-        this.jam_card = page.locator('div#jadwal-list-0 > li');
+        this.jam_card = page.locator('div#jadwal-list-0 > li, ul#jadwal-list-only > li');
         // this.jadwal_cards = page.locator('ul#jadwal-list-only > li');
 
         // User Data
@@ -171,8 +171,11 @@ export class Daytrans{
 
     async pilihJadwal(){
         await this.waitForScheduleSectionLoader();
+        await this.page.waitForTimeout(2000);
 
-        await this.jadwal_btn.first().click(); //Pilih jadwal
+        if (await this.jadwal_btn.first().count() > 0) {
+            await this.jadwal_btn.first().click(); //Pilih jadwal
+        }
         const jam_card = this.jam_card.first(); //Ambil card pertama dari list jam berangkat
         const harga_tiket = this.jam_card.first().locator('h4.harga').nth(1).innerText(); //Ambil harga tiketnya
         await jam_card.locator('button:has-text("Beli")').click(); //Pilih jam
