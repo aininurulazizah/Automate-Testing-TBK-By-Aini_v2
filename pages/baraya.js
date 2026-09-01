@@ -23,8 +23,10 @@ export class Baraya {
         this.add_bayi_btn = page.locator('#btnPlusBayi');
         this.simpan_penumpang_btn = page.locator('button:has-text("Simpan")');
         this.cari_btn = page.locator('#submit'); 
+        this.expand_jadwal_btn = page.locator('button#btn-toggle-jadwal-pergi');
+        this.expand_jadwalplg_btn = page.locator('button[id^="btn-toggle-jadwal-pulang"]');
         this.jadwal_card = page.locator('ul#jadwal-list-pergi > li');
-        this.jadwal_plg_card = page.locator('div#jadwal-list-pulang > li');
+        this.jadwal_plg_card = page.locator('div[id^="jadwal-list-pulang"] > li');
 
         // User Data
         this.nama_pemesan = page.locator('#pemesan');
@@ -177,6 +179,10 @@ export class Baraya {
     async pilihJadwal() {
         await this.waitForLoader('div#modal-load', 'show', false);
 
+        if (await this.expand_jadwal_btn.count() > 0) {
+            await this.expand_jadwal_btn.click();
+        }
+
         const first_jadwal = await this.jadwal_card.first();
         const harga_tiket = await first_jadwal.locator('h4.harga').first().innerText();
         await first_jadwal.locator('button:has-text("Pilih")').first().click();
@@ -185,6 +191,10 @@ export class Baraya {
 
     async pilihJadwalPulang() {
         await this.waitForLoader('div#modal-load', 'show', false);
+
+        if (await this.expand_jadwalplg_btn.count() > 0) {
+            await this.expand_jadwalplg_btn.click();
+        }
 
         const first_jadwal = await this.jadwal_plg_card.first();
         const harga_tiket = await first_jadwal.locator('h4.harga').first().innerText();

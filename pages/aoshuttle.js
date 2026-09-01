@@ -223,15 +223,39 @@ export class Aoshuttle {
     }
 
     async validasiTotalHargaTiket(harga_tiket, jml_penumpang, expected_total_tiket, current_page, biaya_lainnya, case_flag) {
+        
+        const harga_type = harga_tiket.includes(" - ") ? "range" : "fixed";
+        let harga_min;
+        let harga_max;
 
         switch(current_page) {
             case("seat-page") :
 
+                const list_kursi_tersedia = case_flag === "round-trip" ? this.kursi_plg_tersedia : this.kursi_tersedia;
+        
                 for (let i = 0; i < jml_penumpang; i++) {
-                    const current_harga_tiket = this.normalizeRupiah(harga_tiket);
+
+                    const params = (await list_kursi_tersedia.nth(i).getAttribute('onclick')) //Ambil harga tiket dari atribut onclick
+                    ?.match(/pilihkursi(?:_pp)?\((.*)\)/)?.[1];
+                    
+                    const current_harga_tiket = this.normalizeRupiah(params?.split(',')[1].trim().replace(/'/g, ''));
+
+                    if (harga_type === "range") {
+                        [harga_min, harga_max] = (harga_tiket.split(" - "));
+                        harga_min = this.normalizeRupiah(harga_min);
+                        harga_max = this.normalizeRupiah(harga_max);   
+    
+                        expect(current_harga_tiket).toBeGreaterThanOrEqual(harga_min);
+                        expect(current_harga_tiket).toBeLessThanOrEqual(harga_max);
+                    }
+                    
+                    if (harga_type === "fixed") {
+                        expect(current_harga_tiket).toBe(this.normalizeRupiah(harga_tiket));
+                    }
+
                     expected_total_tiket += current_harga_tiket;
                 }
-                
+
                 const actual_total_tiket_seat_1 = this.normalizeRupiah(await this.page.locator('span.display-price-seat-selected').innerText());
                 expect(actual_total_tiket_seat_1).toBe(expected_total_tiket);
 
