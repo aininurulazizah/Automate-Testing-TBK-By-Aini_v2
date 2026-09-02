@@ -338,12 +338,12 @@ export const testData = {
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,
             kurang_hari: 7,
-            customMonthToIndo: false
+            customMonthToIndo: true
         }),
         TanggalPulang: getTanggalCustom({
             selang_bulan: 1,
             kurang_hari: 1,
-            customMonthToIndo: false
+            customMonthToIndo: true
         }),
         JumlahPenumpang: DEFAULT_PASSENGER,
         MetodeBayar: "Pembayaran Instan",

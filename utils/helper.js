@@ -34,5 +34,5 @@ export async function clearBrowserState(page) {
         sessionStorage.clear();
     });
 
-    await page.reload();
+    await page.reload({ waitUntil: 'domcontentloaded' });
 }

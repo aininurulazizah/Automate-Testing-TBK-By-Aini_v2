@@ -178,6 +178,7 @@ export class Baraya {
 
     async pilihJadwal() {
         await this.waitForLoader('div#modal-load', 'show', false);
+        await this.page.waitForTimeout(1000);
 
         if (await this.expand_jadwal_btn.count() > 0) {
             await this.expand_jadwal_btn.click();
@@ -191,6 +192,7 @@ export class Baraya {
 
     async pilihJadwalPulang() {
         await this.waitForLoader('div#modal-load', 'show', false);
+        await this.page.waitForTimeout(1000);
 
         if (await this.expand_jadwalplg_btn.count() > 0) {
             await this.expand_jadwalplg_btn.click();
