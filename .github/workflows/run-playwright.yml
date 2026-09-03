@@ -183,6 +183,31 @@ jobs:
             -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
             --data-urlencode "text=$TELEGRAM_REPORT"
 
+      - name: Checkout to Dashboard repository
+        uses: actions/checkout@v4
+        with:
+          repository: aininurulazizah/Automate-Testing-Dashboard-TBK
+          token: ${{ secrets.DASHBOARD_REPO_TOKEN }}
+          path: dashboard
+
+      - name: Update Dashboard Data
+        run: |
+          cp reports/dashboard-data.json dashboard/src/data/dashboard-data.json
+
+      - name: Commit Dashboard Data
+        run: |
+          cd dashboard
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add src/data/dashboard-data.json
+
+          git diff --cached --quiet || \
+            git commit -m "chore: update dashboard data"
+
+          git push
+
       - name: Upload Playwright Artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -192,11 +217,3 @@ jobs:
             test-results
             playwright-report
 
-      # - name: Generate HTML report
-      #   run: npx playwright show-report --output=report
-
-      # - name: Deploy report to Github Pages
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: ./report
