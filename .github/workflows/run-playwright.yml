@@ -99,7 +99,6 @@ jobs:
           let failed = 0;
           let flaky = 0;
           let detail = '';
-          let failedDetail = '';
 
           suites.forEach(suite => {
             if (!suite.file) return;
@@ -125,28 +124,6 @@ jobs:
                 flaky++;
               } else {
                 failed++;
-
-                const lastResult = results.at(-1);
-
-                const rawError =
-                  lastResult?.error?.message ||
-                  lastResult?.error ||
-                  lastResult?.errors?.[0]?.message ||
-                  'No error message available';
-
-                const errorMessage = String(rawError)
-                  .replace(/\x1B\[[0-9;]*m/g, '')
-                  .replace(/\n\s*\n+/g, '\n')
-                  .trim();
-
-                const shortError = errorMessage
-                  .split('\n')
-                  .slice(0, 5)
-                  .join('\n');
-                  
-                failedDetail +=
-                  `❌ ${spec.title}\n` +
-                  `💥 ${shortError}\n\n`;
               }
 
             });
@@ -166,8 +143,8 @@ jobs:
              ⚠️ Flaky: ${flaky}
              ❌ Failed: ${failed}
 
-             Failed Detail
-             ${failedDetail || 'None'}
+             🔗 Detailed Test Results
+             https://automate-testing-dashboard-tbk-jo5p.vercel.app/
              `;
 
           fs.appendFileSync(
