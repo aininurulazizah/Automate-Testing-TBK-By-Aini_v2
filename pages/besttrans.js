@@ -31,6 +31,8 @@ export class Besttrans {
         this.carikursi_btn = page.locator('button:has-text("Pilih Kursi")');
 
         // Seat Page
+        this.tab2d = page.locator('#btn-2d');
+        this.tab3d = page.locator('#btn-3d')
         this.kursi_tersedia = page.locator('div.seat-blank');
         this.tab_plg = page.locator('button:has-text("Kursi Pulang")');
         this.kursi_plg_tersedia = page.locator('div.seat-blank');
@@ -201,6 +203,7 @@ export class Besttrans {
     async pilihKursi(jml_penumpang) {
         await this.waitForLoader('div#modal-load', 'show', false);
 
+        await this.tab2d.click();
         for(let i = 0; i < jml_penumpang; i++) {
             await this.getPenumpangTerdaftar(i+1, 0).click();
             await this.kursi_tersedia.nth(i).click();
@@ -211,6 +214,7 @@ export class Besttrans {
         await this.waitForLoader('div#modal-load', 'show', false);
 
         await this.tab_plg.click();
+        await this.tab2d.click();
         for(let i = 0; i < jml_penumpang; i++) {
             await this.getPenumpangTerdaftar(i+1, 0).click();
             await this.kursi_plg_tersedia.nth(i).click();
