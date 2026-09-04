@@ -14,10 +14,13 @@ export class Yantigroup {
         this.dropdown_tujuan = this.tujuan_field.locator('div.ss-list');
         this.tanggal_pergi = page.locator('input#tanggal_pergi + input');
         this.pp_checkbox =  page.locator('#is_pp');
+        this.pp_tab = page.locator('button[data-trip="roundtrip"]');
         this.tanggal_pulang = page.locator('input#tanggal_pulang + input');
         this.next_month_btn = page.locator('.flatpickr-next-month');
         this.next_month_btn2 = page.locator('.flatpickr-next-month').nth(1);
         this.jumlah_penumpang = page.locator('select#jmlpenumpang + div');
+        this.jml_pnmp_value = page.locator('#passengerValue');
+        this.add_penumpang = page.locator('#passengerPlusButton');
         this.dropdown_jml_penumpang = this.jumlah_penumpang.locator('div.ss-list');
         this.cari_btn = page.locator('button[onclick="return cek()"]'); 
         this.jadwal_card = page.locator('div#users li');
@@ -119,6 +122,7 @@ export class Yantigroup {
     }
 
     async isiTujuan(value) {
+        await this.waitForLoader('.loadKeberangkatan', 'd-none', true);
         await this.tujuan_field.click();
         await this.dropdown_tujuan.locator(`div.ss-option:text-is("${value}")`).click();
     }
@@ -133,7 +137,11 @@ export class Yantigroup {
     }
 
     async checklistPP() {
-        await this.pp_checkbox.evaluate(el => el.click());
+        if (await this.pp_tab.count() > 0) {
+            await this.pp_tab.click();
+        } else {
+            await this.pp_checkbox.evaluate(el => el.click());
+        }
     }
 
     async isiTanggalPulang(value) {
@@ -147,9 +155,15 @@ export class Yantigroup {
     }
 
     async isiJumlahPenumpang(value) {
-        await this.jumlah_penumpang.click();
-        await this.dropdown_jml_penumpang.locator(`div:text-is("${value} Orang")`).click();
-        await this.keberangkatan_field.click(); // Untuk menghilangkan dropdown
+        if (await this.jml_pnmp_value.count() > 0){
+            while (this.normalizeRupiah(await this.jml_pnmp_value.innerText()) !== value) {
+                await this.add_penumpang.click();
+            }
+        } else {
+            await this.jumlah_penumpang.click();
+            await this.dropdown_jml_penumpang.locator(`div:text-is("${value} Orang")`).click();
+            await this.keberangkatan_field.click(); // Untuk menghilangkan dropdown
+        }
     }
 
     async cariTiket() {
