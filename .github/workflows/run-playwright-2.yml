@@ -1,4 +1,4 @@
-name: Run Playwright Tests
+name: Run Playwright Tests (Non Scheduled)
 
 on:
   workflow_dispatch:
