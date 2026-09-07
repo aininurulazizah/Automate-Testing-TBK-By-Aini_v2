@@ -705,7 +705,7 @@ export const testData = {
     },
 
     Minanga: {
-        Keberangkatan: "Pool Minanga Express",
+        Keberangkatan: "POOL BANDAR LAMPUNG",
         Tujuan: "Bulak Kapal",
         TanggalPergi: getTanggalCustom({
             selang_bulan: 1,

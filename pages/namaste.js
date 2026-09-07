@@ -159,18 +159,37 @@ export class Namaste {
     async pilihJadwal() {
         await this.waitForLoader('div#modal-load', 'show', false);
 
-        const first_jadwal = await this.jadwal_card.first();
+        let jadwal_ke = 0;
+        let first_jadwal;
+
+        first_jadwal = await this.jadwal_card.nth(jadwal_ke); //Asign ke jadwal tersedia paling atas
+
+        while (await first_jadwal.locator('span:has-text("Tiket Habis")').count() > 0) { //Selama ditemukan identifier tiket habis
+            jadwal_ke++ ;
+            first_jadwal = await this.jadwal_card.nth(jadwal_ke); //Assign ke jadwal tersedia selanjutnya
+        }
+
         const harga_tiket = await first_jadwal.locator('div.harga > p').first().innerText();
-        await first_jadwal.locator('button:has-text("Pilih")').first().click();
+        await first_jadwal.locator('button:has-text("Pilih")').click();
+
         return harga_tiket;
     }
 
     async pilihJadwalPulang() {
         await this.waitForLoader('div#modal-load', 'show', false);
 
-        const first_jadwal = await this.jadwal_plg_card.first();
+        let jadwal_ke = 0;
+        let first_jadwal;
+
+        first_jadwal = await this.jadwal_plg_card.nth(jadwal_ke); //Asign ke jadwal tersedia paling atas
+
+        while (await first_jadwal.locator('span:has-text("Tiket Habis")').count() > 0) { //Selama ditemukan identifier tiket habis
+            jadwal_ke++ ;
+            first_jadwal = await this.jadwal_plg_card.nth(jadwal_ke); //Assign ke jadwal tersedia selanjutnya
+        }
+        
         const harga_tiket = await first_jadwal.locator('p:has-text("Rp")').first().innerText();
-        await first_jadwal.locator('button:has-text("Pilih")').first().click();
+        await first_jadwal.locator('button:has-text("Pilih")').click();
         return harga_tiket;
     }
 
