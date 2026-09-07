@@ -19,6 +19,26 @@ const details = [];
 
 walkSuites(raw.suites);
 
+const statusOrder = {
+  failed: 1,
+  flaky: 2,
+  passed: 3,
+  skipped: 4
+};
+
+details.sort((a, b) => {
+  // Urutkan berdasarkan status
+  const statusComparison =
+    statusOrder[a.status] - statusOrder[b.status];
+
+  if (statusComparison !== 0) {
+    return statusComparison;
+  }
+
+  // Kalau status sama, urutkan berdasarkan title
+  return a.title.localeCompare(b.title);
+});
+
 const dashboardData = {
   generatedAt: new Date().toISOString(),
   summary: {
